@@ -14,7 +14,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
@@ -105,11 +104,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGender((byte) (rand.nextBoolean() ? -1 : 1));
         return spawnDataIn;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        return getBoundingBox(getPose());
     }
 
     @Override
@@ -278,12 +272,14 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         compound.putByte("Gender", this.getGender());
+        compound.putByte("Color", (byte) this.getBandanaColor().getId());
         super.writeAdditional(compound);
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         this.setGender(compound.getByte("Gender"));
+        this.setBandanaColor(DyeColor.byId(compound.getByte("Color")));
         super.readAdditional(compound);
     }
 
