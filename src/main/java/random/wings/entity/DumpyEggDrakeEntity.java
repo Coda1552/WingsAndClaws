@@ -14,6 +14,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
@@ -29,6 +30,7 @@ import java.util.function.Predicate;
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private static final DataParameter<Byte> GENDER = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.VARINT);
+    private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
     private int attackCooldown;
@@ -93,8 +95,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(BANDANA_COLOR, DyeColor.RED.getId());
         this.dataManager.register(GENDER, (byte) 0);
+        this.dataManager.register(BANDANA_COLOR, DyeColor.RED.getId());
     }
 
     @Nullable
@@ -103,6 +105,16 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGender((byte) (rand.nextBoolean() ? -1 : 1));
         return spawnDataIn;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox() {
+        return getBoundingBox(getPose());
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
     }
 
     @Nullable

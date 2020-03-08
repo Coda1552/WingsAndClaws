@@ -14,6 +14,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import random.wings.entity.DumpyEggDrakeEntity;
 import random.wings.item.WingsItems;
 import random.wings.tileentity.NestTileEntity;
 import random.wings.tileentity.WingsTileEntities;
@@ -73,5 +74,12 @@ public class NestBlock extends ContainerBlock {
             }
         }
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+    }
+
+    @Override
+    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+        if (!player.abilities.isCreativeMode)
+            worldIn.getEntitiesWithinAABB(DumpyEggDrakeEntity.class, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() == -1 && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
+        super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 }

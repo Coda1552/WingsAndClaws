@@ -22,8 +22,8 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
     public RendererModel jaw;
     public RendererModel hornLeft;
     public RendererModel hornRight;
-    private boolean init;
-    private float bodyRotatePointY;
+    //private boolean init;
+    //private float bodyRotatePointY;
 
     public DumpyEggDrakeModel() {
         setAngles();
@@ -39,13 +39,8 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
     @Override
     public void setLivingAnimations(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
-        if (!init) {
-            init = true;
-            bodyRotatePointY = body.rotationPointY;
-        }
         if (entityIn.isSleeping()) {
             body.rotateAngleZ = 1.6f;
-            body.rotationPointY = 20;
             armLeft.rotateAngleZ = 0.23f;
             armRight.rotateAngleZ = -0.28f;
             legLeft.rotateAngleZ = 0.1f;
@@ -76,7 +71,6 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
             armLeft.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.3f) * (-(limbSwingAmount / (attacking ? 2 : 4)) - 0.1f) + 0.1f;
             armRight.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.3f) * ((limbSwingAmount / (attacking ? 2 : 4)) + 0.1f) + 0.1f;
             body.rotateAngleZ = 0;
-            body.rotationPointY = bodyRotatePointY;
             armLeft.rotateAngleZ = 0;
             armRight.rotateAngleZ = 0;
             legLeft.rotateAngleZ = 0;

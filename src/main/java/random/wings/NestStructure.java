@@ -10,7 +10,6 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import random.wings.block.WingsBlocks;
@@ -33,7 +32,7 @@ public class NestStructure extends Feature<NoFeatureConfig> {
     private static DumpyEggDrakeEntity spawn(BlockPos pos, Random rand, World world) {
         DumpyEggDrakeEntity entity = Objects.requireNonNull(WingsEntities.DUMPY_EGG_DRAKE.create(world));
         Vec3d p = get(pos, rand);
-        entity.setPositionAndRotation(p.x, world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) p.x, (int) p.z), p.z, 0, 0);
+        entity.setPosition(p.x, p.y, p.z);
         return entity;
     }
 

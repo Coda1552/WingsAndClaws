@@ -21,6 +21,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import random.wings.block.WingsBlocks;
+import random.wings.client.ClientEventHandler;
 import random.wings.entity.WingsEntities;
 import random.wings.item.WingsItems;
 import random.wings.tileentity.WingsTileEntities;

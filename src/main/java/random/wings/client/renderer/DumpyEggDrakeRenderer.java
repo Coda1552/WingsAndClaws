@@ -1,5 +1,6 @@
 package random.wings.client.renderer;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +26,13 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
     public void doRender(DumpyEggDrakeEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         entityModel = entity.isChild() ? child : adult;
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
+
+    @Override
+    protected void preRenderCallback(DumpyEggDrakeEntity entitylivingbaseIn, float partialTickTime) {
+        super.preRenderCallback(entitylivingbaseIn, partialTickTime);
+        if (entitylivingbaseIn.isSleeping())
+            GlStateManager.translated(0, entitylivingbaseIn.isChild() ? 0.325 : 0.65, 0);
     }
 
     @Nullable
