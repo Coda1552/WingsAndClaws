@@ -1,0 +1,17 @@
+{
+  "ded.ambient": {
+    "sounds": [
+      "wings:ded/ambient"
+    ]
+  },
+  "ded.hurt": {
+    "sounds": [
+      "wings:ded/hurt"
+    ]
+  },
+  "ded.death": {
+    "sounds": [
+      "wings:ded/death"
+    ]
+  }
+}

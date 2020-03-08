@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+[[mods]]
+modId="wings"
+version="${file.jarVersion}"
+displayName="Wings and Claws"
+credits=""
+authors=""
+description=""
+[[dependencies.wings]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28,)"
+    ordering="NONE"
+    side="BOTH"
