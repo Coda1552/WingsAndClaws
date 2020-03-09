@@ -70,12 +70,12 @@ public class NestStructure extends Feature<NoFeatureConfig> {
 
                 BlockPos base = pos.add(-3, 0, -3);
                 DumpyEggDrakeEntity male = spawn(base, rand, world.getWorld());
-                male.setGender((byte) -1);
+                male.setGender(true);
                 world.addEntity(male);
 
                 for (int i = 1; i < (rand.nextBoolean() ? 2 : 3); i++) {
                     DumpyEggDrakeEntity female = spawn(base, rand, world.getWorld());
-                    male.setGender((byte) 1);
+                    female.setGender(false);
                     world.addEntity(female);
                 }
 

@@ -79,7 +79,7 @@ public class NestBlock extends ContainerBlock {
     @Override
     public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
         if (!player.abilities.isCreativeMode)
-            worldIn.getEntitiesWithinAABB(DumpyEggDrakeEntity.class, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() == -1 && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
+            worldIn.getEntitiesWithinAABB(DumpyEggDrakeEntity.class, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
         super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 }

@@ -29,10 +29,10 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
     }
 
     @Override
-    protected void preRenderCallback(DumpyEggDrakeEntity entitylivingbaseIn, float partialTickTime) {
-        super.preRenderCallback(entitylivingbaseIn, partialTickTime);
-        if (entitylivingbaseIn.isSleeping())
-            GlStateManager.translated(0, entitylivingbaseIn.isChild() ? 0.325 : 0.65, 0);
+    protected void preRenderCallback(DumpyEggDrakeEntity entity, float partialTickTime) {
+        super.preRenderCallback(entity, partialTickTime);
+        if (entity.isSleeping())
+            GlStateManager.translated(0, entity.isChild() ? 0.325 : 0.65, 0);
     }
 
     @Nullable
@@ -40,10 +40,10 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
     protected ResourceLocation getEntityTexture(DumpyEggDrakeEntity entity) {
         byte texture = 0;
         if (entity.isChild()) texture |= 1;
-        if (entity.getGender() == 1) texture |= 2;
+        if (entity.getGender()) texture |= 2;
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {
-            String entityTexture = String.format("%s_%s%s", ((texture & 1) != 0) ? "child" : "adult", ((texture & 2) != 0) ? "female" : "male", ((texture & 4) != 0) ? "_sleep" : "");
+            String entityTexture = String.format("%s_%s%s", ((texture & 1) != 0) ? "child" : "adult", ((texture & 2) != 0) ? "male" : "female", ((texture & 4) != 0) ? "_sleep" : "");
             ResourceLocation location = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/dumpy_egg_drake/" + entityTexture + ".png");
             TEXTURES[texture] = location;
             return location;

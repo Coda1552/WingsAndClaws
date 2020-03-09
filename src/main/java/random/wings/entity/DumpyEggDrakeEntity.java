@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
-    private static final DataParameter<Byte> GENDER = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
@@ -80,7 +80,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
         });
         this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
-        this.goalSelector.addGoal(1, new HurtByTargetGoal(this).setCallsForHelp(getClass()));
     }
 
     @Override
@@ -94,15 +93,15 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(GENDER, (byte) 0);
-        this.dataManager.register(BANDANA_COLOR, DyeColor.RED.getId());
+        this.dataManager.register(GENDER, false);
+        this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.RED.getId());
     }
 
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setGender((byte) (rand.nextBoolean() ? -1 : 1));
+        this.setGender(rand.nextBoolean());
         return spawnDataIn;
     }
 
@@ -130,6 +129,11 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
+    public boolean isSilent() {
+        return isSleeping() || super.isSilent();
+    }
+
+    @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
@@ -138,16 +142,18 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode)) {
-            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isChild() && entity.getGender() == -1;
+        if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
+            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isChild() && entity.getGender() && !entity.isOwner((LivingEntity) source.getTrueSource());
             if (canAttack.test(this)) {
                 setAttackTarget((LivingEntity) source.getTrueSource());
             }
             world.getEntitiesWithinAABB(getClass(), getBoundingBox().grow(31)).stream().filter(canAttack).forEach(e -> e.setAttackTarget((LivingEntity) source.getTrueSource()));
         }
 
-        oldPos = getPositionVec();
-        alarmedTimer = 200;
+        if (isSleeping()) {
+            oldPos = getPositionVec();
+            alarmedTimer = 200;
+        }
         return super.attackEntityFrom(source, amount);
     }
 
@@ -155,8 +161,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (isTamed() && stack.getItem() instanceof DyeItem) {
-            if (!player.abilities.isCreativeMode) stack.shrink(1);
             setBandanaColor(((DyeItem) stack.getItem()).getDyeColor());
+            if (!player.abilities.isCreativeMode) stack.shrink(1);
         }
         if (stack.getItem() instanceof SpawnEggItem && ((SpawnEggItem) stack.getItem()).hasType(stack.getTag(), this.getType())) {
             if (!this.world.isRemote) {
@@ -194,7 +200,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         }
         if (!isSleeping()) {
             LivingEntity attackTarget = getAttackTarget();
-            if (attackTarget != null && attackTarget.isAlive()) {
+            if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.isCreativeMode) {
                 getNavigator().tryMoveToEntityLiving(attackTarget, 1.2);
                 if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
                     attackEntityAsMob(attackTarget);
@@ -259,7 +265,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     public boolean canMateWith(AnimalEntity otherAnimal) {
         if (otherAnimal instanceof DumpyEggDrakeEntity) {
             DumpyEggDrakeEntity drake = (DumpyEggDrakeEntity) otherAnimal;
-            return drake.isInLove() && this.isInLove() && this.getGender() == -drake.getGender() && !this.isSleeping() && !drake.isSleeping();
+            return drake.isInLove() && this.isInLove() && this.getGender() != drake.getGender() && !this.isSleeping() && !drake.isSleeping();
         }
         return false;
     }
@@ -271,14 +277,14 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
-        compound.putByte("Gender", this.getGender());
+        compound.putBoolean("Gender", this.getGender());
         compound.putByte("Color", (byte) this.getBandanaColor().getId());
         super.writeAdditional(compound);
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
-        this.setGender(compound.getByte("Gender"));
+        this.setGender(compound.getBoolean("Gender"));
         this.setBandanaColor(DyeColor.byId(compound.getByte("Color")));
         super.readAdditional(compound);
     }
@@ -288,11 +294,11 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         return new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG);
     }
 
-    public byte getGender() {
+    public boolean getGender() {
         return this.dataManager.get(GENDER);
     }
 
-    public void setGender(byte gender) {
+    public void setGender(boolean gender) {
         this.dataManager.set(GENDER, gender);
     }
 
@@ -301,6 +307,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     private void setBandanaColor(DyeColor color) {
-        this.dataManager.set(BANDANA_COLOR, color.getId());
+        this.dataManager.set(BANDANA_COLOR, (byte) color.getId());
     }
 }
