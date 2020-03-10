@@ -20,10 +20,12 @@ public interface IDragonEntity {
     }
 
     default void createEgg() {
-        if (canBreed() && this instanceof AnimalEntity) {
+        if (canDragonBreed() && this instanceof AnimalEntity) {
             ((AnimalEntity) this).entityDropItem(getEgg());
         }
     }
 
-    boolean canBreed();
+    default boolean canDragonBreed() {
+        return this instanceof AnimalEntity && ((AnimalEntity) this).canBreed();
+    }
 }
