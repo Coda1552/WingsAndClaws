@@ -16,6 +16,7 @@ public class WingsEntities {
     public static final EntityType<DragonEggEntity> DRAGON_EGG = create("dragon_egg", DragonEggEntity::new, 0.2f, 0.2f);
     private static final Map<EntityType<?>, Tuple<Integer, Integer>> EGGS = new HashMap<>();
     public static final EntityType<DumpyEggDrakeEntity> DUMPY_EGG_DRAKE = create("dumpy_egg_drake", DumpyEggDrakeEntity::new, 1.2f, 1.3f, 0xE2A336, 0xCEA575);
+    public static final EntityType<HatchetBeakEntity> HATCHET_BEAK = create("hatchet_beak", HatchetBeakEntity::new, 2.3f, 1.0f, 0x785028, 0x167a6d);
 
     private static <T extends AnimalEntity> EntityType<T> create(String name, EntityType.IFactory<T> factory, float width, float height, int pri, int sec) {
         EntityType<T> type = create(name, factory, EntityClassification.CREATURE, width, height);
