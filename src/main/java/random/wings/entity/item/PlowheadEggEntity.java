@@ -9,7 +9,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,7 +16,6 @@ import random.wings.entity.WingsEntities;
 import random.wings.entity.monster.IcyPlowheadEntity;
 import random.wings.item.WingsItems;
 
-//shouldn't this not be a projectile?
 public class PlowheadEggEntity extends Entity {
 	private int hatchTime;
 
@@ -58,26 +56,30 @@ public class PlowheadEggEntity extends Entity {
 		return new SSpawnObjectPacket(this);
 	}
 
-	protected void onImpact(RayTraceResult result) {
+	@Override
+	public void tick() {
+		super.tick();
 		if (!this.world.isRemote) {
-			if (this.rand.nextInt(8) == 0) {
-				int i = 1;
-				if (this.rand.nextInt(32) == 0) {
-					i = 4;
-				}
+			if (hatchTime++ >= 4800) {
+				if (this.rand.nextInt(8) == 0) {
+					int i = 1;
+					if (this.rand.nextInt(32) == 0) {
+						i = 4;
+					}
 
-				for (int j = 0; j < i; ++j) {
-					IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
-					if (plowhead != null) {
-						plowhead.setGrowingAge(-24000);
-						plowhead.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-						this.world.addEntity(plowhead);
+					for (int j = 0; j < i; ++j) {
+						IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
+						if (plowhead != null) {
+							plowhead.setGrowingAge(-24000);
+							plowhead.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+							this.world.addEntity(plowhead);
+						}
 					}
 				}
-			}
 
-			this.world.setEntityState(this, (byte)3);
-			this.remove();
+				this.world.setEntityState(this, (byte) 3);
+				this.remove();
+			}
 		}
 	}
 }
