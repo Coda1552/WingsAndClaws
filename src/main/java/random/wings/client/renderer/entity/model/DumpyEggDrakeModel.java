@@ -1,10 +1,10 @@
-package random.wings.client.model;
+package random.wings.client.renderer.entity.model;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import random.wings.entity.DumpyEggDrakeEntity;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
 
 public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity> {
     public RendererModel body;

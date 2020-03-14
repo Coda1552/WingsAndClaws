@@ -1,4 +1,4 @@
-package random.wings.client.renderer;
+package random.wings.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;

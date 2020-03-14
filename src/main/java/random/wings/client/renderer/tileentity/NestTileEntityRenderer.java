@@ -1,10 +1,10 @@
-package random.wings.client.renderer;
+package random.wings.client.renderer.tileentity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
-import random.wings.client.model.DrakeNestModel;
+import random.wings.client.renderer.tileentity.model.DrakeNestModel;
 import random.wings.tileentity.NestTileEntity;
 
 public class NestTileEntityRenderer extends TileEntityRenderer<NestTileEntity> {

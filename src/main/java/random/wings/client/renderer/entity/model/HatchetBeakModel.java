@@ -1,8 +1,8 @@
-package random.wings.client.model;
+package random.wings.client.renderer.entity.model;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client. renderer.entity.model.RendererModel;
-import random.wings.entity.HatchetBeakEntity;
+import net.minecraft.client.renderer.entity.model.RendererModel;
+import random.wings.entity.passive.HatchetBeakEntity;
 
 public class HatchetBeakModel extends EntityModel<HatchetBeakEntity> {
     public RendererModel body;

@@ -1,9 +1,8 @@
-package random.wings.entity;
+package random.wings.entity.passive;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.Ingredient;
@@ -15,10 +14,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import random.wings.WingsSounds;
+import random.wings.entity.TameableDragonEntity;
+import random.wings.entity.WingsEntities;
 import random.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
@@ -27,7 +26,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
-    private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
@@ -93,16 +91,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(GENDER, false);
         this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.RED.getId());
-    }
-
-    @Nullable
-    @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setGender(rand.nextBoolean());
-        return spawnDataIn;
     }
 
     @Override
@@ -137,7 +126,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
         this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
     }
 
     @Override
@@ -150,10 +139,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             world.getEntitiesWithinAABB(getClass(), getBoundingBox().grow(31)).stream().filter(canAttack).forEach(e -> e.setAttackTarget((LivingEntity) source.getTrueSource()));
         }
 
-        if (isSleeping()) {
-            oldPos = getPositionVec();
-            alarmedTimer = 200;
-        }
+        if (isSleeping()) oldPos = getPositionVec();
+        alarmedTimer = 200;
         return super.attackEntityFrom(source, amount);
     }
 
@@ -262,29 +249,18 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
-    public boolean canMateWith(AnimalEntity otherAnimal) {
-        if (otherAnimal instanceof DumpyEggDrakeEntity) {
-            DumpyEggDrakeEntity drake = (DumpyEggDrakeEntity) otherAnimal;
-            return drake.isInLove() && this.isInLove() && this.getGender() != drake.getGender() && !this.isSleeping() && !drake.isSleeping();
-        }
-        return false;
-    }
-
-    @Override
     public boolean isSleeping() {
         return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 23000;
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
-        compound.putBoolean("Gender", this.getGender());
         compound.putByte("Color", (byte) this.getBandanaColor().getId());
         super.writeAdditional(compound);
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
-        this.setGender(compound.getBoolean("Gender"));
         this.setBandanaColor(DyeColor.byId(compound.getByte("Color")));
         super.readAdditional(compound);
     }
@@ -294,13 +270,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         return new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG);
     }
 
-    public boolean getGender() {
-        return this.dataManager.get(GENDER);
-    }
-
-    public void setGender(boolean gender) {
-        this.dataManager.set(GENDER, gender);
-    }
 
     public DyeColor getBandanaColor() {
         return DyeColor.byId(this.dataManager.get(BANDANA_COLOR));

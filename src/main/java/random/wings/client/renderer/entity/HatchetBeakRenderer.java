@@ -1,11 +1,11 @@
-package random.wings.client.renderer;
+package random.wings.client.renderer.entity;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
-import random.wings.client.model.HatchetBeakModel;
-import random.wings.entity.HatchetBeakEntity;
+import random.wings.client.renderer.entity.model.HatchetBeakModel;
+import random.wings.entity.passive.HatchetBeakEntity;
 
 import javax.annotation.Nullable;
 

@@ -14,7 +14,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import random.wings.entity.DumpyEggDrakeEntity;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
 import random.wings.item.WingsItems;
 import random.wings.tileentity.NestTileEntity;
 import random.wings.tileentity.WingsTileEntities;

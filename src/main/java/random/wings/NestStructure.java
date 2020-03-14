@@ -13,8 +13,8 @@ import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import random.wings.block.WingsBlocks;
-import random.wings.entity.DumpyEggDrakeEntity;
 import random.wings.entity.WingsEntities;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
 import random.wings.tileentity.NestTileEntity;
 
 import java.util.Objects;

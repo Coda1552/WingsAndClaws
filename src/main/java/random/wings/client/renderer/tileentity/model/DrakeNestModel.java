@@ -1,4 +1,4 @@
-package random.wings.client.model;
+package random.wings.client.renderer.tileentity.model;
 
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;

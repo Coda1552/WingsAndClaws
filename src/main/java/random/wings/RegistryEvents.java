@@ -1,8 +1,6 @@
 package random.wings;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEventData;
-import net.minecraft.block.IceBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -19,7 +17,6 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -64,6 +61,8 @@ public class RegistryEvents {
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().registerAll(WingsEntities.LIST.toArray(new EntityType[0]));
         ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.DESERT))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.DUMPY_EGG_DRAKE, 1, 1, 1)));
+        BiomeDictionary.getBiomes(BiomeDictionary.Type.SAVANNA).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HATCHET_BEAK, 1, 1, 1)));
+        ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.COLD_OCEAN))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.ICY_PLOWHEAD, 1, 1, 2)));
     }
 
     @SubscribeEvent

@@ -7,6 +7,11 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Tuple;
+import random.wings.entity.item.DragonEggEntity;
+import random.wings.entity.item.PlowheadEggEntity;
+import random.wings.entity.monster.IcyPlowheadEntity;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
+import random.wings.entity.passive.HatchetBeakEntity;
 import random.wings.item.WingsItems;
 
 import java.util.*;

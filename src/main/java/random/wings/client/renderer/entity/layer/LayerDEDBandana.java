@@ -1,11 +1,12 @@
-package random.wings.client.renderer;
+package random.wings.client.renderer.entity.layer;
 
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
-import random.wings.client.model.DumpyEggDrakeModel;
-import random.wings.entity.DumpyEggDrakeEntity;
+import random.wings.client.renderer.entity.DumpyEggDrakeRenderer;
+import random.wings.client.renderer.entity.model.DumpyEggDrakeModel;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
 
 import java.util.HashMap;
 import java.util.Map;

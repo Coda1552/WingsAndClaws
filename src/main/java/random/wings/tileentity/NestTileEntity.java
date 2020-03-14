@@ -10,8 +10,8 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import random.wings.entity.DumpyEggDrakeEntity;
 import random.wings.entity.WingsEntities;
+import random.wings.entity.passive.DumpyEggDrakeEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package random.wings.entity;
+package random.wings.entity.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -14,13 +15,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import random.wings.item.WingsItems;
+import random.wings.entity.WingsEntities;
 
 public class DragonEggEntity extends ProjectileItemEntity {
     private EntityType<?> eggType;
 
-    public DragonEggEntity(EntityType<? extends DragonEggEntity> p_i50154_1_, World p_i50154_2_) {
-        super(p_i50154_1_, p_i50154_2_);
+    public DragonEggEntity(EntityType<? extends DragonEggEntity> type, World world) {
+        super(type, world);
     }
 
     public DragonEggEntity(EntityType<?> type, World worldIn, LivingEntity throwerIn) {
@@ -68,6 +69,6 @@ public class DragonEggEntity extends ProjectileItemEntity {
     }
 
     protected Item func_213885_i() {
-        return WingsItems.DRAGON_EGG;
+        return Items.AIR; //since this currently unused on its own
     }
 }
