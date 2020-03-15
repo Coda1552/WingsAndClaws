@@ -1,5 +1,6 @@
 package random.wings.client.renderer.entity.model;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import random.wings.entity.item.PlowheadEggEntity;
@@ -21,12 +22,15 @@ public class PlowheadEggModel extends EntityModel<PlowheadEggEntity> {
     }
 
     @Override
-    public void render(PlowheadEggEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.inner.render(f5);
+    public void render(PlowheadEggEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        this.inner.render(scale);
     }
 
     public void render(Runnable bindTexture) {
         bindTexture.run();
-        //TODO
+        GlStateManager.pushMatrix();
+        render(null, 0, 0, -1, 0, 0, 0.625f);
+        GlStateManager.popMatrix();
     }
 }

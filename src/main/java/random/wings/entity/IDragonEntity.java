@@ -5,13 +5,12 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import random.wings.item.WingsItems;
 
 public interface IDragonEntity {
     default ItemStack getEgg() {
         ResourceLocation key = ((Entity) this).getType().getRegistryName();
         if (key != null) {
-            ItemStack stack = new ItemStack(WingsItems.DRAGON_EGG);
+            ItemStack stack = ItemStack.EMPTY;//ItemStack(WingsItems.DRAGON_EGG); removed the dragon egg here, remove this if no dragons need it
             CompoundNBT nbt = stack.getOrCreateTag();
             nbt.putString("type", key.getPath());
             return stack;

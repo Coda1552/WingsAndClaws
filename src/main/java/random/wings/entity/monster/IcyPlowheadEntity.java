@@ -217,7 +217,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public void createEgg() {
-		world.addEntity(new PlowheadEggEntity(world, posX, posY, posZ));
+		world.addEntity(new PlowheadEggEntity(world, this));
 	}
 
 	@Override
