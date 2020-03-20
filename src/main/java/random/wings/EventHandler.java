@@ -21,7 +21,7 @@ public class EventHandler {
 				ItemEntity itm = EntityType.ITEM.create(event.getWorld().getWorld());
 				if(itm != null) {
 					itm.setPosition(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
-					itm.setItem(new ItemStack(WingsItems.GLACIAL_PLANKTON));
+					itm.setItem(new ItemStack(WingsItems.GLACIAL_SHRIMP));
 					event.getWorld().getWorld().addEntity(itm);
 				}
 			}
