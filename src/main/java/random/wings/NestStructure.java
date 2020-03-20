@@ -15,7 +15,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import random.wings.block.WingsBlocks;
 import random.wings.entity.WingsEntities;
 import random.wings.entity.passive.DumpyEggDrakeEntity;
-import random.wings.tileentity.NestTileEntity;
+import random.wings.tileentity.DEDNestTileEntity;
 
 import java.util.Objects;
 import java.util.Random;
@@ -48,11 +48,11 @@ public class NestStructure extends Feature<NoFeatureConfig> {
         world.removeBlock(down.add(3, 0, -3), false);
         world.removeBlock(down.add(3, 0, 3), false);*/
         BlockPos.getAllInBox(down.add(-1, 0, -1), pos.add(1, 0, 1)).forEach(p -> world.removeBlock(p, false));
-        if (world.setBlockState(down, WingsBlocks.NEST.getDefaultState(), 2)) {
+        if (world.setBlockState(down, WingsBlocks.DED_NEST.getDefaultState(), 2)) {
             TileEntity te = world.getTileEntity(down);
-            if (te instanceof NestTileEntity) {
+            if (te instanceof DEDNestTileEntity) {
                 BlockPos.getAllInBox(pos.add(-4, 0, -4), pos.add(4, 0, 4)).forEach(p -> world.removeBlock(p, false));
-                ((NestTileEntity) te).setEggs(world.getWorld(), rand.nextInt(3) + 1);
+                ((DEDNestTileEntity) te).setEggs(world.getWorld(), rand.nextInt(3) + 1);
                 BlockState slab = Blocks.SANDSTONE_SLAB.getDefaultState();
                 world.setBlockState(down.add(-1, 0, -1), slab, 2);
                 world.setBlockState(down.add(1, 0, -1), slab, 2);

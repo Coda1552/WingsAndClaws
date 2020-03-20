@@ -5,9 +5,9 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
 import random.wings.client.renderer.tileentity.model.DrakeNestModel;
-import random.wings.tileentity.NestTileEntity;
+import random.wings.tileentity.DEDNestTileEntity;
 
-public class NestTileEntityRenderer extends TileEntityRenderer<NestTileEntity> {
+public class NestTileEntityRenderer extends TileEntityRenderer<DEDNestTileEntity> {
     public static final NestTileEntityRenderer INSTANCE = new NestTileEntityRenderer();
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[4];
 
@@ -20,7 +20,7 @@ public class NestTileEntityRenderer extends TileEntityRenderer<NestTileEntity> {
     private final DrakeNestModel model = new DrakeNestModel();
 
     @Override
-    public void render(NestTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(DEDNestTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
         super.render(tileEntityIn, x, y, z, partialTicks, destroyStage);
         this.bindTexture(TEXTURES[tileEntityIn.getEggCount()]);
         GlStateManager.pushMatrix();

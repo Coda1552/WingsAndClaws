@@ -11,11 +11,11 @@ import random.wings.entity.item.PlowheadEggEntity;
 import random.wings.entity.monster.IcyPlowheadEntity;
 import random.wings.entity.passive.DumpyEggDrakeEntity;
 import random.wings.entity.passive.HatchetBeakEntity;
-import random.wings.tileentity.NestTileEntity;
+import random.wings.tileentity.DEDNestTileEntity;
 
 public class ClientEventHandler {
     public static void init() {
-        ClientRegistry.bindTileEntitySpecialRenderer(NestTileEntity.class, NestTileEntityRenderer.INSTANCE);
+        ClientRegistry.bindTileEntitySpecialRenderer(DEDNestTileEntity.class, NestTileEntityRenderer.INSTANCE);
         RenderingRegistry.registerEntityRenderingHandler(DumpyEggDrakeEntity.class, DumpyEggDrakeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(HatchetBeakEntity.class, HatchetBeakRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(IcyPlowheadEntity.class, IcyPlowheadRenderer::new);

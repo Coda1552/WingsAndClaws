@@ -67,7 +67,7 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().registerAll(WingsTileEntities.NEST.setRegistryName("nest"));
+        event.getRegistry().registerAll(WingsTileEntities.DED_NEST.setRegistryName("nest"));
     }
 
     @SubscribeEvent

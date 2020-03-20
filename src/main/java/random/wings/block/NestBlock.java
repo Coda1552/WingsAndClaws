@@ -3,6 +3,7 @@ package random.wings.block;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -14,8 +15,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import random.wings.entity.passive.DumpyEggDrakeEntity;
-import random.wings.item.WingsItems;
+import random.wings.entity.TameableDragonEntity;
 import random.wings.tileentity.NestTileEntity;
 import random.wings.tileentity.WingsTileEntities;
 
@@ -23,18 +23,26 @@ import javax.annotation.Nullable;
 
 public class NestBlock extends ContainerBlock {
     private static final VoxelShape AABB = VoxelShapes.create(0.05, 0, 0.05, 0.95, 0.3, 0.95);
+    private final Class<? extends TameableDragonEntity> entity;
+    private final Class<? extends NestTileEntity> tile;
+    private Item item;
 
-    protected NestBlock() {
+    public NestBlock(String name, Class<? extends TameableDragonEntity> entity, Class<? extends NestTileEntity> tile) {
         super(Block.Properties.create(Material.SAND).sound(SoundType.SAND).hardnessAndResistance(1, 0));
-        String name = "nest";
+        this.entity = entity;
+        this.tile = tile;
         setRegistryName(name);
         WingsBlocks.LIST.add(this);
+    }
+
+    public void setItem(Item value) {
+        this.item = value;
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return WingsTileEntities.NEST.create();
+        return WingsTileEntities.DED_NEST.create();
     }
 
     @Override
@@ -56,12 +64,12 @@ public class NestBlock extends ContainerBlock {
     public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         ItemStack stack = player.getHeldItem(handIn);
         TileEntity te = worldIn.getTileEntity(pos);
-        if (te instanceof NestTileEntity) {
+        if (tile.isInstance(te)) {
             if (stack.isEmpty()) {
                 boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.setHeldItem(handIn, new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG));
+                if (removed) player.setHeldItem(handIn, new ItemStack(item));
                 return removed;
-            } else if (stack.getItem() == WingsItems.DUMPY_EGG_DRAKE_EGG) {
+            } else if (stack.getItem() == item) {
                 boolean added = ((NestTileEntity) te).addEgg();
                 if (added) {
                     if (!player.abilities.isCreativeMode) stack.shrink(1);
@@ -79,7 +87,7 @@ public class NestBlock extends ContainerBlock {
     @Override
     public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
         if (!player.abilities.isCreativeMode)
-            worldIn.getEntitiesWithinAABB(DumpyEggDrakeEntity.class, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
+            worldIn.getEntitiesWithinAABB(entity, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
         super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 }

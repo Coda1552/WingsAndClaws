@@ -1,6 +1,5 @@
 package random.wings.item;
 
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -36,7 +35,8 @@ public class WingsItems {
 
     //Custom block items
     static {
-        add("nest", new BlockItem(WingsBlocks.NEST, new Item.Properties().group(WingsItems.GROUP).setTEISR(() -> NestItemRenderer::new)));
+        add("ded_nest", new NestEggItem(WingsBlocks.DED_NEST, new Item.Properties().setTEISR(() -> NestItemRenderer::new)));
+        add("hb_nest", new NestEggItem(WingsBlocks.HB_NEST, new Item.Properties()));
     }
 
     private static Item add(String name, Item item) {
