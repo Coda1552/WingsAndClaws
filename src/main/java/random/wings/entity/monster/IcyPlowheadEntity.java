@@ -146,8 +146,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Override
 	public boolean processInteract(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!world.isRemote && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_PLANKTON) {
-			if (this.rand.nextInt(25) == 0) {
+		if (!world.isRemote && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_SHRIMP) {
+			if (this.rand.nextInt(10) == 0) {
 				this.setTamedBy(player);
 				this.setAttackTarget(null);
 				this.playTameEffect(true);
@@ -182,7 +182,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public boolean isBreedingItem(ItemStack stack) {
-		return stack.getItem() == WingsItems.GLACIAL_PLANKTON;
+		return stack.getItem() == WingsItems.GLACIAL_SHRIMP;
 	}
 
 	@Override

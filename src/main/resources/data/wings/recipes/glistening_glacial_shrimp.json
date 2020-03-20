@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "wings:glacial_shrimp"
-    },
-    {
-      "item": "minecraft:experience_bottle"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "wings:glacial_shrimp"
+        },
+        {
+            "item": "minecraft:experience_bottle"
+        }
+    ],
+    "result": {
+        "item": "wings:glistening_glacial_shrimp"
     }
-  ],
-  "result": {
-    "item": "wings:glistening_glacial_shrimp"
-  }
 }
