@@ -1,17 +1,62 @@
 {
   "ded.ambient": {
+    "category": "ambient",
+    "subtitle": "wings.subtitle.ded.ambient",
     "sounds": [
-      "wings:ded/ambient"
+      {
+        "name": "wings:ded.ambient",
+        "stream": true
+      }
     ]
   },
   "ded.hurt": {
+    "category": "hurt",
+    "subtitle": "wings.subtitle.ded.hurt",
     "sounds": [
-      "wings:ded/hurt"
+      {
+        "name": "wings:ded.hurt",
+        "stream": true
+      }
     ]
   },
   "ded.death": {
+    "category": "death",
+    "subtitle": "wings.subtitle.ded.death",
     "sounds": [
-      "wings:ded/death"
+      {
+        "name": "wings:ded.death",
+        "stream": true
+      }
+    ]
+  },
+  "plowhead.ambient": {
+    "category": "ambient",
+    "subtitle": "wings.subtitle.plowhead.ambient",
+    "sounds": [
+      {
+        "name": "wings:plowhead.ambient",
+        "stream": true
+      }
+    ]
+  },
+  "plowhead.hurt": {
+    "category": "hurt",
+    "subtitle": "wings.subtitle.plowhead.hurt",
+    "sounds": [
+      {
+        "name": "wings:plowhead.hurt",
+        "stream": true
+      }
+    ]
+  },
+  "plowhead.death": {
+    "category": "death",
+    "subtitle": "wings.subtitle.plowhead.death",
+    "sounds": [
+      {
+        "name": "wings:plowhead.death",
+        "stream": true
+      }
     ]
   }
 }

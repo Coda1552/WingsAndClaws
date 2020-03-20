@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "wings:glacial_plankton"
+        },
+        {
+            "item": "minecraft:experience_bottle"
+        }
+    ],
+    "result": {
+        "item": "wings:glistening_glacial_plankton"
+    }
+}

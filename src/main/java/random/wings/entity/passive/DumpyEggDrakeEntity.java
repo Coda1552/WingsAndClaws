@@ -147,7 +147,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (isTamed() && stack.getItem() instanceof DyeItem) {
+        if (!world.isRemote && isTamed() && stack.getItem() instanceof DyeItem) {
             setBandanaColor(((DyeItem) stack.getItem()).getDyeColor());
             if (!player.abilities.isCreativeMode) stack.shrink(1);
         }

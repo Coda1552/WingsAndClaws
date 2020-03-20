@@ -5,5 +5,11 @@
   "item.wings.dumpy_egg_drake_spawn_egg": "Dumpy Egg Drake Spawn Egg",
   "item.wings.dumpy_egg_drake_egg": "Dumpy Egg Drake Egg",
   "block.wings.nest": "Dumpy Egg Drake Nest",
-  "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake"
+  "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake",
+  "wings.subtitle.ded.ambient": "Dumpy Egg Drake Ambient",
+  "wings.subtitle.ded.hurt": "Dumpy Egg Drake Hurt",
+  "wings.subtitle.ded.death": "Dumpy Egg Drake Death",
+  "wings.subtitle.plowhead.ambient": "Icy Plowhead Ambient",
+  "wings.subtitle.plowhead.hurt": "Icy Plowhead Hurt",
+  "wings.subtitle.plowhead.death": "Icy Plowhead Death"
 }

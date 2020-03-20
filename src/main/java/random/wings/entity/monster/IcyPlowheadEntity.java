@@ -99,19 +99,19 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return WingsSounds.DED_AMBIENT;
+		return WingsSounds.PLOWHEAD_AMBIENT;
 	}
 
 	@Nullable
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return WingsSounds.DED_HURT;
+		return WingsSounds.PLOWHEAD_HURT;
 	}
 
 	@Nullable
 	@Override
 	protected SoundEvent getDeathSound() {
-		return WingsSounds.DED_DEATH;
+		return WingsSounds.PLOWHEAD_DEATH;
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Override
 	public boolean processInteract(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_PLANKTON) {
+		if (!world.isRemote && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_PLANKTON) {
 			if (this.rand.nextInt(25) == 0) {
 				this.setTamedBy(player);
 				this.setAttackTarget(null);
