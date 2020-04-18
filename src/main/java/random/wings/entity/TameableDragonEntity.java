@@ -13,12 +13,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import random.wings.entity.passive.DumpyEggDrakeEntity;
 
 import javax.annotation.Nullable;
 
 public abstract class TameableDragonEntity extends TameableEntity implements IDragonEntity {
-    private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
 
     protected TameableDragonEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);

@@ -22,8 +22,6 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
     public RendererModel jaw;
     public RendererModel hornLeft;
     public RendererModel hornRight;
-    //private boolean init;
-    //private float bodyRotatePointY;
 
     public DumpyEggDrakeModel() {
         setAngles();

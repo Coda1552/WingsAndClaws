@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -17,22 +18,26 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import random.wings.entity.TameableDragonEntity;
 import random.wings.tileentity.NestTileEntity;
-import random.wings.tileentity.WingsTileEntities;
 
 import javax.annotation.Nullable;
 
-public class NestBlock extends ContainerBlock {
+public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
     private static final VoxelShape AABB = VoxelShapes.create(0.05, 0, 0.05, 0.95, 0.3, 0.95);
     private final Class<? extends TameableDragonEntity> entity;
-    private final Class<? extends NestTileEntity> tile;
+    private final Class<T> tile;
+    private TileEntityType<T> type;
     private Item item;
 
-    public NestBlock(String name, Class<? extends TameableDragonEntity> entity, Class<? extends NestTileEntity> tile) {
+    public NestBlock(String name, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
         super(Block.Properties.create(Material.SAND).sound(SoundType.SAND).hardnessAndResistance(1, 0));
         this.entity = entity;
         this.tile = tile;
         setRegistryName(name);
         WingsBlocks.LIST.add(this);
+    }
+
+    public void setItem(TileEntityType<T> value) {
+        this.type = value;
     }
 
     public void setItem(Item value) {
@@ -42,7 +47,7 @@ public class NestBlock extends ContainerBlock {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return WingsTileEntities.DED_NEST.create();
+        return type.create();
     }
 
     @Override

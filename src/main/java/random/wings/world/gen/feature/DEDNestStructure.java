@@ -1,4 +1,4 @@
-package random.wings;
+package random.wings.world.gen.feature;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,9 +20,10 @@ import random.wings.tileentity.DEDNestTileEntity;
 import java.util.Objects;
 import java.util.Random;
 
-public class NestStructure extends Feature<NoFeatureConfig> {
-    public NestStructure() {
+public class DEDNestStructure extends Feature<NoFeatureConfig> {
+    public DEDNestStructure() {
         super(NoFeatureConfig::deserialize);
+        WingsFeatures.LIST.add(setRegistryName("ded_nest"));
     }
 
     private static Vec3d get(BlockPos pos, Random rand) {
@@ -38,15 +39,9 @@ public class NestStructure extends Feature<NoFeatureConfig> {
 
     @Override
     public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        //pos = pos.down();
-        //-108 68 -71
         BlockPos down = pos.down();
         BlockState sand = Blocks.SAND.getDefaultState();
         BlockPos.getAllInBox(down.add(-3, 0, -3), pos.add(3, 0, 3)).forEach(p -> world.setBlockState(p, sand, 2));
-        /*world.removeBlock(down.add(-3, 0, -3), false);
-        world.removeBlock(down.add(-3, 0, 3), false);
-        world.removeBlock(down.add(3, 0, -3), false);
-        world.removeBlock(down.add(3, 0, 3), false);*/
         BlockPos.getAllInBox(down.add(-1, 0, -1), pos.add(1, 0, 1)).forEach(p -> world.removeBlock(p, false));
         if (world.setBlockState(down, WingsBlocks.DED_NEST.getDefaultState(), 2)) {
             TileEntity te = world.getTileEntity(down);
@@ -82,7 +77,7 @@ public class NestStructure extends Feature<NoFeatureConfig> {
                 for (int i = 1; i < (rand.nextBoolean() ? 2 : 3); i++) {
                     DumpyEggDrakeEntity child = spawn(base, rand, world.getWorld());
                     child.setGrowingAge(-24000);
-                    child.onInitialSpawn(world, world.getDifficultyForLocation(child.getPosition()), SpawnReason.NATURAL, null, null);
+                    child.onInitialSpawn(world, world.getDifficultyForLocation(child.getPosition()), SpawnReason.STRUCTURE, null, null);
                     world.addEntity(child);
                 }
             }

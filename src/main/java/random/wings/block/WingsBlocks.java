@@ -11,6 +11,6 @@ import java.util.List;
 
 public class WingsBlocks {
     public static final List<Block> LIST = new ArrayList<>();
-    public static final NestBlock DED_NEST = new NestBlock("ded_nest", DumpyEggDrakeEntity.class, DEDNestTileEntity.class);
-    public static final NestBlock HB_NEST = new NestBlock("hb_nest", HatchetBeakEntity.class, HBNestTileEntity.class);
+    public static final NestBlock<DEDNestTileEntity> DED_NEST = new NestBlock<>("ded_nest", DumpyEggDrakeEntity.class, DEDNestTileEntity.class);
+    public static final NestBlock<HBNestTileEntity> HB_NEST = new NestBlock<>("hb_nest", HatchetBeakEntity.class, HBNestTileEntity.class);
 }

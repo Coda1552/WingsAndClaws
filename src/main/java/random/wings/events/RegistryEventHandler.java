@@ -1,4 +1,4 @@
-package random.wings;
+package random.wings.events;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -11,7 +11,6 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -20,17 +19,18 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import random.wings.WingsAndClaws;
+import random.wings.WingsSounds;
 import random.wings.block.WingsBlocks;
 import random.wings.client.ClientEventHandler;
 import random.wings.entity.WingsEntities;
 import random.wings.item.WingsItems;
 import random.wings.tileentity.WingsTileEntities;
+import random.wings.world.gen.feature.WingsFeatures;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class RegistryEvents {
-    private static final Feature<NoFeatureConfig> NEST = new NestStructure();
-
+public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(WingsBlocks.LIST.toArray(new Block[0]));
@@ -44,7 +44,7 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
-        event.getRegistry().register(NEST.setRegistryName("nest"));
+        event.getRegistry().registerAll(WingsFeatures.LIST.toArray(new Feature[0]));
     }
 
     @SubscribeEvent
@@ -54,7 +54,8 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerBiomes(RegistryEvent.Register<Biome> event) {
-        Biomes.DESERT.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(NEST, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(300)));
+        Biomes.DESERT.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(WingsFeatures.DED_NEST, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(300)));
+        Biomes.SHATTERED_SAVANNA.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(WingsFeatures.HB_NEST, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP, new ChanceConfig(300)));
     }
 
     @SubscribeEvent
@@ -67,7 +68,7 @@ public class RegistryEvents {
 
     @SubscribeEvent
     public static void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().registerAll(WingsTileEntities.DED_NEST.setRegistryName("nest"));
+        event.getRegistry().registerAll(WingsTileEntities.LIST.toArray(new TileEntityType[0]));
     }
 
     @SubscribeEvent

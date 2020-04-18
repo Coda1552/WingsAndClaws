@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "s#",
+    "s "
+  ],
+  "key": {
+    "#": {
+      "item": "wings:hatchet_beak_crest"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "wings:crest_hatchet",
+    "count": 1
+  }
+}

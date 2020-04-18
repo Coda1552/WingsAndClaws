@@ -13,8 +13,8 @@ import javax.annotation.Nullable;
 
 public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[8];
-    private DumpyEggDrakeModel adult;
-    private DumpyEggDrakeModel child;
+    private final DumpyEggDrakeModel adult;
+    private final DumpyEggDrakeModel child;
 
     public DumpyEggDrakeRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new DumpyEggDrakeModel.Adult(), 0.5f);

@@ -38,15 +38,15 @@
             }
           ],
           "name": "wings:dragon_meat"
-        },
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
         {
-          "rolls": 1,
-          "entries": [
-            {
-              "type": "minecraft:item",
-              "name": "wings:plowhead_horn"
-            }
-          ]
+          "type": "minecraft:item",
+          "name": "wings:plowhead_horn"
         }
       ]
     }

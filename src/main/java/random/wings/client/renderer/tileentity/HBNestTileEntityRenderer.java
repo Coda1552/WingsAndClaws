@@ -4,23 +4,15 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
-import random.wings.client.renderer.tileentity.model.DrakeNestModel;
-import random.wings.tileentity.DEDNestTileEntity;
+import random.wings.client.renderer.tileentity.model.HBNestModel;
+import random.wings.tileentity.HBNestTileEntity;
 
-public class NestTileEntityRenderer extends TileEntityRenderer<DEDNestTileEntity> {
-    public static final NestTileEntityRenderer INSTANCE = new NestTileEntityRenderer();
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[4];
-
-    static {
-        for (int i = 0; i < TEXTURES.length; i++) {
-            TEXTURES[i] = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/eggs_" + i + ".png");
-        }
-    }
-
-    private final DrakeNestModel model = new DrakeNestModel();
+public class HBNestTileEntityRenderer extends TileEntityRenderer<HBNestTileEntity> {
+    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/hatchet_beak/empty.png"), new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/hatchet_beak/egg.png")};
+    private final HBNestModel model = new HBNestModel();
 
     @Override
-    public void render(DEDNestTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(HBNestTileEntity tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
         super.render(tileEntityIn, x, y, z, partialTicks, destroyStage);
         this.bindTexture(TEXTURES[tileEntityIn.getEggCount()]);
         GlStateManager.pushMatrix();

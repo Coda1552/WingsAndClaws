@@ -2,6 +2,7 @@ package random.wings.client.renderer.entity.model;
 
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.util.math.MathHelper;
 import random.wings.entity.passive.HatchetBeakEntity;
 
 public class HatchetBeakModel extends EntityModel<HatchetBeakEntity> {
@@ -150,8 +151,24 @@ public class HatchetBeakModel extends EntityModel<HatchetBeakEntity> {
     }
 
     @Override
-    public void render(HatchetBeakEntity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(HatchetBeakEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+
         this.body.render(f5);
+    }
+
+    @Override
+    public void setRotationAngles(HatchetBeakEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+        super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+        wingLeftBone1.rotateAngleZ = 0.8f;
+        wingRightBone1.rotateAngleZ = -0.8f;
+        wingLeftBone2.rotateAngleZ = -1.6f;
+        wingRightBone2.rotateAngleZ = 1.6f;
+        if (!entityIn.isFlying()) {
+            wingRightBone1.rotateAngleY = MathHelper.cos(limbSwing * 0.45f + 0.6f) * limbSwingAmount * 0.6f - 0.2f;
+            legRight.rotateAngleX = MathHelper.cos(limbSwing * 0.25f + 0.2f) * limbSwingAmount * 1.4f - 0.2f;
+            wingLeftBone1.rotateAngleY = -(MathHelper.cos(limbSwing * 0.45f + 2.6f) * limbSwingAmount * 0.6f - 0.2f);
+            legLeft.rotateAngleX = -(MathHelper.cos(limbSwing * 0.25f + 0.2f) * limbSwingAmount * 1.4f - 0.2f);
+        }
     }
 
     public void setRotateAngle(RendererModel modelRenderer, float x, float y, float z) {

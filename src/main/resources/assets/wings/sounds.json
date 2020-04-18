@@ -58,5 +58,14 @@
         "stream": true
       }
     ]
+  },
+  "plowhead.angry": {
+    "subtitle": "wings.subtitle.plowhead.angry",
+    "sounds": [
+      {
+        "name": "wings:plowhead.angry",
+        "stream": true
+      }
+    ]
   }
 }

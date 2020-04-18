@@ -11,7 +11,7 @@ import random.wings.entity.passive.HatchetBeakEntity;
 import java.util.Objects;
 
 public class HBNestTileEntity extends NestTileEntity {
-    private int eggTimer;
+    private int eggTimer = -1;
 
     public HBNestTileEntity() {
         super(WingsTileEntities.HB_NEST);

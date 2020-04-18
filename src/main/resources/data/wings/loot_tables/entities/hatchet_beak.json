@@ -40,6 +40,15 @@
           "name": "wings:dragon_meat"
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "wings:hatchet_beak_crest"
+        }
+      ]
     }
   ]
 }

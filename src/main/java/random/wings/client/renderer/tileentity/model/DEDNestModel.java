@@ -3,14 +3,14 @@ package random.wings.client.renderer.tileentity.model;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 
-public class DrakeNestModel extends Model {
+public class DEDNestModel extends Model {
     public RendererModel bottom;
     public RendererModel top;
     public RendererModel egg1;
     public RendererModel egg2;
     public RendererModel egg3;
 
-    public DrakeNestModel() {
+    public DEDNestModel() {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.egg1 = new RendererModel(this, 42, 0);
@@ -34,11 +34,12 @@ public class DrakeNestModel extends Model {
     }
 
     public void render() {
-        this.egg1.render(0.0625f);
-        this.bottom.render(0.0625f);
-        this.egg2.render(0.0625f);
-        this.top.render(0.0625f);
-        this.egg3.render(0.0625f);
+        float f = 0.0625f;
+        this.egg1.render(f);
+        this.bottom.render(f);
+        this.egg2.render(f);
+        this.top.render(f);
+        this.egg3.render(f);
     }
 
     public void setRotateAngle(RendererModel modelRenderer, float x, float y, float z) {
