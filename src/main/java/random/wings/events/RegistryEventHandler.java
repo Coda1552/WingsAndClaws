@@ -2,6 +2,7 @@ package random.wings.events;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -9,6 +10,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -24,6 +26,7 @@ import random.wings.WingsSounds;
 import random.wings.block.WingsBlocks;
 import random.wings.client.ClientEventHandler;
 import random.wings.entity.WingsEntities;
+import random.wings.entity.passive.MimangoEntity;
 import random.wings.item.WingsItems;
 import random.wings.tileentity.WingsTileEntities;
 import random.wings.world.gen.feature.WingsFeatures;
@@ -64,6 +67,8 @@ public class RegistryEventHandler {
         ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.DESERT))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.DUMPY_EGG_DRAKE, 1, 1, 1)));
         BiomeDictionary.getBiomes(BiomeDictionary.Type.SAVANNA).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HATCHET_BEAK, 1, 1, 1)));
         ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.COLD_OCEAN))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.ICY_PLOWHEAD, 1, 1, 2)));
+        Biomes.JUNGLE.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 5, 1, 1));
+        EntitySpawnPlacementRegistry.register(WingsEntities.MIMANGO, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, MimangoEntity::canSpawn);
     }
 
     @SubscribeEvent
