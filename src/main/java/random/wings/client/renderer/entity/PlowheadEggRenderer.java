@@ -22,10 +22,10 @@ public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> imple
     @Override
     public void doRender(PlowheadEggEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        GlStateManager.pushMatrix();
         GlStateManager.translated(x, y, z);
         bindEntityTexture(entity);
-        GlStateManager.pushMatrix();
-        model.render(entity, 0, 0, -1, 0, 0, 0.625f);
+        model.render(entity, 0, 0, -1, 0, 0, 0);
         GlStateManager.popMatrix();
     }
 
