@@ -7,6 +7,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 import random.wings.entity.WingsEntities;
 
 public class DragonEggEntity extends ProjectileItemEntity {
@@ -70,5 +72,10 @@ public class DragonEggEntity extends ProjectileItemEntity {
 
     protected Item func_213885_i() {
         return Items.AIR; //since this currently unused on its own
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

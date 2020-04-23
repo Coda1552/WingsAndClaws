@@ -12,7 +12,7 @@ import random.wings.entity.item.PlowheadEggEntity;
 import javax.annotation.Nullable;
 
 public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> implements IEntityRenderer<PlowheadEggEntity, PlowheadEggModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/icy_plowhead/egg.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/items/icy_plowhead_egg.png");
     private final PlowheadEggModel model = new PlowheadEggModel();
 
     public PlowheadEggRenderer(EntityRendererManager renderManager) {
@@ -22,10 +22,10 @@ public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> imple
     @Override
     public void doRender(PlowheadEggEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        GlStateManager.pushMatrix();
         GlStateManager.translated(x, y, z);
         bindEntityTexture(entity);
-        GlStateManager.pushMatrix();
-        model.render(entity, 0, 0, -1, 0, 0, 0.625f);
+        model.render(entity, 0, 0, -1, 0, 0, 0);
         GlStateManager.popMatrix();
     }
 
