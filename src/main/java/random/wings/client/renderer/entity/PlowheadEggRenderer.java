@@ -12,7 +12,7 @@ import random.wings.entity.item.PlowheadEggEntity;
 import javax.annotation.Nullable;
 
 public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> implements IEntityRenderer<PlowheadEggEntity, PlowheadEggModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/icy_plowhead/egg.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/items/icy_plowhead_egg.png");
     private final PlowheadEggModel model = new PlowheadEggModel();
 
     public PlowheadEggRenderer(EntityRendererManager renderManager) {
