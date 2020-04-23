@@ -129,6 +129,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	@Override
+	protected float getSoundVolume() {
+		return 0.15f;
+	}
+
+	@Override
 	public void setTamed(boolean tamed) {
 		super.setTamed(tamed);
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 44 : 30);
