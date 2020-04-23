@@ -12,6 +12,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.network.NetworkHooks;
 import random.wings.entity.WingsEntities;
 import random.wings.entity.monster.IcyPlowheadEntity;
 import random.wings.item.WingsItems;
@@ -19,7 +21,7 @@ import random.wings.item.WingsItems;
 public class PlowheadEggEntity extends Entity {
 	private int hatchTime;
 
-	public PlowheadEggEntity(EntityType<? extends PlowheadEggEntity> type, World world) {
+	public PlowheadEggEntity(EntityType<?> type, World world) {
 		super(type, world);
 	}
 
@@ -53,7 +55,7 @@ public class PlowheadEggEntity extends Entity {
 
 	@Override
 	public IPacket<?> createSpawnPacket() {
-		return new SSpawnObjectPacket(this);
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
