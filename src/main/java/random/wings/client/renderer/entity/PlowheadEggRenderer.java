@@ -1,6 +1,7 @@
 package random.wings.client.renderer.entity;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -20,18 +21,17 @@ public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> imple
     }
 
     @Override
-    public void doRender(PlowheadEggEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(x, y, z);
-        bindEntityTexture(entity);
-        model.render(entity, 0, 0, -1, 0, 0, 0.0625f);
-        GlStateManager.popMatrix();
+    public void render(PlowheadEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        matrixStackIn.push();
+        //bindTexture
+        model.render(matrixStackIn, bufferIn.getBuffer(this.model.getRenderType(getEntityTexture(entityIn))), packedLightIn, 0, 1, 1, 1, 1);
+        matrixStackIn.pop();
     }
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(PlowheadEggEntity entity) {
+    public ResourceLocation getEntityTexture(PlowheadEggEntity entity) {
         return TEXTURE;
     }
 

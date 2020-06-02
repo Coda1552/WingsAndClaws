@@ -40,7 +40,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new FlyingMovementController(this);
+        this.moveController = new FlyingMovementController(this, 10, true);
     }
 
     @Override
@@ -105,14 +105,14 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public void tick() {
-        BlockPos pos = new BlockPos(posX, posY + 1, posZ);
+        BlockPos pos = new BlockPos(getPosX(), getPosY() + 1, getPosZ());
         if (world.getBlockState(pos).isAir(world, pos)) setHidden(false);
 
         super.tick();
 
         if (isHidden()) {
             this.setMotion(Vec3d.ZERO);
-            this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.getHeight();
+            this.setRawPosition(getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), getPosZ());
         }
     }
 

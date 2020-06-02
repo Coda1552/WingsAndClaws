@@ -1,13 +1,13 @@
 package random.wings.client.renderer.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import random.wings.WingsAndClaws;
 import random.wings.client.renderer.entity.model.MimangoModel;
 import random.wings.entity.passive.MimangoEntity;
-
-import javax.annotation.Nullable;
 
 public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[6];
@@ -21,14 +21,13 @@ public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
     }
 
     @Override
-    public void doRender(MimangoEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        entityModel = entity.isChild() ? child : adult;
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    public void render(MimangoEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        entityModel = entityIn.isChild() ? child : adult;
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(MimangoEntity entity) {
+    public ResourceLocation getEntityTexture(MimangoEntity entity) {
         int variant = entity.isChild() ? 1 : entity.getVariant() + 2;
         ResourceLocation texture = TEXTURES[variant];
         if (texture == null) {

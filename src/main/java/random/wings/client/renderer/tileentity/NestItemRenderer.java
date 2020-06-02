@@ -1,5 +1,7 @@
 package random.wings.client.renderer.tileentity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
@@ -16,7 +18,7 @@ public class NestItemRenderer extends ItemStackTileEntityRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack itemStackIn) {
-        TileEntityRendererDispatcher.instance.renderAsItem(instance);
+    public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        TileEntityRendererDispatcher.instance.renderItem(instance, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 }

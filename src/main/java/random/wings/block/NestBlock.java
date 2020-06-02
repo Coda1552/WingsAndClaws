@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -61,19 +61,14 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
     }
 
     @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         ItemStack stack = player.getHeldItem(handIn);
         TileEntity te = worldIn.getTileEntity(pos);
         if (tile.isInstance(te)) {
             if (stack.isEmpty()) {
                 boolean removed = ((NestTileEntity) te).removeEgg();
                 if (removed) player.setHeldItem(handIn, new ItemStack(item));
-                return removed;
+                return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             } else if (stack.getItem() == item) {
                 boolean added = ((NestTileEntity) te).addEgg();
                 if (added) {
@@ -81,9 +76,9 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
                 } else {
                     boolean removed = stack.getCount() < stack.getMaxStackSize() && ((NestTileEntity) te).removeEgg();
                     if (removed) stack.grow(1);
-                    return removed;
+                    return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
                 }
-                return true;
+                return ActionResultType.PASS;
             }
         }
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);

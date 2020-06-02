@@ -5,24 +5,19 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import random.wings.client.renderer.entity.*;
 import random.wings.client.renderer.tileentity.DEDNestTileEntityRenderer;
 import random.wings.client.renderer.tileentity.HBNestTileEntityRenderer;
-import random.wings.entity.item.PlowheadEggEntity;
-import random.wings.entity.monster.IcyPlowheadEntity;
-import random.wings.entity.passive.DumpyEggDrakeEntity;
-import random.wings.entity.passive.HatchetBeakEntity;
-import random.wings.entity.passive.MimangoEntity;
-import random.wings.tileentity.DEDNestTileEntity;
-import random.wings.tileentity.HBNestTileEntity;
+import random.wings.entity.WingsEntities;
+import random.wings.tileentity.WingsTileEntities;
 
 public class ClientEventHandler {
     public static void init() {
-        ClientRegistry.bindTileEntitySpecialRenderer(DEDNestTileEntity.class, new DEDNestTileEntityRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(HBNestTileEntity.class, new HBNestTileEntityRenderer());
+        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST, DEDNestTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST, HBNestTileEntityRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(DumpyEggDrakeEntity.class, DumpyEggDrakeRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(HatchetBeakEntity.class, HatchetBeakRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(IcyPlowheadEntity.class, IcyPlowheadRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(PlowheadEggEntity.class, PlowheadEggRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(MimangoEntity.class, MimangoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.DUMPY_EGG_DRAKE, DumpyEggDrakeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HATCHET_BEAK, HatchetBeakRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.ICY_PLOWHEAD, IcyPlowheadRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.PLOWHEAD_EGG, PlowheadEggRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.MIMANGO, MimangoRenderer::new);
         //RenderingRegistry.registerEntityRenderingHandler(MimangoEggEntity.class, MimangoEggRenderer::new);
     }
 }

@@ -34,7 +34,7 @@ public class DragonEggEntity extends ProjectileItemEntity {
         if (id == 3) {
             double d = 0.08D;
             for (int i = 0; i < 8; ++i)
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), this.posX, this.posY, this.posZ, (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d);
+                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), getPosX(), getPosY(), getPosZ(), (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d);
         }
 
     }
@@ -56,7 +56,7 @@ public class DragonEggEntity extends ProjectileItemEntity {
                     if (entity instanceof AnimalEntity) {
                         AnimalEntity animal = (AnimalEntity) entity;
                         animal.setGrowingAge(-24000);
-                        animal.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                        animal.setLocationAndAngles(getPosX(), getPosY(), getPosZ(), this.rotationYaw, 0.0F);
                         this.world.addEntity(animal);
                     }
                 }
@@ -75,5 +75,10 @@ public class DragonEggEntity extends ProjectileItemEntity {
     @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @Override
+    protected Item getDefaultItem() {
+        return null;
     }
 }

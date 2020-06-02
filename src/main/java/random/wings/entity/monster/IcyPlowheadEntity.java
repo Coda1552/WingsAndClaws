@@ -177,7 +177,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(world);
 				if (plowhead != null) {
 					plowhead.setGrowingAge(-24000);
-					plowhead.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+					plowhead.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
 					plowhead.onInitialSpawn(world, world.getDifficultyForLocation(plowhead.getPosition()), SpawnReason.SPAWN_EGG, null, null);
 					this.world.addEntity(plowhead);
 					if (stack.hasDisplayName()) {
@@ -224,7 +224,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 						startedCharging = true;
 					}
-					setMotion(MathHelper.clamp(target.getHitVec().x - posX, -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - posY, -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - posZ, -0.5, 0.5));
+					setMotion(MathHelper.clamp(target.getHitVec().x - getPosX(), -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - getPosY(), -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - getPosZ(), -0.5, 0.5));
 					getLookController().setLookPosition(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0, 0);
 					if (getDistanceSq(target.getHitVec()) <= 4) {
 						switch (target.getType()) {
@@ -243,9 +243,9 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 						startedCharging = true;
 					}
-					setMotion(MathHelper.clamp(iceBlock.getX() - posX, -0.5, 0.5), MathHelper.clamp(iceBlock.getY() - posY, -0.3, 0.3), MathHelper.clamp(iceBlock.getZ() - posZ, -0.5, 0.5));
+					setMotion(MathHelper.clamp(iceBlock.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(iceBlock.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(iceBlock.getZ() - getPosZ(), -0.5, 0.5));
 					getLookController().setLookPosition(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0, 0);
-					if (iceBlock.distanceSq(posX, posY, posZ, true) <= 4) {
+					if (iceBlock.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
 						world.removeBlock(iceBlock, false);
 						iceBlock = null;
 						ramTime = rand.nextInt(1200) + 1200;
@@ -281,7 +281,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				}
 				sleepTarget = p;
 			}
-			setMotion(MathHelper.clamp(sleepTarget.getX() - posX, -0.5, 0.5), MathHelper.clamp(sleepTarget.getY() - posY, -0.3, 0.3), MathHelper.clamp(sleepTarget.getZ() - posZ, -0.5, 0.5));
+			setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.5, 0.5));
 			return false;
 		}
 		sleepTarget = null;
@@ -332,9 +332,9 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			}
 
 			if (this.action == MovementController.Action.MOVE_TO && !this.plowhead.getNavigator().noPath()) {
-				double d0 = this.posX - this.plowhead.posX;
-				double d1 = this.posY - this.plowhead.posY;
-				double d2 = this.posZ - this.plowhead.posZ;
+				double d0 = this.posX - this.plowhead.getPosX();
+				double d1 = this.posY - this.plowhead.getPosY();
+				double d2 = this.posZ - this.plowhead.getPosZ();
 				double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 				d1 = d1 / d3;
 				float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;

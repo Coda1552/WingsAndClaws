@@ -7,8 +7,6 @@ import random.wings.WingsAndClaws;
 import random.wings.client.renderer.entity.model.IcyPlowheadModel;
 import random.wings.entity.monster.IcyPlowheadEntity;
 
-import javax.annotation.Nullable;
-
 public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowheadModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[4];
 
@@ -16,9 +14,8 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
         super(p_i50961_1_, new IcyPlowheadModel(), 0.75f);
     }
 
-    @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(IcyPlowheadEntity entity) {
+    public ResourceLocation getEntityTexture(IcyPlowheadEntity entity) {
         byte texture = 0;
         if (entity.getGender()) texture |= 1;
         if (entity.isSleeping()) texture |= 2;

@@ -1,35 +1,36 @@
 package random.wings.client.renderer.entity.model;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import random.wings.entity.passive.DumpyEggDrakeEntity;
 
-public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity> {
-    public RendererModel body;
-    public RendererModel tail1;
-    public RendererModel neck;
-    public RendererModel legLeft;
-    public RendererModel legRight;
-    public RendererModel armLeft;
-    public RendererModel armRight;
-    public RendererModel tail2;
-    public RendererModel tailTip;
-    public RendererModel headJoint;
-    public RendererModel bandana;
-    public RendererModel head;
-    public RendererModel jaw;
-    public RendererModel hornLeft;
-    public RendererModel hornRight;
+public abstract class DumpyEggDrakeModel extends SegmentedModel<DumpyEggDrakeEntity> {
+    public ModelRenderer body;
+    public ModelRenderer tail1;
+    public ModelRenderer neck;
+    public ModelRenderer legLeft;
+    public ModelRenderer legRight;
+    public ModelRenderer armLeft;
+    public ModelRenderer armRight;
+    public ModelRenderer tail2;
+    public ModelRenderer tailTip;
+    public ModelRenderer headJoint;
+    public ModelRenderer bandana;
+    public ModelRenderer head;
+    public ModelRenderer jaw;
+    public ModelRenderer hornLeft;
+    public ModelRenderer hornRight;
 
     public DumpyEggDrakeModel() {
         setAngles();
     }
 
     @Override
-    public void render(DumpyEggDrakeEntity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        this.body.render(f5);
+    public Iterable<ModelRenderer> getParts() {
+        return ImmutableList.of(body);
     }
 
     protected abstract void setAngles();
@@ -79,8 +80,8 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
         }
     }
 
-    public void setRotationAngles(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-        super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+    @Override
+    public void setRotationAngles(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.neck.rotateAngleX = Math.min(headPitch + 10, 0) * ((float) Math.PI / 180F);
         this.headJoint.rotateAngleZ = headPitch * ((float) Math.PI / 180F);
     }
@@ -90,51 +91,51 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
         protected void setAngles() {
             this.textureWidth = 128;
             this.textureHeight = 128;
-            this.hornRight = new RendererModel(this, 10, 0);
+            this.hornRight = new ModelRenderer(this, 10, 0);
             this.hornRight.setRotationPoint(-1.5F, -4.0F, -3.0F);
             this.hornRight.addBox(-1.0F, -2.0F, -1.0F, 1, 2, 2, 0.0F);
             this.hornRight.rotateAngleZ = -0.4363323129985824F;
-            this.tailTip = new RendererModel(this, 92, 19);
+            this.tailTip = new ModelRenderer(this, 92, 19);
             this.tailTip.setRotationPoint(0.0F, 0.0F, 14.0F);
             this.tailTip.addBox(-2.5F, -2.5F, 0.0F, 5, 5, 6, 0.0F);
-            this.body = new RendererModel(this, 0, 0);
+            this.body = new ModelRenderer(this, 0, 0);
             this.body.setRotationPoint(0.0F, 10.0F, 0.0F);
             this.body.addBox(-4.0F, -5.0F, -8.0F, 8, 10, 16, 0.0F);
-            this.hornLeft = new RendererModel(this, 10, 0);
+            this.hornLeft = new ModelRenderer(this, 10, 0);
             this.hornLeft.setRotationPoint(1.5F, -4.0F, -3.0F);
             this.hornLeft.addBox(0.0F, -2.0F, -1.0F, 1, 2, 2, 0.0F);
             this.hornLeft.rotateAngleZ = 0.4363323129985824F;
-            this.jaw = new RendererModel(this, 64, 20);
+            this.jaw = new ModelRenderer(this, 64, 20);
             this.jaw.setRotationPoint(0.0F, 1.5F, 0.0F);
             this.jaw.addBox(-2.0F, 0.0F, -5.5F, 4, 1, 6, 0.0F);
-            this.legLeft = new RendererModel(this, 86, 0);
+            this.legLeft = new ModelRenderer(this, 86, 0);
             this.legLeft.setRotationPoint(3.0F, 0.0F, 3.5F);
             this.legLeft.addBox(-2.0F, 0.0F, -2.5F, 4, 14, 5, 0.0F);
-            this.armLeft = new RendererModel(this, 72, 0);
+            this.armLeft = new ModelRenderer(this, 72, 0);
             this.armLeft.setRotationPoint(4.0F, 3.0F, -4.0F);
             this.armLeft.addBox(-1.0F, -1.0F, -1.5F, 2, 6, 3, 0.0F);
-            this.head = new RendererModel(this, 42, 20);
+            this.head = new ModelRenderer(this, 42, 20);
             this.head.setRotationPoint(0.0F, 1.5F, 0.0F);
             this.head.addBox(-2.5F, -4.0F, -6.0F, 5, 4, 6, 0.0F);
-            this.tail2 = new RendererModel(this, 65, 19);
+            this.tail2 = new ModelRenderer(this, 65, 19);
             this.tail2.setRotationPoint(0.0F, -0.5F, 13.0F);
             this.tail2.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 21, 0.0F);
-            this.headJoint = new RendererModel(this, 0, 0);
+            this.headJoint = new ModelRenderer(this, 0, 0);
             this.headJoint.setRotationPoint(0.0F, 0.0F, -8.0F);
             this.headJoint.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-            this.bandana = new RendererModel(this, 0, 27);
+            this.bandana = new ModelRenderer(this, 0, 27);
             this.bandana.setRotationPoint(0.0F, -3.5F, -4.5F);
             this.bandana.addBox(-3.5F, 0.0F, -2.5F, 7, 10, 5, 0.0F);
-            this.tail1 = new RendererModel(this, 48, 0);
+            this.tail1 = new ModelRenderer(this, 48, 0);
             this.tail1.setRotationPoint(0.0F, -1.0F, 7.0F);
             this.tail1.addBox(-2.5F, -3.0F, 0.0F, 5, 6, 14, 0.0F);
-            this.neck = new RendererModel(this, 32, 0);
+            this.neck = new ModelRenderer(this, 32, 0);
             this.neck.setRotationPoint(0.0F, -1.0F, -7.0F);
             this.neck.addBox(-3.0F, -3.0F, -8.0F, 6, 6, 8, 0.0F);
-            this.legRight = new RendererModel(this, 86, 0);
+            this.legRight = new ModelRenderer(this, 86, 0);
             this.legRight.setRotationPoint(-3.0F, 0.0F, 3.5F);
             this.legRight.addBox(-2.0F, 0.0F, -2.5F, 4, 14, 5, 0.0F);
-            this.armRight = new RendererModel(this, 72, 0);
+            this.armRight = new ModelRenderer(this, 72, 0);
             this.armRight.setRotationPoint(-4.0F, 3.0F, -4.0F);
             this.armRight.addBox(-1.0F, -1.0F, -1.5F, 2, 6, 3, 0.0F);
             this.head.addChild(this.hornRight);
@@ -159,51 +160,51 @@ public abstract class DumpyEggDrakeModel extends EntityModel<DumpyEggDrakeEntity
         protected void setAngles() {
             this.textureWidth = 64;
             this.textureHeight = 64;
-            this.tail2 = new RendererModel(this, 28, 11);
+            this.tail2 = new ModelRenderer(this, 28, 11);
             this.tail2.setRotationPoint(0.0F, 0.0F, 8.0F);
             this.tail2.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 12, 0.0F);
-            this.legLeft = new RendererModel(this, 0, 0);
+            this.legLeft = new ModelRenderer(this, 0, 0);
             this.legLeft.setRotationPoint(2.0F, 0.5F, 0.0F);
             this.legLeft.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
-            this.armLeft = new RendererModel(this, 20, 0);
+            this.armLeft = new ModelRenderer(this, 20, 0);
             this.armLeft.setRotationPoint(2.5F, 2.0F, -4.5F);
             this.armLeft.addBox(-0.5F, 0.0F, -0.5F, 1, 3, 1, 0.0F);
-            this.neck = new RendererModel(this, 47, 6);
+            this.neck = new ModelRenderer(this, 47, 6);
             this.neck.setRotationPoint(0.0F, -0.5F, -7.0F);
             this.neck.addBox(-1.5F, -2.0F, -5.0F, 3, 4, 5, 0.0F);
-            this.armRight = new RendererModel(this, 20, 0);
+            this.armRight = new ModelRenderer(this, 20, 0);
             this.armRight.setRotationPoint(-2.5F, 2.0F, -4.5F);
             this.armRight.addBox(-0.5F, 0.0F, -0.5F, 1, 3, 1, 0.0F);
-            this.jaw = new RendererModel(this, 53, 2);
+            this.jaw = new ModelRenderer(this, 53, 2);
             this.jaw.setRotationPoint(0.0F, 0.0F, -0.2F);
             this.jaw.addBox(-1.0F, 0.0F, -2.5F, 2, 1, 3, 0.0F);
-            this.tail1 = new RendererModel(this, 30, 0);
+            this.tail1 = new ModelRenderer(this, 30, 0);
             this.tail1.setRotationPoint(0.0F, -0.5F, 3.0F);
             this.tail1.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 8, 0.0F);
-            this.head = new RendererModel(this, 44, 0);
+            this.head = new ModelRenderer(this, 44, 0);
             this.head.setRotationPoint(0.0F, 0.0F, 0.0F);
             this.head.addBox(-1.5F, -2.0F, -3.0F, 3, 2, 3, 0.0F);
-            this.hornLeft = new RendererModel(this, 53, 0);
+            this.hornLeft = new ModelRenderer(this, 53, 0);
             this.hornLeft.setRotationPoint(0.5F, -2.0F, -1.0F);
             this.hornLeft.addBox(0.0F, -1.0F, -0.5F, 1, 1, 1, 0.0F);
             this.hornLeft.rotateAngleZ = 0.4363323129985824F;
-            this.hornRight = new RendererModel(this, 53, 0);
+            this.hornRight = new ModelRenderer(this, 53, 0);
             this.hornRight.setRotationPoint(-0.5F, -2.0F, -1.0F);
             this.hornRight.addBox(-1.0F, -1.0F, -0.5F, 1, 1, 1, 0.0F);
             this.hornRight.rotateAngleZ = -0.4363323129985824F;
-            this.headJoint = new RendererModel(this, 34, 0);
+            this.headJoint = new ModelRenderer(this, 34, 0);
             this.headJoint.setRotationPoint(0.0F, 0.5F, -5.0F);
             this.headJoint.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-            this.bandana = new RendererModel(this, 0, 18);
+            this.bandana = new ModelRenderer(this, 0, 18);
             this.bandana.setRotationPoint(0.0F, -0.5F, -1.5F);
             this.bandana.addBox(-2.0F, -2.0F, -2.5F, 4, 7, 3, 0.0F);
-            this.legRight = new RendererModel(this, 0, 0);
+            this.legRight = new ModelRenderer(this, 0, 0);
             this.legRight.setRotationPoint(-2.0F, 0.5F, 0.0F);
             this.legRight.addBox(-1.0F, 0.0F, -1.5F, 2, 7, 3, 0.0F);
-            this.body = new RendererModel(this, 0, 0);
+            this.body = new ModelRenderer(this, 0, 0);
             this.body.setRotationPoint(0.0F, 16.5F, 2.0F);
             this.body.addBox(-2.5F, -3.0F, -7.0F, 5, 6, 10, 0.0F);
-            this.tailTip = new RendererModel(this, 24, 0);
+            this.tailTip = new ModelRenderer(this, 24, 0);
             this.tailTip.setRotationPoint(0.0F, 0.0F, 7.0F);
             this.tailTip.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 4, 0.0F);
             this.tail1.addChild(this.tail2);

@@ -156,7 +156,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.create(world);
                 if (drake != null) {
                     drake.setGrowingAge(-24000);
-                    drake.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+                    drake.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
                     drake.onInitialSpawn(world, world.getDifficultyForLocation(drake.getPosition()), SpawnReason.SPAWN_EGG, null, null);
                     this.world.addEntity(drake);
                     if (stack.hasDisplayName()) {
