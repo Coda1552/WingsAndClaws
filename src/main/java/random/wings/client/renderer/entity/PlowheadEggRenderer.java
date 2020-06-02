@@ -25,7 +25,7 @@ public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> imple
         GlStateManager.pushMatrix();
         GlStateManager.translated(x, y, z);
         bindEntityTexture(entity);
-        model.render(entity, 0, 0, -1, 0, 0, 0);
+        model.render(entity, 0, 0, -1, 0, 0, 0.0625f);
         GlStateManager.popMatrix();
     }
 

@@ -32,7 +32,7 @@ public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
         int variant = entity.isChild() ? 1 : entity.getVariant() + 2;
         ResourceLocation texture = TEXTURES[variant];
         if (texture == null) {
-            TEXTURES[variant] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/mimango/texture_" + variant);
+            TEXTURES[variant] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/mimango/mimango_" + variant + ".png");
         }
         return texture;
     }

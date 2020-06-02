@@ -1,8 +1,11 @@
 package random.wings.entity.passive;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -11,9 +14,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -25,13 +33,19 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
-public class MimangoEntity extends TameableDragonEntity {
+public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final DataParameter<Boolean> HIDDEN = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
     private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(Items.COCOA_BEANS);
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
+        this.moveController = new FlyingMovementController(this);
+    }
+
+    @Override
+    public PathNavigator getNavigator() {
+        return new FlyingPathNavigator(this, world);
     }
 
     @Override
@@ -43,7 +57,7 @@ public class MimangoEntity extends TameableDragonEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(HIDDEN, true);
+        this.dataManager.register(HIDDEN, false);
         this.dataManager.register(VARIANT, 0);
     }
 
@@ -64,9 +78,9 @@ public class MimangoEntity extends TameableDragonEntity {
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
+    public boolean attackEntityFrom(DamageSource source, float amount) {
         if (isHidden()) setHidden(false);
-        return super.attackEntityAsMob(entityIn);
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
@@ -74,10 +88,39 @@ public class MimangoEntity extends TameableDragonEntity {
         return stack.getItem() == Items.COCOA_BEANS;
     }
 
+    public boolean canBePushed() {
+        return false;
+    }
+
+    public void fall(float distance, float damageMultiplier) {
+    }
+
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    }
+
+    protected void collideWithEntity(Entity entityIn) {
+    }
+
+    protected void collideWithNearbyEntities() {
+    }
+
+    public void tick() {
+        BlockPos pos = new BlockPos(posX, posY + 1, posZ);
+        if (world.getBlockState(pos).isAir(world, pos)) setHidden(false);
+
+        super.tick();
+
+        if (isHidden()) {
+            this.setMotion(Vec3d.ZERO);
+            this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.getHeight();
+        }
+    }
+
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setVariant(rand.nextInt(5));
+        setHidden(world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
@@ -113,7 +156,7 @@ public class MimangoEntity extends TameableDragonEntity {
     }
 
     public static boolean canSpawn(EntityType<MimangoEntity> type, IWorld world, SpawnReason reason, BlockPos pos, Random rand) {
-        Block block = world.getBlockState(pos.down()).getBlock();
+        Block block = world.getBlockState(pos.up()).getBlock();
         return block.isIn(BlockTags.LEAVES) && world.getLightSubtracted(pos, 0) > 8;
     }
 }

@@ -2,7 +2,6 @@ package random.wings.entity.item;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
@@ -17,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-import random.wings.entity.WingsEntities;
 
 public class DragonEggEntity extends ProjectileItemEntity {
     private EntityType<?> eggType;
@@ -26,10 +24,10 @@ public class DragonEggEntity extends ProjectileItemEntity {
         super(type, world);
     }
 
-    public DragonEggEntity(EntityType<?> type, World worldIn, LivingEntity throwerIn) {
+    /*public DragonEggEntity(EntityType<?> type, World worldIn, LivingEntity throwerIn) {
         super(WingsEntities.DRAGON_EGG, throwerIn, worldIn);
         this.eggType = type;
-    }
+    }*/
 
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {

@@ -3,16 +3,17 @@ package random.wings.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import random.wings.WingsAndClaws;
-import random.wings.entity.item.DragonEggEntity;
 
 public class DragonEggItem extends Item {
     public DragonEggItem() {
@@ -45,11 +46,11 @@ public class DragonEggItem extends Item {
             assert nbt != null;
             EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(WingsAndClaws.MOD_ID, nbt.getString("type")));
             if (type != null) {
-                ProjectileItemEntity entity = new DragonEggEntity(type, world, player);
+                /*ProjectileItemEntity entity = new DragonEggEntity(type, world, player);
                 entity.func_213884_b(stack);
                 entity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
                 world.playSound(null, player.getPosition(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
-                return entity;
+                return entity;*/
             }
         }
         return null;
