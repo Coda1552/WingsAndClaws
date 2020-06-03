@@ -60,7 +60,8 @@ public class PlowheadEggEntity extends Entity {
 	public void tick() {
 		super.tick();
 		if (!this.world.isRemote) {
-			if (isInWaterOrBubbleColumn() || hatchTime++ >= 4800) {
+			setMotion(getMotion().add(0, -0.005, 0));
+			if (isInWaterOrBubbleColumn() && hatchTime++ >= 4800) {
 				if (this.rand.nextInt(8) == 0) {
 					int i = 1;
 					if (this.rand.nextInt(32) == 0) {

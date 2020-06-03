@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
@@ -34,7 +33,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class IcyPlowheadEntity extends TameableDragonEntity {
-	private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
+	//private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
 	private int alarmedTimer;
 	private int attackCooldown;
@@ -273,19 +272,26 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public boolean isSleeping() {
-		if (!onGround) {
-			if (sleepTarget == null) {
-				BlockPos p = getPosition().add(rand.nextInt(32), -1, rand.nextInt(32));
-				while (world.getBlockState(p).getBlock() == Blocks.WATER) {
-					p = p.down();
+		boolean isNight = world.getDayTime() > 13000 && world.getDayTime() < 23000;
+		boolean ground = world.getBlockState(new BlockPos(getPosX(), getPosY() - 1, getPosZ())).getBlock() != Blocks.WATER;
+		if (isNight) {
+			if (!ground) {
+				if (sleepTarget == null) {
+					BlockPos p = getPosition().add(rand.nextInt(64) - 32, -1, rand.nextInt(64) - 32);
+					while (world.getBlockState(p).getBlock() == Blocks.WATER) {
+						p = p.down();
+					}
+					sleepTarget = p;
 				}
-				sleepTarget = p;
+				setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.1, 0.1), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.2, 0.2), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.03, 0.03));
+				return false;
 			}
-			setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.5, 0.5));
-			return false;
+			return alarmedTimer == 0 && ground;
+		} else if (sleepTarget != null) {
+			sleepTarget = null;
+			setMotion(getMotion().add(0, 0.2, 0));
 		}
-		sleepTarget = null;
-		return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 23000;
+		return false;
 	}
 
 	@Override

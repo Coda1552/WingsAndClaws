@@ -1,7 +1,9 @@
 package random.wings.block;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,8 +30,8 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
     private TileEntityType<T> type;
     private Item item;
 
-    public NestBlock(String name, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
-        super(Block.Properties.create(Material.SAND).sound(SoundType.SAND).hardnessAndResistance(1, 0));
+    public NestBlock(String name, Block.Properties properties, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
+        super(properties);
         this.entity = entity;
         this.tile = tile;
         setRegistryName(name);
