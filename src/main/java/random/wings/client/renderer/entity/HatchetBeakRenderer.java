@@ -10,7 +10,7 @@ import random.wings.entity.passive.HatchetBeakEntity;
 import javax.annotation.Nullable;
 
 public class HatchetBeakRenderer extends MobRenderer<HatchetBeakEntity, HatchetBeakModel> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/hatchet_beak/hatchet_beak.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/hatchet_beak/hatchet_beak.png");
 
     public HatchetBeakRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new HatchetBeakModel(), 0.75f);

@@ -10,7 +10,7 @@ import random.wings.WingsAndClaws;
 import random.wings.client.renderer.tileentity.model.PlowheadShieldModel;
 
 public class PlowheadShieldRenderer extends ItemStackTileEntityRenderer {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/icy_plowhead/shield.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/shield.png");
     private final PlowheadShieldModel model = new PlowheadShieldModel();
 
     @Override

@@ -23,7 +23,6 @@ import java.util.Random;
 public class DEDNestStructure extends Feature<NoFeatureConfig> {
     public DEDNestStructure() {
         super(NoFeatureConfig::deserialize);
-        WingsFeatures.LIST.add(setRegistryName("ded_nest"));
     }
 
     private static Vec3d get(BlockPos pos, Random rand) {

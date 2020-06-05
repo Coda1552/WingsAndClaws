@@ -18,7 +18,6 @@ import java.util.Random;
 public class HBNestStructure extends Feature<NoFeatureConfig> {
     public HBNestStructure() {
         super(NoFeatureConfig::deserialize);
-        WingsFeatures.LIST.add(setRegistryName("hb_nest"));
     }
 
     @Override

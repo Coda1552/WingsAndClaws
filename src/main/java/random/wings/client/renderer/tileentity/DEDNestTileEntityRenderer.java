@@ -20,12 +20,13 @@ public class DEDNestTileEntityRenderer extends TileEntityRenderer<DEDNestTileEnt
 
     @Override
     public void render(DEDNestTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        model.setEggCount(tileEntityIn.getEggCount());
         NestTileEntity.render(tileEntityIn, model, TEXTURES, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 
     static {
         for (int i = 0; i < TEXTURES.length; i++) {
-            TEXTURES[i] = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/dumpy_egg_drake/eggs_" + i + ".png");
+            TEXTURES[i] = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/dumpy_egg_drake/eggs_" + i + ".png");
         }
     }
 }

@@ -10,6 +10,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -21,6 +27,8 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.storage.loot.LootContext;
 import random.wings.WingsSounds;
 import random.wings.entity.TameableDragonEntity;
 import random.wings.entity.WingsEntities;
@@ -30,24 +38,32 @@ import random.wings.item.WingsItems;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class IcyPlowheadEntity extends TameableDragonEntity {
 	//private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
+	private static final DataParameter<Optional<BlockPos>> ICE_BLOCK = EntityDataManager.createKey(IcyPlowheadEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
 	private int alarmedTimer;
 	private int attackCooldown;
 	private Vec3d oldPos;
 	private int ramTime;
-	private BlockPos iceBlock;
 	private RayTraceResult target;
 	private BlockPos sleepTarget;
-	private boolean startedCharging;
+	private int startedCharging;
 
 	public IcyPlowheadEntity(EntityType<? extends IcyPlowheadEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.setPathPriority(PathNodeType.WATER, 1.0F);
 		this.moveController = new MoveHelperController(this);
+		this.setPathPriority(PathNodeType.WATER, 0.0F);
+	}
+
+	@Override
+	protected void registerData() {
+		super.registerData();
+		this.dataManager.register(ICE_BLOCK, Optional.empty());
 	}
 
 	@Override
@@ -160,6 +176,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	public boolean processInteract(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_SHRIMP) {
+			if (!player.abilities.isCreativeMode) stack.shrink(1);
 			if (this.rand.nextInt(10) == 0) {
 				this.setTamedBy(player);
 				this.setAttackTarget(null);
@@ -218,10 +235,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					attackCooldown = 0;
 					setAttackTarget(null);
 				}
+				Optional<BlockPos> iceBlock = this.dataManager.get(ICE_BLOCK);
 				if (target != null) {
-					if (!startedCharging) {
+					if (startedCharging == 0) {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
-						startedCharging = true;
+						startedCharging = 120;
 					}
 					setMotion(MathHelper.clamp(target.getHitVec().x - getPosX(), -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - getPosY(), -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - getPosZ(), -0.5, 0.5));
 					getLookController().setLookPosition(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0, 0);
@@ -235,26 +253,41 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 								break;
 						}
 						target = null;
-						startedCharging = false;
+						startedCharging = 0;
 					}
-				} else if (iceBlock != null) {
-					if (!startedCharging) {
-						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
-						startedCharging = true;
-					}
-					setMotion(MathHelper.clamp(iceBlock.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(iceBlock.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(iceBlock.getZ() - getPosZ(), -0.5, 0.5));
-					getLookController().setLookPosition(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0, 0);
-					if (iceBlock.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
-						world.removeBlock(iceBlock, false);
-						iceBlock = null;
-						ramTime = rand.nextInt(1200) + 1200;
-						startedCharging = false;
-					}
+				} else {
+					iceBlock.ifPresent(it -> {
+						if (startedCharging == 0) {
+							playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
+							startedCharging = 120;
+						} else if (startedCharging == 1) {
+							dataManager.set(ICE_BLOCK, Optional.empty());
+							return;
+						} else --startedCharging;
+						setMotion(MathHelper.clamp(it.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(it.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(it.getZ() - getPosZ(), -0.5, 0.5));
+						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
+							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+						}
+						getLookController().setLookPosition(it.getX(), it.getY(), it.getZ(), 0, 0);
+						if (it.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
+							BlockState state = world.getBlockState(it);
+							world.setEntityState(this, (byte) 5);
+							if (state.isSolid()) {
+								for (ItemStack drop : state.getDrops(new LootContext.Builder((ServerWorld) world).withRandom(rand))) {
+									entityDropItem(drop, (float) (it.getY() - getPosY()));
+								}
+							}
+							world.removeBlock(it, false);
+							dataManager.set(ICE_BLOCK, Optional.empty());
+							ramTime = rand.nextInt(1200) + 1200;
+							startedCharging = 0;
+						}
+					});
 				}
 				if (attackCooldown-- <= 0) attackCooldown = 0;
 				if (alarmedTimer-- <= 0) alarmedTimer = 0;
 				if (ramTime-- <= 0) ramTime = 0;
-				if (ramTime == 0 && iceBlock == null && ticksExisted % 20 == 0) {
+				if (ramTime == 0 && !iceBlock.isPresent() && ticksExisted % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
 					BlockPos.getAllInBox(getPosition().add(-16, -16, -16), getPosition().add(16, 16, 16)).forEach(pos -> {
 						BlockState state = world.getBlockState(pos);
@@ -263,11 +296,27 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							possible.add(pos.toImmutable());
 						}
 					});
-					if (possible.size() > 0) iceBlock = possible.get(rand.nextInt(possible.size()));
+					if (possible.size() > 0)
+						dataManager.set(ICE_BLOCK, Optional.of(possible.get(rand.nextInt(possible.size()))));
 				}
 			}
 			super.livingTick();
 		} else this.travel(new Vec3d(this.moveStrafing, this.moveVertical, this.moveForward));
+	}
+
+	@Override
+	public void handleStatusUpdate(byte id) {
+		if (id == 5) {
+			dataManager.get(ICE_BLOCK).ifPresent(iceBlock -> {
+				IParticleData data = new BlockParticleData(ParticleTypes.BLOCK, world.getBlockState(iceBlock)).setPos(iceBlock);
+				for (int i = 0; i < 7; ++i) {
+					double d0 = this.rand.nextGaussian() * 0.01D;
+					double d1 = this.rand.nextGaussian() * 0.01D;
+					double d2 = this.rand.nextGaussian() * 0.01D;
+					this.world.addParticle(data, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.2D, this.getPosZRandom(1.0D), d0, d1, d2);
+				}
+			});
+		} else super.handleStatusUpdate(id);
 	}
 
 	@Override

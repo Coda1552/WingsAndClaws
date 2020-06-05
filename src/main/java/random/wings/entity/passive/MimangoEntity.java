@@ -92,7 +92,8 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         return false;
     }
 
-    public void fall(float distance, float damageMultiplier) {
+    public boolean onLivingFall(float distance, float damageMultiplier) {
+        return false;
     }
 
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {

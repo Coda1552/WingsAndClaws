@@ -21,7 +21,7 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
         if (entity.isSleeping()) texture |= 2;
         if (TEXTURES[texture] == null) {
             String entityTexture = String.format("%s%s", ((texture & 1) != 0) ? "male" : "female", ((texture & 2) != 0) ? "_sleep" : "");
-            ResourceLocation location = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/icy_plowhead/" + entityTexture + ".png");
+            ResourceLocation location = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/" + entityTexture + ".png");
             TEXTURES[texture] = location;
             return location;
         }

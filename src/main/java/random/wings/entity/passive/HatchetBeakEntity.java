@@ -4,6 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonReader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +27,7 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 import random.wings.WingsAndClaws;
 import random.wings.entity.TameableDragonEntity;
@@ -77,6 +82,15 @@ public class HatchetBeakEntity extends TameableDragonEntity {
     }
 
     @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1, 40));
+        this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1));
+    }
+
+    @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(SADDLE, false);
@@ -124,7 +138,8 @@ public class HatchetBeakEntity extends TameableDragonEntity {
             if (points.containsKey(stack.getItem())) {
                 AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
                 playerPoints.set(playerPoints.get() + points.get(stack.getItem()));
-                if (playerPoints.get() >= 100 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                if (!player.abilities.isCreativeMode) stack.shrink(1);
+                if (playerPoints.get() >= 100 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.setTamedBy(player);
                     this.navigator.clearPath();
                     this.setAttackTarget(null);

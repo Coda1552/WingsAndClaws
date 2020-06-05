@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "wings:entities/icy_plowhead/shield"
+    "particle": "wings:entity/icy_plowhead/shield"
   },
   "display": {
     "thirdperson_righthand": {

@@ -43,7 +43,7 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {
             String entityTexture = String.format("%s_%s%s", ((texture & 1) != 0) ? "child" : "adult", ((texture & 2) != 0) ? "male" : "female", ((texture & 4) != 0) ? "_sleep" : "");
-            ResourceLocation location = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/dumpy_egg_drake/" + entityTexture + ".png");
+            ResourceLocation location = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake/" + entityTexture + ".png");
             TEXTURES[texture] = location;
             return location;
         }

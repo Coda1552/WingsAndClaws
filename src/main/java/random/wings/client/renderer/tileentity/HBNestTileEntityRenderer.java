@@ -11,7 +11,7 @@ import random.wings.tileentity.HBNestTileEntity;
 import random.wings.tileentity.NestTileEntity;
 
 public class HBNestTileEntityRenderer extends TileEntityRenderer<HBNestTileEntity> {
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/hatchet_beak/empty.png"), new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/nest/hatchet_beak/egg.png")};
+    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak/empty.png"), new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak/egg.png")};
     private final HBNestModel model = new HBNestModel();
 
     public HBNestTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {

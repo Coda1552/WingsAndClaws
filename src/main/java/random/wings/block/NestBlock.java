@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -30,12 +31,10 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
     private TileEntityType<T> type;
     private Item item;
 
-    public NestBlock(String name, Block.Properties properties, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
+    public NestBlock(Block.Properties properties, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
         super(properties);
         this.entity = entity;
         this.tile = tile;
-        setRegistryName(name);
-        WingsBlocks.LIST.add(this);
     }
 
     public void setItem(TileEntityType<T> value) {
@@ -69,18 +68,18 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
         if (tile.isInstance(te)) {
             if (stack.isEmpty()) {
                 boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.setHeldItem(handIn, new ItemStack(item));
+                if (removed) player.addItemStackToInventory(new ItemStack(item));
                 return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             } else if (stack.getItem() == item) {
                 boolean added = ((NestTileEntity) te).addEgg();
                 if (added) {
+                    player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
                     if (!player.abilities.isCreativeMode) stack.shrink(1);
-                } else {
-                    boolean removed = stack.getCount() < stack.getMaxStackSize() && ((NestTileEntity) te).removeEgg();
-                    if (removed) stack.grow(1);
-                    return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
+                    return ActionResultType.SUCCESS;
                 }
-                return ActionResultType.PASS;
+                boolean removed = ((NestTileEntity) te).removeEgg();
+                if (removed) player.addItemStackToInventory(new ItemStack(item));
+                return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             }
         }
         return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);

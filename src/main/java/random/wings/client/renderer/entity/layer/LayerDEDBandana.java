@@ -25,7 +25,7 @@ public class LayerDEDBandana extends LayerRenderer<DumpyEggDrakeEntity, DumpyEgg
             int texture = (color.getId() << 1) | (entitylivingbaseIn.isChild() ? 1 : 0);
             ResourceLocation resource = TEXTURES[texture];
             if (resource == null)
-                TEXTURES[texture] = resource = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/dumpy_egg_drake/bandana/" + (entitylivingbaseIn.isChild() ? "baby_" : "") + "bandana_" + color + ".png");
+                TEXTURES[texture] = resource = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake/bandana/" + (entitylivingbaseIn.isChild() ? "baby_" : "") + "bandana_" + color + ".png");
             this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(this.getEntityModel().getRenderType(resource)), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0)), 1, 1, 1, 1);
         }
     }

@@ -29,9 +29,9 @@ public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
     @Override
     public ResourceLocation getEntityTexture(MimangoEntity entity) {
         int variant = entity.isChild() ? 1 : entity.getVariant() + 2;
-        ResourceLocation texture = TEXTURES[variant];
+        ResourceLocation texture = TEXTURES[variant - 1];
         if (texture == null) {
-            TEXTURES[variant] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entities/mimango/mimango_" + variant + ".png");
+            TEXTURES[variant] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/mimango/mimango_" + variant + ".png");
         }
         return texture;
     }
