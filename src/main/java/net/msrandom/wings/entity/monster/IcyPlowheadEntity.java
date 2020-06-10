@@ -52,6 +52,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack staff = ItemStack.EMPTY;
+	public float pitch;
 	private int alarmedTimer;
 	private int attackCooldown;
 	private Vec3d oldPos;
@@ -59,7 +60,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private RayTraceResult target;
 	private BlockPos sleepTarget;
 	private int startedCharging;
-	private int time;
 
 	public IcyPlowheadEntity(EntityType<? extends IcyPlowheadEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -240,9 +240,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			oldPos = null;
 		}
 		if (!isSleeping()) {
-			if (++time >= 20) time = 0;
-			if (!this.onGround) this.rotationPitch = (float) MathHelper.clampedLerp(this.rotationPitch, -(this.getMotion().getY() * 180), time * 0.1);
-			else this.rotationPitch = 0;
+			if (this.onGround) {
+				this.pitch = 0;
+			} else {
+				this.pitch = (float) MathHelper.clampedLerp(this.pitch, -(this.getMotion().getY() * 180), MathHelper.sin(ticksExisted) * 2);
+			}
 
 			if (!world.isRemote) {
 				LivingEntity attackTarget = getAttackTarget();

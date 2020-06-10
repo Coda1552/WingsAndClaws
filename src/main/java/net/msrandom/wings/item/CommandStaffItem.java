@@ -1,10 +1,16 @@
 package net.msrandom.wings.item;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -12,9 +18,11 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 
-public class CommandStaffItem extends Item {
+import java.util.Collections;
+
+public class CommandStaffItem extends ToolItem {
     public CommandStaffItem() {
-        super(new Item.Properties().group(WingsItems.GROUP).maxStackSize(1));
+        super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1));
     }
 
     @Override
@@ -50,5 +58,10 @@ public class CommandStaffItem extends Item {
         }
 
         return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+        return HashMultimap.create();
     }
 }
