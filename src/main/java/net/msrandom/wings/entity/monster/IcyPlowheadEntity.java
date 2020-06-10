@@ -5,14 +5,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
@@ -53,6 +52,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack staff = ItemStack.EMPTY;
 	public float pitch;
+	public float yaw;
 	private int alarmedTimer;
 	private int attackCooldown;
 	private Vec3d oldPos;
@@ -92,16 +92,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			}
 		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1) {
-			@Override
-			public boolean shouldExecute() {
-				boolean execute = super.shouldExecute();
-				if (execute && closestEntity instanceof PlayerEntity && getDistanceSq(closestEntity) <= 10 && !((PlayerEntity) closestEntity).isCreative()) {
-					this.entity.setAttackTarget((PlayerEntity) closestEntity);
-				}
-				return execute;
-			}
-		});
 		this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
 	}
 
@@ -248,8 +238,19 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 			if (!world.isRemote) {
 				LivingEntity attackTarget = getAttackTarget();
-				if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.isCreativeMode) {
-					getNavigator().tryMoveToEntityLiving(attackTarget, 1.2);
+
+				if (!isTamed() && attackTarget == null) {
+					PlayerEntity player = world.getClosestPlayer(this, 32);
+					if (player != null && !player.abilities.isCreativeMode) {
+						if (world.getFluidState(player.getPosition()).getFluid() == Fluids.WATER) {
+							setAttackTarget(player);
+						}
+					}
+				}
+
+				if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
+					setMotion(MathHelper.clamp(attackTarget.getPosX() - getPosX(), -0.3, 0.3), MathHelper.clamp(attackTarget.getPosY() - getPosY(), -0.1, 0.1), MathHelper.clamp(attackTarget.getPosZ() - getPosZ(), -0.3, 0.3));
+					//yaw = (float)(MathHelper.atan2(attackTarget.getPosX() - getPosX(), attackTarget.getPosZ() - getPosZ()) * (double)(180F / (float)Math.PI)) - 90.0F;
 					if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
 						attackEntityAsMob(attackTarget);
 						attackCooldown = 20;
@@ -266,7 +267,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						startedCharging = 120;
 					}
 					setMotion(MathHelper.clamp(target.getHitVec().x - getPosX(), -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - getPosY(), -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - getPosZ(), -0.5, 0.5));
-					getLookController().setLookPosition(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0, 0);
+					//yaw = (float)(MathHelper.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) * 180 / Math.PI) - 180;
 					if (getDistanceSq(target.getHitVec()) <= 4) {
 						switch (target.getType()) {
 							case BLOCK:
@@ -289,10 +290,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							return;
 						} else --startedCharging;
 						setMotion(MathHelper.clamp(it.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(it.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(it.getZ() - getPosZ(), -0.5, 0.5));
+						//yaw = (float)(MathHelper.atan2(it.getX() - getPosX(), it.getZ() - getPosZ()) * (double)(180F / (float)Math.PI)) - 90.0F;
 						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 						}
-						getLookController().setLookPosition(it.getX(), it.getY(), it.getZ(), 0, 0);
 						if (it.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
 							breakBlock(it, false);
 							dataManager.set(ICE_BLOCK, Optional.empty());
@@ -335,9 +336,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					sleepTarget = p;
 				}
 				setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.1, 0.1), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.2, 0.2), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.03, 0.03));
+				//yaw = (float)(MathHelper.atan2(sleepTarget.getX() - getPosX(), sleepTarget.getZ() - getPosZ()) * 180 / Math.PI) + 180;
 				return false;
 			}
-			return alarmedTimer == 0 && ground;
+			return alarmedTimer == 0;
 		} else if (sleepTarget != null) {
 			sleepTarget = null;
 			setMotion(getMotion().add(0, 0.2, 0));
@@ -353,6 +355,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			if (!selected || rand.nextBoolean()) entityDropItem(new ItemStack(WingsItems.GLACIAL_SHRIMP), (float) (pos.getY() - getPosY()));
 		} else if (state.isSolid()) {
 			ToolType type = state.getHarvestTool();
+			if (type == null) type = ToolType.PICKAXE;
 			ItemStack stack = tools.computeIfAbsent(type, k -> {
 				if (k == ToolType.AXE) return new ItemStack(Items.IRON_AXE);
 				if (k == ToolType.PICKAXE) return new ItemStack(Items.IRON_PICKAXE);
@@ -363,7 +366,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			if (selected) {
 				for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
 					if (entry.getKey() == Enchantments.EFFICIENCY) {
-						List<BlockPos> positions = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1)).collect(Collectors.toList());
+						List<BlockPos> positions = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toList());
 						int k = 0;
 						for (int i = 0; i < entry.getValue(); i++) {
 							for (int i1 = k; i1 < positions.size(); i1++) {
@@ -371,6 +374,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 								if (world.getBlockState(p).isSolid()) {
 									breakBlock(p, false);
 									k = i1;
+									break;
 								}
 							}
 						}
@@ -388,7 +392,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	private void setupTool(ItemStack stack) {
 		if (!staff.isEmpty()) {
-			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(staff).entrySet()) EnchantedBookItem.addEnchantment(stack, new EnchantmentData(entry.getKey(), entry.getValue()));
+			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(staff).entrySet())
+				stack.addEnchantment(entry.getKey(), entry.getValue());
 			staff = ItemStack.EMPTY;
 		}
 	}

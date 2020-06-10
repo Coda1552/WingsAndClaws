@@ -4,30 +4,30 @@
     "particle": "wings:entity/icy_plowhead/shield"
   },
   "display": {
-      "thirdperson_righthand": {
-        "rotation": [ 45, -45, 180 ],
-        "translation": [ -4, 2, -2 ],
-        "scale": [ 0.8, 0.8, 0.8 ]
-      },
-      "thirdperson_lefthand": {
-        "rotation": [ 0, -90, 180 ],
-        "translation": [ -4, 2, 11 ],
-        "scale": [ 0.8, 0.8, 0.8 ]
-      },
-      "firstperson_righthand": {
-        "rotation": [ 180, -180, -5 ],
-        "translation": [ -10, 2, 8 ],
-        "scale": [ 0.8, 0.8, 0.8 ]
-      },
-      "firstperson_lefthand": {
-        "rotation": [ 180, -180, -5 ],
-        "translation": [ 0, 2, 8 ],
-        "scale": [ 0.8, 0.8, 0.8 ]
-      },
-      "gui": {
-        "rotation": [ 195, 25, 5 ],
-        "translation": [ 4, 1, 0 ],
-        "scale": [ 0.52, 0.52, 0.52 ]
-      }
+    "thirdperson_righthand": {
+      "rotation": [ 45, -45, 180 ],
+      "translation": [ -10.49, 7, 0 ],
+      "scale": [ 0.8, 0.8, 0.8 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 0, -90, 180 ],
+      "translation": [ -4, 2, 11 ],
+      "scale": [ 0.8, 0.8, 0.8 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 180, -180, -5 ],
+      "translation": [ -10, 2, 8 ],
+      "scale": [ 0.8, 0.8, 0.8 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 180, -180, -5 ],
+      "translation": [ 0, 2, 8 ],
+      "scale": [ 0.8, 0.8, 0.8 ]
+    },
+    "gui": {
+      "rotation": [ 195, 25, 5 ],
+      "translation": [ 4, 1, 0 ],
+      "scale": [ 0.52, 0.52, 0.52 ]
+    }
   }
 }

@@ -2,10 +2,10 @@ package net.msrandom.wings.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 
 import java.util.Collections;
@@ -32,12 +33,12 @@ public class CommandStaffItem extends ToolItem {
             boolean flag = false;
             if (mop.getType() == RayTraceResult.Type.ENTITY) {
                 EntityRayTraceResult result = ((EntityRayTraceResult) mop);
-                flag = result.getEntity() instanceof TameableEntity && !((TameableEntity) result.getEntity()).isOwner(playerIn) && worldIn.getBlockState(result.getEntity().getPosition()).getMaterial() == Material.WATER;
+                flag = result.getEntity() instanceof TameableEntity && !((TameableEntity) result.getEntity()).isOwner(playerIn) && worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
             }
             else {
                 BlockPos pos = ((BlockRayTraceResult) mop).getPos();
                 for (Direction value : Direction.values()) {
-                    flag = worldIn.getBlockState(pos.offset(value)).getMaterial() == Material.WATER;
+                    flag = worldIn.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
                     if (flag) break;
                 }
             }
@@ -48,7 +49,7 @@ public class CommandStaffItem extends ToolItem {
                         last = entity;
                     }
                 }
-                if (last != null) {
+                if (last != null && last.getState() != TameableDragonEntity.WonderState.STAY) {
                     ItemStack stack = playerIn.getHeldItem(handIn);
                     last.setTarget(mop);
                     last.setStaff(stack);

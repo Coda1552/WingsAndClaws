@@ -74,7 +74,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         this.dataManager.set(GENDER, gender);
     }
 
-    protected WonderState getState() {
+    public WonderState getState() {
         return WonderState.values()[dataManager.get(STATE)];
     }
 
