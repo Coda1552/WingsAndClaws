@@ -24,6 +24,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
@@ -230,10 +231,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			oldPos = null;
 		}
 		if (!isSleeping()) {
-			if (this.onGround) {
-				this.pitch = 0;
-			} else {
+			if (this.inWater) {
 				this.pitch = (float) MathHelper.clampedLerp(this.pitch, -(this.getMotion().getY() * 180), MathHelper.sin(ticksExisted) * 2);
+			} else {
+				this.pitch = 0;
 			}
 
 			if (!world.isRemote) {
@@ -268,6 +269,9 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 					setMotion(MathHelper.clamp(target.getHitVec().x - getPosX(), -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - getPosY(), -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - getPosZ(), -0.5, 0.5));
 					//yaw = (float)(MathHelper.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) * 180 / Math.PI) - 180;
+					for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
+						entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+					}
 					if (getDistanceSq(target.getHitVec()) <= 4) {
 						switch (target.getType()) {
 							case BLOCK:
@@ -309,9 +313,16 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					List<BlockPos> possible = new ArrayList<>();
 					BlockPos.getAllInBox(getPosition().add(-16, -16, -16), getPosition().add(16, 16, 16)).forEach(pos -> {
 						BlockState state = world.getBlockState(pos);
-						Material material = state.getMaterial();
-						if (material == Material.ICE || material == Material.PACKED_ICE) {
-							possible.add(pos.toImmutable());
+						boolean flag = false;
+						for (Direction value : Direction.values()) {
+							flag = world.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
+							if (flag) break;
+						}
+						if (flag) {
+							Material material = state.getMaterial();
+							if (material == Material.ICE || material == Material.PACKED_ICE) {
+								possible.add(pos.toImmutable());
+							}
 						}
 					});
 					if (possible.size() > 0)

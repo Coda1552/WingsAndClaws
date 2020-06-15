@@ -1,12 +1,14 @@
 package net.msrandom.wings.client.renderer.entity.model;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 
-public class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity> {
+import java.util.Collections;
+
+public class IcyPlowheadModel extends AgeableModel<IcyPlowheadEntity> {
     public ModelRenderer body;
     public ModelRenderer armLeft;
     public ModelRenderer legLeft;
@@ -73,6 +75,16 @@ public class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity> {
     }
 
     @Override
+    protected Iterable<ModelRenderer> getHeadParts() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    protected Iterable<ModelRenderer> getBodyParts() {
+        return ImmutableList.of(body);
+    }
+
+    @Override
     public void setRotationAngles(IcyPlowheadEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.body.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F;
         this.tail1.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.5F * limbSwingAmount * 0.5F;
@@ -87,11 +99,6 @@ public class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity> {
         this.legLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * -1.5F * limbSwingAmount * 0.5F;
         this.legLeft.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * -2.0F * limbSwingAmount * 0.5F + -0.3F;
         this.head.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F;
-    }
-
-    @Override
-    public Iterable<ModelRenderer> getParts() {
-        return ImmutableList.of(body);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
