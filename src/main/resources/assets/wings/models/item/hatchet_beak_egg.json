@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:items/hatchet_beak_egg"
+    "layer0": "wings:item/hatchet_beak_egg"
   }
 }

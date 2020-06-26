@@ -81,7 +81,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == WingsItems.COMMAND_STAFF && isOwner(player)) {
+        if (stack.getItem() == WingsItems.HORN_HORN && isOwner(player)) {
             WonderState state = getState();
             WonderState newState = state == WonderState.FOLLOW ? WonderState.STAY : WonderState.values()[state.ordinal() + 1];
             dataManager.set(STATE, (byte) newState.ordinal());

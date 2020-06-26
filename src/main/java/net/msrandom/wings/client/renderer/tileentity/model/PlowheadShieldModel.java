@@ -43,7 +43,7 @@ public class PlowheadShieldModel extends Model {
 
     @Override
     public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        this.base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn);
+        this.base.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

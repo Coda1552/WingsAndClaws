@@ -34,8 +34,8 @@ public class WingsItems {
     public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
     public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
     public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
-    public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(new Item.Properties().group(GROUP).maxStackSize(1).setISTER(() -> PlowheadShieldRenderer::new)));
-    public static final Item COMMAND_STAFF = register("command_staff", new CommandStaffItem());
+    public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(new Item.Properties().group(GROUP).maxDamage(678).setISTER(() -> PlowheadShieldRenderer::new)));
+    public static final Item HORN_HORN = register("horn_horn", new PlowheadHornItem());
 
     //Custom block items
     static {

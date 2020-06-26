@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:items/dumpy_egg_drake_egg"
+    "layer0": "wings:item/dumpy_egg_drake_egg"
   }
 }

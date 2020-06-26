@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:items/glacial_shrimp"
+    "layer0": "wings:item/glacial_shrimp"
   }
 }
