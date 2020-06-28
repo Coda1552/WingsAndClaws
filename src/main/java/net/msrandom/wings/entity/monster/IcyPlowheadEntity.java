@@ -244,7 +244,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
 							setMotion(MathHelper.clamp(owner.getPosX() - getPosX(), -0.1, 0.1), MathHelper.clamp(owner.getPosY() - getPosY(), -0.05, 0.05), MathHelper.clamp(owner.getPosZ() - getPosZ(), -0.1, 0.1));
-							rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+							rotationYaw = (float) Math.toDegrees(Math.atan2(owner.getPosX() - getPosX(), owner.getPosZ() - getPosZ()) - Math.PI / 2);
 						}
 					}
 				} else {
