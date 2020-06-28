@@ -67,5 +67,14 @@
         "stream": true
       }
     ]
+  },
+  "horn.use": {
+    "subtitle": "wings.subtitle.horn.use",
+    "sounds": [
+      {
+        "name": "wings:battle.horn",
+        "stream": true
+      }
+    ]
   }
 }

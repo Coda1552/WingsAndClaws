@@ -53,7 +53,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack staff = ItemStack.EMPTY;
 	public float pitch;
-	public float yaw;
 	private int alarmedTimer;
 	private int attackCooldown;
 	private Vec3d oldPos;
@@ -251,7 +250,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 				if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
 					setMotion(MathHelper.clamp(attackTarget.getPosX() - getPosX(), -0.3, 0.3), MathHelper.clamp(attackTarget.getPosY() - getPosY(), -0.1, 0.1), MathHelper.clamp(attackTarget.getPosZ() - getPosZ(), -0.3, 0.3));
-					//yaw = (float)(MathHelper.atan2(attackTarget.getPosX() - getPosX(), attackTarget.getPosZ() - getPosZ()) * (double)(180F / (float)Math.PI)) - 90.0F;
+					rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
 					if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
 						attackEntityAsMob(attackTarget);
 						attackCooldown = 20;
@@ -294,7 +293,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							return;
 						} else --startedCharging;
 						setMotion(MathHelper.clamp(it.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(it.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(it.getZ() - getPosZ(), -0.5, 0.5));
-						//yaw = (float)(MathHelper.atan2(it.getX() - getPosX(), it.getZ() - getPosZ()) * (double)(180F / (float)Math.PI)) - 90.0F;
+						rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+
 						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 						}
@@ -347,7 +347,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					sleepTarget = p;
 				}
 				setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.1, 0.1), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.2, 0.2), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.03, 0.03));
-				//yaw = (float)(MathHelper.atan2(sleepTarget.getX() - getPosX(), sleepTarget.getZ() - getPosZ()) * 180 / Math.PI) + 180;
+				rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+
 				return false;
 			}
 			return alarmedTimer == 0;

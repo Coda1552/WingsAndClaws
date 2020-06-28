@@ -1,19 +1,19 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "wings:entity/icy_plowhead/shield"
+    "particle": "wings:entity/icy_plowhead/horn"
   },
   "display": {
     "thirdperson_righthand": {
       "rotation": [
-        45,
+        40,
         -45,
         180
       ],
       "translation": [
-        -6,
-        0,
-        4
+        -5,
+        13,
+        8
       ],
       "scale": [
         0.8,
@@ -23,14 +23,14 @@
     },
     "thirdperson_lefthand": {
       "rotation": [
-        45,
+        40,
         -45,
         180
       ],
       "translation": [
         4,
-        -6,
-        11
+        8,
+        16
       ],
       "scale": [
         0.8,
@@ -42,12 +42,12 @@
       "rotation": [
         180,
         -180,
-        5
+        -5
       ],
       "translation": [
-        -9,
-        1,
-        8
+        -5,
+        2,
+        -10
       ],
       "scale": [
         0.8,
@@ -59,12 +59,12 @@
       "rotation": [
         180,
         -180,
-        5
+        -5
       ],
       "translation": [
-        1,
-        1,
-        8
+        8,
+        2,
+        -8
       ],
       "scale": [
         0.8,
@@ -79,14 +79,14 @@
         5
       ],
       "translation": [
-        5.5,
-        1,
+        10,
+        10,
         0
       ],
       "scale": [
-        0.52,
-        0.52,
-        0.52
+        1,
+        1,
+        1
       ]
     }
   }

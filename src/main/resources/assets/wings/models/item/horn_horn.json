@@ -1,3 +1,135 @@
 {
-  "parent": "builtin/entity"
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "wings:entity/icy_plowhead/horn"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        180
+      ],
+      "translation": [
+        -6.5,
+        10,
+        2
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        180
+      ],
+      "translation": [
+        6.5,
+        10,
+        2
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        180,
+        -180,
+        -5
+      ],
+      "translation": [
+        -10,
+        13,
+        8
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        180,
+        -180,
+        -5
+      ],
+      "translation": [
+        0,
+        13,
+        8
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    },
+    "gui": {
+      "rotation": [
+        195,
+        25,
+        5
+      ],
+      "translation": [
+        10,
+        10,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        180,
+        180,
+        0
+      ],
+      "translation": [
+        -2,
+        4,
+        2
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "ground": {
+      "rotation": [
+        180,
+        0,
+        0
+      ],
+      "translation": [
+        4,
+        8,
+        -3
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "wings:using": 1
+      },
+      "model": "wings:item/horn_using"
+    }
+  ]
 }

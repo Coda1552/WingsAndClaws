@@ -15,6 +15,7 @@ public class WingsSounds {
     public static final SoundEvent PLOWHEAD_HURT = create("plowhead.hurt");
     public static final SoundEvent PLOWHEAD_DEATH = create("plowhead.death");
     public static final SoundEvent PLOWHEAD_ANGRY = create("plowhead.angry");
+    public static final SoundEvent BATTLE_HORN = create("horn.use");
 
     private static SoundEvent create(String name) {
         SoundEvent event = new SoundEvent(new ResourceLocation(WingsAndClaws.MOD_ID, name));

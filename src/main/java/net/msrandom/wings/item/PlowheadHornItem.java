@@ -12,8 +12,11 @@ import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadHornRenderer;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
@@ -23,21 +26,23 @@ import java.util.Collections;
 public class PlowheadHornItem extends ToolItem {
     public PlowheadHornItem() {
         super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1).setISTER(() -> PlowheadHornRenderer::new));
+        this.addPropertyOverride(new ResourceLocation(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
     }
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.NONE;
+        return UseAction.CROSSBOW;
     }
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return 32;
+        return 48;
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         playerIn.setActiveHand(handIn);
+        playerIn.playSound(WingsSounds.BATTLE_HORN, 1, 1);
         return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
     }
 

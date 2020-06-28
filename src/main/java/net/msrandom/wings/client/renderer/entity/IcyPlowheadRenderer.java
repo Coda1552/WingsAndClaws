@@ -19,7 +19,6 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
     @Override
     protected void preRenderCallback(IcyPlowheadEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
         matrixStackIn.rotate(Vector3f.XP.rotationDegrees(entitylivingbaseIn.pitch));
-        //matrixStackIn.rotate(Vector3f.YP.rotationDegrees(entitylivingbaseIn.yaw));
         super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
     }
 

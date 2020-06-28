@@ -15,19 +15,55 @@
       "scale": [ 0.8, 0.8, 0.8 ]
     },
     "firstperson_righthand": {
-      "rotation": [ 180, -180, -5 ],
-      "translation": [ -10, 2, 8 ],
-      "scale": [ 0.8, 0.8, 0.8 ]
+      "rotation": [
+        180,
+        -180,
+        -5
+      ],
+      "translation": [
+        -8,
+        0,
+        8
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
     },
     "firstperson_lefthand": {
-      "rotation": [ 180, -180, -5 ],
-      "translation": [ 0, 2, 8 ],
-      "scale": [ 0.8, 0.8, 0.8 ]
+      "rotation": [
+        180,
+        -180,
+        -5
+      ],
+      "translation": [
+        2,
+        0,
+        8
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
     },
     "gui": {
-      "rotation": [ 195, 25, 5 ],
-      "translation": [ 4, 1, 0 ],
-      "scale": [ 0.52, 0.52, 0.52 ]
+      "rotation": [
+        195,
+        25,
+        5
+      ],
+      "translation": [
+        5.5,
+        1,
+        0
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ]
     },
     "fixed": {
       "rotation": [ 180, 180, 0 ],
