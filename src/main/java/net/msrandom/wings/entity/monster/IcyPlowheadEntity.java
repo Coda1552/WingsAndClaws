@@ -63,7 +63,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	public IcyPlowheadEntity(EntityType<? extends IcyPlowheadEntity> type, World worldIn) {
 		super(type, worldIn);
-		this.setPathPriority(PathNodeType.WATER, 1.0F);
 		this.moveController = new MoveHelperController(this);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 	}
@@ -452,6 +451,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	public void setStaff(ItemStack staff) {
 		this.staff = staff;
+	}
+
+	public static boolean canSpawn(EntityType<? extends IcyPlowheadEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
+		return worldIn.getBlockState(pos).getBlock() == Blocks.WATER && worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
 	}
 
 	static class MoveHelperController extends MovementController {
