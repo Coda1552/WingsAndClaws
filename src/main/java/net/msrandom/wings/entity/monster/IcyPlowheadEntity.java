@@ -456,7 +456,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	private void move(double x, double y, double z, double horizontalSpeed, double verticalSpeed) {
-		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
+		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : world.getFluidState(getPosition()).getFluid() != Fluids.WATER ? -verticalSpeed : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
 		rotationYaw = (float) Math.toDegrees(Math.atan2(x - getPosX(), z - getPosZ()) - Math.PI / 2);
 	}
 

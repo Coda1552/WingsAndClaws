@@ -21,11 +21,11 @@ public class WingsEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = new DeferredRegister<>(ForgeRegistries.ENTITIES, WingsAndClaws.MOD_ID);
     //public static final EntityType<DragonEggEntity> DRAGON_EGG = createEgg("dragon_egg", DragonEggEntity::new, () -> WingsEntities.DRAGON_EGG, 0.2f, 0.2f);
     public static final EntityType<DumpyEggDrakeEntity> DUMPY_EGG_DRAKE = createCreature("dumpy_egg_drake", DumpyEggDrakeEntity::new, 1.2f, 1.3f, 0xE2A336, 0xCEA575);
-    public static final EntityType<HatchetBeakEntity> HATCHET_BEAK = createCreature("hatchet_beak", HatchetBeakEntity::new, 2.3f, 2.5f, 0x785028, 0x167a6d);
+    public static final EntityType<HatchetBeakEntity> HATCHET_BEAK = createCreature("hatchet_beak", HatchetBeakEntity::new, 2.3f, 2.5f/*, 0x785028, 0x167a6d*/);
     public static final EntityType<IcyPlowheadEntity> ICY_PLOWHEAD = createCreature("icy_plowhead", IcyPlowheadEntity::new, 1.5f, 1.0f, 0x3B4782, 0x9CA0AD);
     public static final EntityType<PlowheadEggEntity> PLOWHEAD_EGG = createEgg("icy_plowhead_egg", PlowheadEggEntity::new, 0.43f, 0.43f);
     public static final EntityType<MimangoEggEntity> MIMANGO_EGG = createEgg("mimango_egg", MimangoEggEntity::new, 0.3f, 0.3f);
-    public static final EntityType<MimangoEntity> MIMANGO = createCreature("mimango", MimangoEntity::new, 0.35f, 0.35f, 0xFFDD32, 0x97CB00);
+    public static final EntityType<MimangoEntity> MIMANGO = createCreature("mimango", MimangoEntity::new, 0.35f, 0.35f/*, 0xFFDD32, 0x97CB00*/);
 
     //Eggs used to have a custom client factory, but that just calls the default factory so it's useless, so it's been removed
     private static <T extends Entity> EntityType<T> createEgg(String name, EntityType.IFactory<T> factory, float width, float height) {

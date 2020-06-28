@@ -4,16 +4,14 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.WingsSounds;
@@ -36,26 +34,45 @@ public class PlowheadHornItem extends ToolItem {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return 48;
+        return 32;
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        playerIn.setActiveHand(handIn);
-        playerIn.playSound(WingsSounds.BATTLE_HORN, 1, 1);
-        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+        ItemStack stack = playerIn.getHeldItem(handIn);
+        if (!worldIn.isRemote) {
+            if (!stack.hasTag() || playerIn.ticksExisted - stack.getTag().getInt("LastUsage") > 48) {
+                playerIn.setActiveHand(handIn);
+                worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
+                if (!stack.hasTag()) stack.setTag(new CompoundNBT());
+                stack.getTag().putInt("LastUsage", playerIn.ticksExisted);
+                return ActionResult.resultSuccess(stack);
+            }
+        }
+        return ActionResult.resultFail(stack);
     }
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
-            RayTraceResult mop = rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE);
+            Vec3d vec = player.getPositionVec().add(player.getLookVec());
+            EntityRayTraceResult entityTrace = worldIn.getEntitiesWithinAABB(TameableDragonEntity.class, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
+            RayTraceResult mop = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE) : entityTrace;
             if (mop.getType() != RayTraceResult.Type.MISS) {
                 boolean flag = false;
                 if (mop.getType() == RayTraceResult.Type.ENTITY) {
                     EntityRayTraceResult result = ((EntityRayTraceResult) mop);
-                    flag = result.getEntity() instanceof TameableEntity && !((TameableEntity) result.getEntity()).isOwner(player) && worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
+                    if (!((TameableDragonEntity) result.getEntity()).isOwner(player)) {
+                        flag = worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
+                    } else {
+                        TameableDragonEntity entity = (TameableDragonEntity) result.getEntity();
+                        TameableDragonEntity.WonderState state = entity.getState();
+                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.STAY : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
+                        entity.setState(newState);
+                        player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
+                        return stack;
+                    }
                 } else {
                     BlockPos pos = ((BlockRayTraceResult) mop).getPos();
                     for (Direction value : Direction.values()) {

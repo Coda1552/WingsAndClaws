@@ -6,19 +6,13 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.msrandom.wings.WingsAndClaws;
-import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
 
@@ -80,19 +74,6 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
 
     public void setState(WonderState state) {
         dataManager.set(STATE, (byte) state.ordinal());
-    }
-
-    @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == WingsItems.HORN_HORN && isOwner(player)) {
-            WonderState state = getState();
-            WonderState newState = state == WonderState.FOLLOW ? WonderState.STAY : WonderState.values()[state.ordinal() + 1];
-            setState(newState);
-            player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + "state." + newState.name().toLowerCase()), true);
-            return true;
-        }
-        return false;
     }
 
     @Nullable
