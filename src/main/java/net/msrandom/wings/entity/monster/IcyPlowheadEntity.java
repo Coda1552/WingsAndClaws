@@ -51,7 +51,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private static final DataParameter<Optional<BlockPos>> ICE_BLOCK = EntityDataManager.createKey(IcyPlowheadEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
-	private ItemStack staff = ItemStack.EMPTY;
+	private ItemStack horn = ItemStack.EMPTY;
 	public float pitch;
 	private int alarmedTimer;
 	private int attackCooldown;
@@ -278,7 +278,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 						entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 					}
-					if (getDistanceSq(target.getHitVec()) <= 4) {
+					if (collidedHorizontally) {
+						breakBlock(new BlockPos(getPosX() + Math.sin(Math.toRadians(-rotationYaw)), getPosY(), getPosZ() + Math.cos(Math.toRadians(rotationYaw))), false);
+						target = null;
+					} else if (getDistanceSq(target.getHitVec()) <= 4) {
 						switch (target.getType()) {
 							case BLOCK:
 								breakBlock(((BlockRayTraceResult) target).getPos(), true);
@@ -299,7 +302,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							dataManager.set(ICE_BLOCK, Optional.empty());
 							return;
 						} else --startedCharging;
-						move(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.5, 0.3);
+						move(it.getX(), it.getY(), it.getZ(), 0.5, 0.3);
 
 						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
@@ -318,16 +321,19 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				if (ramTime == 0 && !iceBlock.isPresent() && ticksExisted % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
 					BlockPos.getAllInBox(getPosition().add(-16, -16, -16), getPosition().add(16, 16, 16)).forEach(pos -> {
-						BlockState state = world.getBlockState(pos);
-						boolean flag = false;
-						for (Direction value : Direction.values()) {
-							flag = world.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
-							if (flag) break;
-						}
-						if (flag) {
-							Material material = state.getMaterial();
-							if (material == Material.ICE || material == Material.PACKED_ICE) {
-								possible.add(pos.toImmutable());
+						BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(getPositionVec(), new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+						if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getPos().equals(pos)) {
+							BlockState state = world.getBlockState(pos);
+							boolean flag = false;
+							for (Direction value : Direction.values()) {
+								flag = world.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
+								if (flag) break;
+							}
+							if (flag) {
+								Material material = state.getMaterial();
+								if (material == Material.ICE || material == Material.PACKED_ICE) {
+									possible.add(pos.toImmutable());
+								}
 							}
 						}
 					});
@@ -408,10 +414,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	private void setupTool(ItemStack stack) {
-		if (!staff.isEmpty()) {
-			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(staff).entrySet())
+		if (!horn.isEmpty()) {
+			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(horn).entrySet())
 				stack.addEnchantment(entry.getKey(), entry.getValue());
-			staff = ItemStack.EMPTY;
+			horn = ItemStack.EMPTY;
 		}
 	}
 
@@ -445,8 +451,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 	}
 
-	public void setStaff(ItemStack staff) {
-		this.staff = staff;
+	public void setHorn(ItemStack horn) {
+		this.horn = horn;
 	}
 
 	private void move(double x, double y, double z, double horizontalSpeed, double verticalSpeed) {

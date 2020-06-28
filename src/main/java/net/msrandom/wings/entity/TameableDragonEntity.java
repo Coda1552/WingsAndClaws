@@ -78,13 +78,17 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         return WonderState.values()[dataManager.get(STATE)];
     }
 
+    public void setState(WonderState state) {
+        dataManager.set(STATE, (byte) state.ordinal());
+    }
+
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.getItem() == WingsItems.HORN_HORN && isOwner(player)) {
             WonderState state = getState();
             WonderState newState = state == WonderState.FOLLOW ? WonderState.STAY : WonderState.values()[state.ordinal() + 1];
-            dataManager.set(STATE, (byte) newState.ordinal());
+            setState(newState);
             player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + "state." + newState.name().toLowerCase()), true);
             return true;
         }

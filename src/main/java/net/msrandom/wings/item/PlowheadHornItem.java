@@ -70,9 +70,11 @@ public class PlowheadHornItem extends ToolItem {
                             last = entity;
                         }
                     }
-                    if (last != null && last.getState() != TameableDragonEntity.WonderState.STAY) {
+                    if (last != null) {
+                        if (last.getState() == TameableDragonEntity.WonderState.STAY)
+                            last.setState(TameableDragonEntity.WonderState.WONDER);
                         last.setTarget(mop);
-                        last.setStaff(stack);
+                        last.setHorn(stack);
                         return stack;
                     }
                 }
