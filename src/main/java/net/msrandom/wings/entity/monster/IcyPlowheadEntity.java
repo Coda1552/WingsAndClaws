@@ -242,8 +242,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					if (getState() == WonderState.FOLLOW) {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
-							setMotion(MathHelper.clamp(owner.getPosX() - getPosX(), -0.1, 0.1), MathHelper.clamp(owner.getPosY() - getPosY(), -0.05, 0.05), MathHelper.clamp(owner.getPosZ() - getPosZ(), -0.1, 0.1));
-							rotationYaw = (float) Math.toDegrees(Math.atan2(owner.getPosX() - getPosX(), owner.getPosZ() - getPosZ()) - Math.PI / 2);
+							move(owner.getPosX(), owner.getPosY(), owner.getPosZ(), 0.1, 0.05);
 						}
 					}
 				} else {
@@ -258,8 +257,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				}
 
 				if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
-					setMotion(MathHelper.clamp(attackTarget.getPosX() - getPosX(), -0.3, 0.3), MathHelper.clamp(attackTarget.getPosY() - getPosY(), -0.1, 0.1), MathHelper.clamp(attackTarget.getPosZ() - getPosZ(), -0.3, 0.3));
-					rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+					move(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ(), 0.3, 0.1);
+
 					if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
 						attackEntityAsMob(attackTarget);
 						attackCooldown = 20;
@@ -275,8 +274,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 						startedCharging = 120;
 					}
-					setMotion(MathHelper.clamp(target.getHitVec().x - getPosX(), -0.5, 0.5), MathHelper.clamp(target.getHitVec().y - getPosY(), -0.3, 0.3), MathHelper.clamp(target.getHitVec().z - getPosZ(), -0.5, 0.5));
-					//yaw = (float)(MathHelper.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) * 180 / Math.PI) - 180;
+					move(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.5, 0.3);
 					for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 						entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 					}
@@ -301,8 +299,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							dataManager.set(ICE_BLOCK, Optional.empty());
 							return;
 						} else --startedCharging;
-						setMotion(MathHelper.clamp(it.getX() - getPosX(), -0.5, 0.5), MathHelper.clamp(it.getY() - getPosY(), -0.3, 0.3), MathHelper.clamp(it.getZ() - getPosZ(), -0.5, 0.5));
-						rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+						move(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.5, 0.3);
 
 						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
 							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
@@ -355,8 +352,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 					sleepTarget = p;
 				}
-				setMotion(MathHelper.clamp(sleepTarget.getX() - getPosX(), -0.1, 0.1), MathHelper.clamp(sleepTarget.getY() - getPosY(), -0.2, 0.2), MathHelper.clamp(sleepTarget.getZ() - getPosZ(), -0.03, 0.03));
-				rotationYaw = (float) Math.toDegrees(Math.atan2(target.getHitVec().x - getPosX(), target.getHitVec().z - getPosZ()) - Math.PI / 2);
+				move(sleepTarget.getX(), sleepTarget.getY(), sleepTarget.getZ(), 0.1, 0.2);
 
 				return false;
 			}
@@ -451,6 +447,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	public void setStaff(ItemStack staff) {
 		this.staff = staff;
+	}
+
+	private void move(double x, double y, double z, double horizontalSpeed, double verticalSpeed) {
+		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
+		rotationYaw = (float) Math.toDegrees(Math.atan2(x - getPosX(), z - getPosZ()) - Math.PI / 2);
 	}
 
 	public static boolean canSpawn(EntityType<? extends IcyPlowheadEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
