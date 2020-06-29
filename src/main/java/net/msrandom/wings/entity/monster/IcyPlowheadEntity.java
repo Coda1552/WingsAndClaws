@@ -270,9 +270,14 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						startedCharging = 120;
 					}
 					move(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.5, 0.3);
-					for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-						entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+
+					double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+					if (speed > 0.05) {
+						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
+							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+						}
 					}
+
 					if (collidedHorizontally) {
 						breakBlock(new BlockPos(getPosX() + Math.sin(Math.toRadians(-rotationYaw)), getPosY(), getPosZ() + Math.cos(Math.toRadians(rotationYaw))), false);
 						target = null;
@@ -299,8 +304,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						} else --startedCharging;
 						move(it.getX(), it.getY(), it.getZ(), 0.5, 0.3);
 
-						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+						double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+						if (speed > 0.05) {
+							for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
+								entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+							}
 						}
 						if (it.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
 							breakBlock(it, false);
@@ -453,10 +461,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private void move(double x, double y, double z, double horizontalSpeed, double verticalSpeed) {
 		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : world.getFluidState(getPosition()).getFluid() != Fluids.WATER ? -verticalSpeed : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
 		rotationYaw = (float) Math.toDegrees(Math.atan2(x - getPosX(), z - getPosZ()) - Math.PI / 2);
-	}
-
-	public static boolean canSpawn(EntityType<? extends IcyPlowheadEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-		return worldIn.getBlockState(pos).getBlock() == Blocks.WATER && worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
+		renderYawOffset = rotationYaw;
 	}
 
 	static class MoveHelperController extends MovementController {
@@ -483,7 +488,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				this.plowhead.renderYawOffset = this.plowhead.rotationYaw;
 				float f1 = (float) (this.speed * this.plowhead.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
 				this.plowhead.setAIMoveSpeed(MathHelper.lerp(0.125F, this.plowhead.getAIMoveSpeed(), f1));
-				this.plowhead.setMotion(this.plowhead.getMotion().add(0.0D, (double) this.plowhead.getAIMoveSpeed() * d1 * 0.1D, 0.0D));
+				this.plowhead.setMotion(this.plowhead.getMotion().add(MathHelper.clamp(d0, speed / -10, speed / 10), (double) this.plowhead.getAIMoveSpeed() * d1 * 0.1D, MathHelper.clamp(d2, speed / -10, speed / 10)));
 			} else {
 				this.plowhead.setAIMoveSpeed(0.0F);
 			}
