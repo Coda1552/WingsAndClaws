@@ -8,7 +8,7 @@
   "item.wings.glistening_glacial_shrimp": "Glistening Glacial Shrimp",
   "item.wings.icy_plowhead_spawn_egg": "Icy Plowhead Spawn Egg",
   "item.wings.icy_plowhead_egg": "Icy Plowhead Egg",
-  "item.wings.horn_horn": "Icyplowhead Horn Horn",
+  "item.wings.horn_horn": "Horn Horn",
   "item.wings.icy_plowhead_shield": "Icy Plowhead Shield",
   "block.wings.nest": "Dumpy Egg Drake Nest",
   "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake",
@@ -20,6 +20,6 @@
   "wings.subtitle.plowhead.hurt": "Icy Plowhead Hurt",
   "wings.subtitle.plowhead.death": "Icy Plowhead Death",
   "wings.subtitle.horn.use": "Horn Horn Use",
-  "entity.wingsstate.stay": "Stay",
-  "entity.wingsstate.follow": "Follow"
+  "entity.wings.state.stay": "Stay",
+  "entity.wings.state.follow": "Follow"
 }

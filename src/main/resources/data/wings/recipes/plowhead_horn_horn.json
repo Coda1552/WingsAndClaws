@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  i",
+        " W ",
+        "W  "
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:iron_ingot"
+        },
+        "W": {
+            "item": "wings:plowhead_horn"
+        }
+    },
+    "result": {}
+}
