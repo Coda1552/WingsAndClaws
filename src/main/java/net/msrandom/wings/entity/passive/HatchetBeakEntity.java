@@ -36,7 +36,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -191,7 +190,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
     @Override
     public ItemStack getEgg() {
-        return new ItemStack(WingsItems.HATCHET_BEAK_EGG);
+        return /*new ItemStack(WingsItems.HATCHET_BEAK_EGG)*/ ItemStack.EMPTY;
     }
 
     @Override

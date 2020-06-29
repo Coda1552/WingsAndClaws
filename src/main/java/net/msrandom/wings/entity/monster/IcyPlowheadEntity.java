@@ -9,7 +9,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.BreedGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -19,7 +22,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -51,7 +53,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private BlockPos iceBlock;
 	public float pitch;
 	private int alarmedTimer;
-	private int attackCooldown;
+	private boolean attacking;
 	private Vec3d oldPos;
 	private int ramTime;
 	private RayTraceResult target;
@@ -71,24 +73,26 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1, 40) {
 			@Override
 			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WonderState.WONDER;
+				return super.shouldExecute() && getState() == WonderState.WONDER && getAttackTarget() == null;
 			}
 		});
-		this.goalSelector.addGoal(7, new FollowParentGoal(this, 1.1D));
+		this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1.0D) {
+			@Override
+			public boolean shouldExecute() {
+				return super.shouldExecute() && getState() == WonderState.WONDER && getAttackTarget() == null;
+			}
+		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
-		this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
-	}
-
-	protected PathNavigator createNavigator(World worldIn) {
-		return new SwimmerPathNavigator(this, worldIn);
 	}
 
 	@Override
 	public void tick() {
-		if (this.inWater) {
-			this.setAir(300);
-		}
+		this.setAir(300);
 		super.tick();
+	}
+
+	protected PathNavigator createNavigator(World worldIn) {
+		return new SwimmerPathNavigator(this, worldIn);
 	}
 
 	@Override
@@ -216,8 +220,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			}
 
 			if (!world.isRemote) {
-				LivingEntity attackTarget = getAttackTarget();
-
 				if (isTamed()) {
 					if (getState() == WonderState.FOLLOW) {
 						LivingEntity owner = getOwner();
@@ -226,34 +228,34 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						}
 					}
 				} else {
+					LivingEntity attackTarget = getAttackTarget();
+
 					if (attackTarget == null) {
-						PlayerEntity player = world.getClosestPlayer(this, 32);
+						PlayerEntity player = world.getClosestPlayer(this, 16);
 						if (player != null && !player.abilities.isCreativeMode) {
-							if (world.getFluidState(player.getPosition()).getFluid() == Fluids.WATER) {
-								setAttackTarget(player);
-							}
+							setAttackTarget(player);
+							attacking = true;
 						}
 					}
-				}
 
-				if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
-					getNavigator().tryMoveToEntityLiving(attackTarget, 0.6);
-
-					if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
-						attackEntityAsMob(attackTarget);
-						attackCooldown = 20;
+					if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
+						getNavigator().tryMoveToEntityLiving(attackTarget, 0.4);
+						if (getDistanceSq(attackTarget) <= 4) {
+							attackEntityAsMob(attackTarget);
+						}
+					} else if (attacking) {
+						getNavigator().clearPath();
+						attacking = false;
+						setAttackTarget(null);
 					}
-				} else if (attackCooldown > 0) {
-					getNavigator().clearPath();
-					attackCooldown = 0;
-					setAttackTarget(null);
 				}
+
 				if (target != null) {
 					if (startedCharging == 0) {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 						startedCharging = 120;
 					}
-					getNavigator().tryMoveToXYZ(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.6);
+					getNavigator().tryMoveToXYZ(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.4);
 
 					double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
 					if (speed > 0.05) {
@@ -286,7 +288,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							iceBlock = null;
 							return;
 						} else --startedCharging;
-						getNavigator().tryMoveToXYZ(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.6);
+						getNavigator().tryMoveToXYZ(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.4);
 
 						double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
 						if (speed > 0.05) {
@@ -302,18 +304,22 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						}
 					}
 				}
-				if (attackCooldown-- <= 0) attackCooldown = 0;
+
 				if (alarmedTimer-- <= 0) alarmedTimer = 0;
 				if (ramTime-- <= 0) ramTime = 0;
 				if (ramTime == 0 && iceBlock == null && ticksExisted % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
-					BlockPos.getAllInBox(getPosition().add(-16, -16, -16), getPosition().add(16, 16, 16)).forEach(pos -> {
-						BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(getPositionVec(), new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+					BlockPos start = getPosition();
+					Vec3d vec3d = getPositionVec();
+					BlockPos.PooledMutable mutable = BlockPos.PooledMutable.retain(start.getX(), start.getY(), start.getZ());
+					BlockPos.getAllInBox(start.add(-16, -16, -16), start.add(16, 16, 16)).forEach(pos -> {
+						BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec3d, new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
 						if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getPos().equals(pos)) {
 							BlockState state = world.getBlockState(pos);
-							boolean flag = false;
-							for (Direction value : Direction.values()) {
-								flag = world.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
+							BlockPos.PooledMutable p = mutable.setPos(pos);
+							boolean flag = world.getFluidState(p.move(Direction.DOWN)).getFluid() == Fluids.WATER;
+							for (int i = 2; i < Direction.values().length; ++i) {
+								flag &= world.getFluidState(p.move(Direction.values()[i])).getFluid() == Fluids.WATER;
 								if (flag) break;
 							}
 							if (flag) {
@@ -459,10 +465,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 
 		public void tick() {
-			if (this.plowhead.areEyesInFluid(FluidTags.WATER)) {
-				this.plowhead.setMotion(this.plowhead.getMotion().add(0.0D, 0.005D, 0.0D));
-			}
-
+			this.plowhead.setMotion(this.plowhead.getMotion().add(0.0D, 0.005D, 0.0D));
 			if (this.action == Action.MOVE_TO && !this.plowhead.getNavigator().noPath()) {
 				double d0 = this.posX - this.plowhead.getPosX();
 				double d1 = this.posY - this.plowhead.getPosY();
