@@ -16,5 +16,8 @@
             "item": "minecraft:shield"
         }
     },
-    "result": {}
+    "result": {
+        "item": "wings:plowhead_shield",
+        "count": 1
+    }
 }

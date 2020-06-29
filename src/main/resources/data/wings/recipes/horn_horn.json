@@ -13,5 +13,8 @@
             "item": "wings:plowhead_horn"
         }
     },
-    "result": {}
+    "result": {
+        "item": "wings:horn_horn",
+        "count": 1
+    }
 }

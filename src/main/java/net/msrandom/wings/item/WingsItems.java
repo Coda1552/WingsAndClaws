@@ -36,6 +36,7 @@ public class WingsItems {
     public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(new Item.Properties().group(GROUP).maxDamage(678).setISTER(() -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new PlowheadHornItem());
+    public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
 
     //Custom block items
     static {
