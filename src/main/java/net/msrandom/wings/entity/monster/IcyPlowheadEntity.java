@@ -130,7 +130,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return WingsSounds.PLOWHEAD_AMBIENT;
+		return isSleeping() ? null : WingsSounds.PLOWHEAD_AMBIENT;
 	}
 
 	@Nullable
@@ -143,11 +143,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return WingsSounds.PLOWHEAD_DEATH;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return isSleeping() || super.isSilent();
 	}
 
 	@Override
