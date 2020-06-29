@@ -41,7 +41,10 @@ import net.msrandom.wings.entity.item.PlowheadEggEntity;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -56,7 +59,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private boolean attacking;
 	private Vec3d oldPos;
 	private int ramTime;
-	private RayTraceResult target;
+	private BlockPos target;
 	private BlockPos sleepTarget;
 	private int startedCharging;
 
@@ -225,6 +228,14 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
 							getNavigator().tryMoveToEntityLiving(owner, 0.2);
+							if (onGround) {
+								double x = owner.getPosX() - getPosX();
+								double z = owner.getPosZ() - getPosZ();
+								setMotion(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
+
+								rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+								renderYawOffset = rotationYaw;
+							}
 						}
 					}
 				} else {
@@ -238,7 +249,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						}
 					}
 
-					if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity) {
+					if (attackTarget != null && attackTarget.isAlive()) {
 						getNavigator().tryMoveToEntityLiving(attackTarget, 0.4);
 						if (getDistanceSq(attackTarget) <= 4) {
 							attackEntityAsMob(attackTarget);
@@ -255,7 +266,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 						startedCharging = 120;
 					}
-					getNavigator().tryMoveToXYZ(target.getHitVec().x, target.getHitVec().y, target.getHitVec().z, 0.4);
+					getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 0.4);
 
 					double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
 					if (speed > 0.05) {
@@ -267,15 +278,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					if (collidedHorizontally) {
 						breakBlock(new BlockPos(getPosX() + Math.sin(Math.toRadians(-rotationYaw)), getPosY(), getPosZ() + Math.cos(Math.toRadians(rotationYaw))), false);
 						target = null;
-					} else if (getDistanceSq(target.getHitVec()) <= 4) {
-						switch (target.getType()) {
-							case BLOCK:
-								breakBlock(((BlockRayTraceResult) target).getPos(), true);
-								break;
-							case ENTITY:
-								attackEntityAsMob(((EntityRayTraceResult) target).getEntity());
-								break;
-						}
+					} else if (getDistanceSq(target.getX(), target.getY(), target.getZ()) <= 4) {
+						breakBlock(target, true);
 						target = null;
 						startedCharging = 0;
 					}
@@ -306,8 +310,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				}
 
 				if (alarmedTimer-- <= 0) alarmedTimer = 0;
-				if (ramTime-- <= 0) ramTime = 0;
-				if (ramTime == 0 && iceBlock == null && ticksExisted % 20 == 0) {
+				if ((ramTime <= 0 || --ramTime == 0) && iceBlock == null && ticksExisted % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
 					BlockPos start = getPosition();
 					Vec3d vec3d = getPositionVec();
@@ -423,7 +426,10 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	public void setTarget(RayTraceResult target) {
-		this.target = target;
+		if (target.getType() == RayTraceResult.Type.ENTITY) {
+			Entity entity = ((EntityRayTraceResult) target).getEntity();
+			if (entity instanceof LivingEntity) setAttackTarget((LivingEntity) entity);
+		} else if (target.getType() == RayTraceResult.Type.BLOCK) this.target = ((BlockRayTraceResult) target).getPos();
 	}
 
 	public void travel(Vec3d p_213352_1_) {
@@ -450,11 +456,11 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : world.getFluidState(getPosition()).getFluid() != Fluids.WATER ? -verticalSpeed : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
 		rotationYaw = (float) Math.toDegrees(Math.atan2(x - getPosX(), z - getPosZ()) - Math.PI / 2);
 		renderYawOffset = rotationYaw;
-	}*/
+	}
 
 	public static boolean canSpawn(EntityType<? extends IcyPlowheadEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
 		return worldIn.getBlockState(pos).getBlock() == Blocks.WATER && worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
-	}
+	}*/
 
 	static class MoveHelperController extends MovementController {
 		private final IcyPlowheadEntity plowhead;

@@ -20,6 +20,7 @@
   "wings.subtitle.plowhead.hurt": "Icy Plowhead Hurt",
   "wings.subtitle.plowhead.death": "Icy Plowhead Death",
   "wings.subtitle.horn.use": "Horn Horn Use",
+  "entity.wings.state.wonder": "Wonder",
   "entity.wings.state.stay": "Stay",
   "entity.wings.state.follow": "Follow"
 }

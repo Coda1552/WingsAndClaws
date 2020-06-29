@@ -57,18 +57,18 @@ public class PlowheadHornItem extends ToolItem {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
             Vec3d vec = player.getPositionVec().add(player.getLookVec());
-            EntityRayTraceResult entityTrace = worldIn.getEntitiesWithinAABB(TameableDragonEntity.class, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
+            EntityRayTraceResult entityTrace = worldIn.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
             RayTraceResult mop = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE) : entityTrace;
             if (mop.getType() != RayTraceResult.Type.MISS) {
                 boolean flag = false;
                 if (mop.getType() == RayTraceResult.Type.ENTITY) {
                     EntityRayTraceResult result = ((EntityRayTraceResult) mop);
-                    if (!((TameableDragonEntity) result.getEntity()).isOwner(player)) {
+                    if (!(result.getEntity() instanceof TameableDragonEntity) || !((TameableDragonEntity) result.getEntity()).isOwner(player)) {
                         flag = worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
                     } else {
                         TameableDragonEntity entity = (TameableDragonEntity) result.getEntity();
                         TameableDragonEntity.WonderState state = entity.getState();
-                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.STAY : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
+                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.WONDER : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
                         entity.setState(newState);
                         player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
                         return stack;
