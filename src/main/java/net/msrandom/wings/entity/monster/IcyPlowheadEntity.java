@@ -16,9 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -48,10 +45,10 @@ import java.util.stream.Collectors;
 
 public class IcyPlowheadEntity extends TameableDragonEntity {
 	//private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
-	private static final DataParameter<Optional<BlockPos>> ICE_BLOCK = EntityDataManager.createKey(IcyPlowheadEntity.class, DataSerializers.OPTIONAL_BLOCK_POS);
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack horn = ItemStack.EMPTY;
+	private BlockPos iceBlock;
 	public float pitch;
 	private int alarmedTimer;
 	private int attackCooldown;
@@ -68,12 +65,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	@Override
-	protected void registerData() {
-		super.registerData();
-		this.dataManager.register(ICE_BLOCK, Optional.empty());
-	}
-
-	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
@@ -84,12 +75,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			}
 		});
 		this.goalSelector.addGoal(7, new FollowParentGoal(this, 1.1D));
-		this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1.0D) {
-			@Override
-			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WonderState.WONDER;
-			}
-		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 		this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
 	}
@@ -263,7 +248,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					attackCooldown = 0;
 					setAttackTarget(null);
 				}
-				Optional<BlockPos> iceBlock = this.dataManager.get(ICE_BLOCK);
 				if (target != null) {
 					if (startedCharging == 0) {
 						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
@@ -294,15 +278,15 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						startedCharging = 0;
 					}
 				} else {
-					iceBlock.ifPresent(it -> {
+					if (iceBlock != null) {
 						if (startedCharging == 0) {
 							playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
 							startedCharging = 120;
 						} else if (startedCharging == 1) {
-							dataManager.set(ICE_BLOCK, Optional.empty());
+							iceBlock = null;
 							return;
 						} else --startedCharging;
-						getNavigator().tryMoveToXYZ(it.getX(), it.getY(), it.getZ(), 0.6);
+						getNavigator().tryMoveToXYZ(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.6);
 
 						double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
 						if (speed > 0.05) {
@@ -310,18 +294,18 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 								entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 							}
 						}
-						if (it.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
-							breakBlock(it, false);
-							dataManager.set(ICE_BLOCK, Optional.empty());
+						if (iceBlock.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
+							breakBlock(iceBlock, false);
+							iceBlock = null;
 							ramTime = rand.nextInt(1200) + 1200;
 							startedCharging = 0;
 						}
-					});
+					}
 				}
 				if (attackCooldown-- <= 0) attackCooldown = 0;
 				if (alarmedTimer-- <= 0) alarmedTimer = 0;
 				if (ramTime-- <= 0) ramTime = 0;
-				if (ramTime == 0 && !iceBlock.isPresent() && ticksExisted % 20 == 0) {
+				if (ramTime == 0 && iceBlock == null && ticksExisted % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
 					BlockPos.getAllInBox(getPosition().add(-16, -16, -16), getPosition().add(16, 16, 16)).forEach(pos -> {
 						BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(getPositionVec(), new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
@@ -341,7 +325,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						}
 					});
 					if (possible.size() > 0)
-						dataManager.set(ICE_BLOCK, Optional.of(possible.get(rand.nextInt(possible.size()))));
+						iceBlock = possible.get(rand.nextInt(possible.size()));
 				}
 			}
 			super.livingTick();
@@ -350,10 +334,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public boolean isSleeping() {
-		boolean isNight = world.getDayTime() > 13000 && world.getDayTime() < 23000;
-		boolean ground = world.getBlockState(new BlockPos(getPosX(), getPosY() - 1, getPosZ())).getBlock() != Blocks.WATER;
-		if (isNight) {
-			if (!ground) {
+		if (world.getDayTime() > 13000 && world.getDayTime() < 23000) {
+			if (world.getBlockState(new BlockPos(getPosX(), getPosY() - 1, getPosZ())).getBlock() == Blocks.WATER) {
 				if (sleepTarget == null) {
 					BlockPos p = getPosition().add(rand.nextInt(64) - 32, -1, rand.nextInt(64) - 32);
 					while (world.getBlockState(p).getBlock() == Blocks.WATER) {
