@@ -22,7 +22,7 @@ public abstract class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity>
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return parts;
+        return parts == null ? parts = ImmutableList.of(body) : parts;
     }
 
     @Override
@@ -90,7 +90,6 @@ public abstract class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity>
             this.armLeft = new ModelRenderer(this, 0, 53);
             this.armLeft.setRotationPoint(7.0F, 6.0F, -9.0F);
             this.armLeft.addBox(0.0F, -1.0F, -4.0F, 12, 2, 8, 0.0F);
-            this.parts = ImmutableList.of(body);
             this.body.addChild(this.tail1);
             this.body.addChild(this.legRight);
             this.tail2.addChild(this.tail3);
