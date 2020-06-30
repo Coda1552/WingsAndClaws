@@ -41,7 +41,13 @@ public class PlowheadHornItem extends ToolItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
         if (!worldIn.isRemote) {
-            if (!stack.hasTag() || playerIn.ticksExisted - stack.getTag().getInt("LastUsage") > 48) {
+            boolean noTag = !stack.hasTag();
+            int lastUsage = noTag ? 0 : stack.getTag().getInt("LastUsage");
+            if (!noTag && lastUsage > playerIn.ticksExisted) {
+                lastUsage = playerIn.ticksExisted - 50;
+                stack.getTag().putInt("LastUsage", lastUsage);
+            }
+            if (noTag || playerIn.ticksExisted - lastUsage > 48) {
                 playerIn.setActiveHand(handIn);
                 worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
                 if (!stack.hasTag()) stack.setTag(new CompoundNBT());
