@@ -11,7 +11,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -45,7 +44,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class IcyPlowheadEntity extends TameableDragonEntity {
@@ -73,13 +71,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
-		this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1, 40) {
-			@Override
-			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WonderState.WONDER && getAttackTarget() == null;
-			}
-		});
-		this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1.0D) {
+		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40) {
 			@Override
 			public boolean shouldExecute() {
 				return super.shouldExecute() && getState() == WonderState.WONDER && getAttackTarget() == null;
@@ -101,7 +93,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Override
 	protected void registerAttributes() {
 		super.registerAttributes();
-		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2);
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 44 : 30);
 		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
 	}
@@ -152,11 +144,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-			Predicate<IcyPlowheadEntity> canAttack = entity -> !entity.isChild() && entity.getGender() && !entity.isOwner((LivingEntity) source.getTrueSource());
-			if (canAttack.test(this)) {
+			if (!isChild() && !isOwner((LivingEntity) source.getTrueSource()))
 				setAttackTarget((LivingEntity) source.getTrueSource());
-			}
-			world.getEntitiesWithinAABB(getClass(), getBoundingBox().grow(31)).stream().filter(canAttack).forEach(e -> e.setAttackTarget((LivingEntity) source.getTrueSource()));
 		}
 
 		if (isSleeping()) {
@@ -276,12 +265,12 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 
 					if (collidedHorizontally) {
-						breakBlock(new BlockPos(getPosX() + Math.sin(Math.toRadians(-rotationYaw)), getPosY(), getPosZ() + Math.cos(Math.toRadians(rotationYaw))), false);
+						breakBlock(new BlockPos(getPositionVec().add(getMotion())), false);
 						target = null;
 					} else if (getDistanceSq(target.getX(), target.getY(), target.getZ()) <= 4) {
 						breakBlock(target, true);
-						target = null;
 						startedCharging = 0;
+						target = null;
 					}
 				} else {
 					if (iceBlock != null) {
@@ -316,19 +305,18 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					Vec3d vec3d = getPositionVec();
 					BlockPos.PooledMutable mutable = BlockPos.PooledMutable.retain(start.getX(), start.getY(), start.getZ());
 					BlockPos.getAllInBox(start.add(-16, -16, -16), start.add(16, 16, 16)).forEach(pos -> {
-						BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec3d, new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-						if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getPos().equals(pos)) {
-							BlockState state = world.getBlockState(pos);
-							BlockPos.PooledMutable p = mutable.setPos(pos);
-							boolean flag = world.getFluidState(p.move(Direction.DOWN)).getFluid() == Fluids.WATER;
-							for (int i = 2; i < Direction.values().length; ++i) {
-								flag &= world.getFluidState(p.move(Direction.values()[i])).getFluid() == Fluids.WATER;
-								if (flag) break;
-							}
-							if (flag) {
-								Material material = state.getMaterial();
-								if (material == Material.ICE || material == Material.PACKED_ICE) {
-									possible.add(pos.toImmutable());
+						Material material = world.getBlockState(pos).getMaterial();
+						if (material == Material.ICE || material == Material.PACKED_ICE) {
+							BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec3d, new Vec3d(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+							if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getPos().equals(pos)) {
+								BlockPos.PooledMutable p = mutable.setPos(pos);
+								boolean flag = world.getFluidState(p.move(Direction.DOWN)).getFluid() == Fluids.WATER;
+								for (int i = 2; i < Direction.values().length; ++i) {
+									flag |= world.getFluidState(p.move(Direction.values()[i])).getFluid() == Fluids.WATER;
+									if (flag) {
+										possible.add(pos.toImmutable());
+										break;
+									}
 								}
 							}
 						}
@@ -365,46 +353,49 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	private void breakBlock(BlockPos pos, boolean selected) {
-		BlockState state = world.getBlockState(pos);
-		world.playEvent(2001, pos, Block.getStateId(state));
-		Material material = state.getMaterial();
-		if (material == Material.ICE || material == Material.PACKED_ICE) {
-			if (!selected || rand.nextBoolean()) entityDropItem(new ItemStack(WingsItems.GLACIAL_SHRIMP), (float) (pos.getY() - getPosY()));
-		} else if (state.isSolid()) {
-			ToolType type = state.getHarvestTool();
-			if (type == null) type = ToolType.PICKAXE;
-			ItemStack stack = tools.computeIfAbsent(type, k -> {
-				if (k == ToolType.AXE) return new ItemStack(Items.IRON_AXE);
-				if (k == ToolType.PICKAXE) return new ItemStack(Items.IRON_PICKAXE);
-				if (k == ToolType.SHOVEL) return new ItemStack(Items.IRON_SHOVEL);
-				return ItemStack.EMPTY;
-			});
-			setupTool(stack);
-			if (selected) {
-				for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
-					if (entry.getKey() == Enchantments.EFFICIENCY) {
-						List<BlockPos> positions = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toList());
-						int k = 0;
-						for (int i = 0; i < entry.getValue(); i++) {
-							for (int i1 = k; i1 < positions.size(); i1++) {
-								BlockPos p = positions.get(i1);
-								if (world.getBlockState(p).isSolid()) {
-									breakBlock(p, false);
-									k = i1;
-									break;
+		if (eyesInWater) {
+			BlockState state = world.getBlockState(pos);
+			world.playEvent(2001, pos, Block.getStateId(state));
+			Material material = state.getMaterial();
+			if (material == Material.ICE || material == Material.PACKED_ICE) {
+				if (!selected || rand.nextBoolean())
+					entityDropItem(new ItemStack(WingsItems.GLACIAL_SHRIMP), (float) (pos.getY() - getPosY()));
+			} else if (state.isSolid()) {
+				ToolType type = state.getHarvestTool();
+				if (type == null) type = ToolType.PICKAXE;
+				ItemStack stack = tools.computeIfAbsent(type, k -> {
+					if (k == ToolType.AXE) return new ItemStack(Items.IRON_AXE);
+					if (k == ToolType.PICKAXE) return new ItemStack(Items.IRON_PICKAXE);
+					if (k == ToolType.SHOVEL) return new ItemStack(Items.IRON_SHOVEL);
+					return ItemStack.EMPTY;
+				});
+				setupTool(stack);
+				if (selected) {
+					for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
+						if (entry.getKey() == Enchantments.EFFICIENCY) {
+							List<BlockPos> positions = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toList());
+							int k = 0;
+							for (int i = 0; i < entry.getValue(); i++) {
+								for (int i1 = k; i1 < positions.size(); i1++) {
+									BlockPos p = positions.get(i1);
+									if (world.getBlockState(p).isSolid()) {
+										breakBlock(p, false);
+										k = i1;
+										break;
+									}
 								}
 							}
+							break;
 						}
-						break;
 					}
 				}
-			}
 
-			for (ItemStack drop : state.getDrops(new LootContext.Builder((ServerWorld) world).withRandom(rand).withParameter(LootParameters.POSITION, pos).withParameter(LootParameters.TOOL, stack))) {
-				entityDropItem(drop, (float) (pos.getY() - getPosY()));
+				for (ItemStack drop : state.getDrops(new LootContext.Builder((ServerWorld) world).withRandom(rand).withParameter(LootParameters.POSITION, pos).withParameter(LootParameters.TOOL, stack))) {
+					entityDropItem(drop, (float) (pos.getY() - getPosY()));
+				}
 			}
+			world.removeBlock(pos, false);
 		}
-		world.removeBlock(pos, false);
 	}
 
 	private void setupTool(ItemStack stack) {
@@ -452,17 +443,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.horn = horn;
 	}
 
-/*	private void move(double x, double y, double z, double horizontalSpeed, double verticalSpeed) {
-		setMotion(MathHelper.clamp(x - getPosX(), -horizontalSpeed, horizontalSpeed), world.getFluidState(new BlockPos(getPosX(), getPosY() + 1, getPosZ())).getFluid() == Fluids.WATER ? MathHelper.clamp(y - getPosY(), -verticalSpeed, verticalSpeed) : world.getFluidState(getPosition()).getFluid() != Fluids.WATER ? -verticalSpeed : 0, MathHelper.clamp(z - getPosZ(), -horizontalSpeed, horizontalSpeed));
-		rotationYaw = (float) Math.toDegrees(Math.atan2(x - getPosX(), z - getPosZ()) - Math.PI / 2);
-		renderYawOffset = rotationYaw;
-	}
-
-	public static boolean canSpawn(EntityType<? extends IcyPlowheadEntity> type, IWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn) {
-		return worldIn.getBlockState(pos).getBlock() == Blocks.WATER && worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
-	}*/
-
-	static class MoveHelperController extends MovementController {
+	private static class MoveHelperController extends MovementController {
 		private final IcyPlowheadEntity plowhead;
 
 		MoveHelperController(IcyPlowheadEntity plowhead) {

@@ -277,10 +277,22 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
+    protected void onLeashDistance(float distance) {
+        super.onLeashDistance(distance);
+        System.out.println(distance);
+        if (!world.isRemote && distance >= 5) {
+            if (isSleeping()) {
+                oldPos = getPositionVec();
+                alarmedTimer = 200;
+            }
+            clearLeashed(true, true);
+        }
+    }
+
+    @Override
     public ItemStack getEgg() {
         return new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG);
     }
-
 
     public DyeColor getBandanaColor() {
         return DyeColor.byId(this.dataManager.get(BANDANA_COLOR));
