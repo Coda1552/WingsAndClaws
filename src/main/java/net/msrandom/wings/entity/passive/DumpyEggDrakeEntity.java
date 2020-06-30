@@ -279,7 +279,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     protected void onLeashDistance(float distance) {
         super.onLeashDistance(distance);
-        System.out.println(distance);
         if (!world.isRemote && distance >= 5) {
             if (isSleeping()) {
                 oldPos = getPositionVec();
