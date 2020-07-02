@@ -84,6 +84,6 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     }
 
     public enum WonderState {
-        WONDER, STAY, FOLLOW
+        WANDER, STAY, FOLLOW
     }
 }

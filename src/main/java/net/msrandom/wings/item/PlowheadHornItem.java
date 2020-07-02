@@ -74,7 +74,7 @@ public class PlowheadHornItem extends ToolItem {
                     } else {
                         TameableDragonEntity entity = (TameableDragonEntity) result.getEntity();
                         TameableDragonEntity.WonderState state = entity.getState();
-                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.WONDER : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
+                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.WANDER : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
                         entity.setState(newState);
                         player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
                         return stack;
@@ -95,7 +95,7 @@ public class PlowheadHornItem extends ToolItem {
                     }
                     if (last != null) {
                         if (last.getState() == TameableDragonEntity.WonderState.STAY)
-                            last.setState(TameableDragonEntity.WonderState.WONDER);
+                            last.setState(TameableDragonEntity.WonderState.WANDER);
                         last.setTarget(mop);
                         last.setHorn(stack);
                         return stack;

@@ -74,7 +74,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40) {
 			@Override
 			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WonderState.WONDER && getAttackTarget() == null;
+				return super.shouldExecute() && getState() == WonderState.WANDER && getAttackTarget() == null;
 			}
 		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));

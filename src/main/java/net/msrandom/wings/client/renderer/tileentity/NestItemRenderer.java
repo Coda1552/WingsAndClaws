@@ -7,9 +7,12 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 
+@OnlyIn(Dist.CLIENT)
 public class NestItemRenderer extends ItemStackTileEntityRenderer {
     private final TileEntity instance;
 

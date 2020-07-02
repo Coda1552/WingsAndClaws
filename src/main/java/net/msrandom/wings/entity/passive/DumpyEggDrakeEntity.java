@@ -58,7 +58,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WonderState.WONDER;
+                return super.shouldExecute() && getState() == WonderState.WANDER;
             }
         });
         this.goalSelector.addGoal(9, new LookRandomlyGoal(this));

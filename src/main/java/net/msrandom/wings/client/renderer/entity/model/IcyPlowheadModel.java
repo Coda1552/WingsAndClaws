@@ -27,19 +27,37 @@ public abstract class IcyPlowheadModel extends SegmentedModel<IcyPlowheadEntity>
 
     @Override
     public void setRotationAngles(IcyPlowheadEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.body.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F;
-        this.tail1.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.5F * limbSwingAmount * 0.5F;
-        this.tail2.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.7F * limbSwingAmount * 0.5F;
-        this.tail3.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 0.9F * limbSwingAmount * 0.5F;
-        this.armLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 1.5F * limbSwingAmount * 0.5F;
-        this.armLeft.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F;
-        this.armRight.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * -1.5F * limbSwingAmount * 0.5F;
-        this.armRight.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * -2.0F * limbSwingAmount * 0.5F;
-        this.legRight.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * 1.5F * limbSwingAmount * 0.5F;
-        this.legRight.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * 2.0F * limbSwingAmount * 0.5F + 0.3F;
-        this.legLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * -1.5F * limbSwingAmount * 0.5F;
-        this.legLeft.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * -2.0F * limbSwingAmount * 0.5F + -0.3F;
-        this.head.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F;
+        if (limbSwingAmount < 0.1) {
+            this.armLeft.rotateAngleZ = MathHelper.cos(entityIn.ticksExisted * 0.03f) * 0.05f;
+            this.armRight.rotateAngleZ = MathHelper.cos(entityIn.ticksExisted * 0.03f) * -0.05f;
+            this.legLeft.rotateAngleZ = MathHelper.cos(entityIn.ticksExisted * 0.05f) * -0.05f;
+            this.legRight.rotateAngleZ = MathHelper.cos(entityIn.ticksExisted * 0.05f) * 0.05f;
+
+            this.armLeft.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f) * 0.05f;
+            this.armRight.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f) * -0.05f;
+            this.legLeft.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f) * 0.05f;
+            this.legRight.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f) * -0.05f;
+
+            this.body.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.05f) * 0.03f;
+            this.head.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f + 0.3f) * 0.04f;
+            this.tail1.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.2f) * -0.03f;
+            this.tail2.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.05f) * 0.05f;
+            this.tail3.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.03f) * -0.06f;
+        } else {
+            this.body.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.1F;
+            this.tail1.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.25F;
+            this.tail2.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.35F;
+            this.tail3.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.45F;
+            this.armLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.75F;
+            this.armLeft.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount;
+            this.armRight.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * -0.75F;
+            this.armRight.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * -limbSwingAmount;
+            this.legRight.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * 0.75F;
+            this.legRight.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount + 0.3F;
+            this.legLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * -0.75F;
+            this.legLeft.rotateAngleY = MathHelper.cos(1.0F + limbSwing * 0.4f + (float) Math.PI) * -limbSwingAmount + -0.3F;
+            this.head.rotateAngleY = MathHelper.cos(limbSwing * 0.4f + (float) Math.PI) * limbSwingAmount * -0.1F;
+        }
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

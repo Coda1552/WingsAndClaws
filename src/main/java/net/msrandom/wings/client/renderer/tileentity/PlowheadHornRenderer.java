@@ -6,9 +6,12 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.tileentity.model.PlowheadHornModel;
 
+@OnlyIn(Dist.CLIENT)
 public class PlowheadHornRenderer extends ItemStackTileEntityRenderer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/horn.png");
     private final PlowheadHornModel model = new PlowheadHornModel();

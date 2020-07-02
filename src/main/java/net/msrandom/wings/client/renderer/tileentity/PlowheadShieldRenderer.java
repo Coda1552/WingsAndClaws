@@ -6,9 +6,12 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.tileentity.model.PlowheadShieldModel;
 
+@OnlyIn(Dist.CLIENT)
 public class PlowheadShieldRenderer extends ItemStackTileEntityRenderer {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/shield.png");
     private final PlowheadShieldModel model = new PlowheadShieldModel();
