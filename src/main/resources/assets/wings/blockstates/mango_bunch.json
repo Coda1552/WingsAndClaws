@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "pickles=1": {
+      "model": "wings:block/mango_bunch_1"
+    },
+    "pickles=2": {
+      "model": "wings:block/mango_bunch_2"
+    },
+    "pickles=3": {
+      "model": "wings:block/mango_bunch_3"
+    },
+    "pickles=4": {
+      "model": "wings:block/mango_bunch_4"
+    }
+  }
+}
