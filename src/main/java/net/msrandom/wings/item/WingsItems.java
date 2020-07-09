@@ -1,18 +1,13 @@
 package net.msrandom.wings.item;
 
 import net.minecraft.item.*;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.block.WingsBlocks;
-import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadShieldRenderer;
 import net.msrandom.wings.tileentity.WingsTileEntities;
-
-import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
 public class WingsItems {
     public static final DeferredRegister<Item> REGISTRY = new DeferredRegister<>(ForgeRegistries.ITEMS, WingsAndClaws.MOD_ID);
@@ -39,22 +34,19 @@ public class WingsItems {
     //public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
     //public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
     //public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
-    public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
+    public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(new Item.Properties().group(GROUP).maxDamage(678).setISTER(() -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new PlowheadHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
 
     //Custom block items
     static {
-        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
-        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
+        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
+        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
+        register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP)));
     }
 
     private static Item register(String name, Item item) {
         REGISTRY.register(name, () -> item);
         return item;
-    }
-
-    private static Item.Properties getWithISTER(Item.Properties properties, Supplier<Callable<Object>> ister) {
-        return EffectiveSide.get().isClient() ? ClientEventHandler.getWithISTER(properties, ister) : properties;
     }
 }
