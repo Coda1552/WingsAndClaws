@@ -3,6 +3,7 @@ package net.msrandom.wings.client.renderer.entity.model;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.util.math.MathHelper;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
 public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
@@ -22,8 +23,63 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
     }
 
     @Override
-    public void setRotationAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(MimangoEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
+/*        if(entityIn.isHanging()) {
+            this.wingLeft.rotateAngleY = -2.0F;
+            this.wingLeft.rotateAngleZ = 1.58F;
+            this.wingLeft.rotationPointY = 0.05F;
+            this.wingRight.rotateAngleY = 2.0F;
+            this.wingRight.rotateAngleZ = -1.58F;
+            this.wingRight.rotationPointY = 0.05F;
+            this.head.rotateAngleX = 1.5F;
+            this.body.rotateAngleX = 1.57F;
+        }
 
+        if (entityIn.onGround){
+            if(f1 >= 0.1f) {
+                float speed = 1.0f;
+                float degree = 1.0f;
+                this.wingLeft.rotateAngleY = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + -2.0F;
+                this.wingLeft.rotateAngleZ = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + 1.58F;
+                this.wingLeft.rotationPointY = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + 0.05F;
+                this.wingRight.rotateAngleY = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + 2.0F;
+                this.wingRight.rotateAngleZ = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + -1.58F;
+                this.wingRight.rotationPointY = MathHelper.cos((f * speed * 0.0F)) * (degree * 0.0F) * f1 * 0.5F + 0.05F;
+                this.body.rotateAngleY = MathHelper.cos((f * speed * 0.4F)) * (degree * 0.6F) * f1 * 0.5F;
+                this.tail.rotateAngleY = MathHelper.cos((f * speed * 0.4F)) * (degree * 0.8F) * f1 * 0.5F;
+                this.head.rotateAngleY = MathHelper.cos((f * speed * 0.4F)) * (degree * 0.4F) * f1 * 0.5F;
+            } else {
+                float speed = 1.0f;
+                float degree = 1.0f;
+                this.wingLeft.rotateAngleY = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + -2.0F;
+                this.wingLeft.rotateAngleZ = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + 1.58F;
+                this.wingLeft.rotationPointY = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + 0.05F;
+                this.wingRight.rotateAngleY = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + 2.0F;
+                this.wingRight.rotateAngleZ = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + -1.58F;
+                this.wingRight.rotationPointY = MathHelper.cos((f * speed * 0.0F) + (float) Math.PI) * (degree * 0.0F) * f1 * 0.5F + 0.05F;
+            }
+        }*/
+
+        if(entityIn.isFlying()) {
+
+        }
+        float speed = 1.0f;
+        float degree = 1.0f;
+
+        if(entityIn.isChild()) {
+            this.wingLeft.rotationPointY = -1.5F;
+            this.wingRight.rotationPointY = -1.5F;
+        } else {
+            this.wingLeft.rotationPointY = -1.0F;
+            this.wingRight.rotationPointY = -1.0F;
+        }
+
+        //this.body.rotationPointY = MathHelper.cos((f * speed * 0.4F) + (float) Math.PI) * (degree * 0.1F) * f1 * 0.5F;
+        this.wingLeft.rotateAngleZ = MathHelper.cos((f * speed * 0.8F) + (float) Math.PI) * (degree * 2.0F) * f1 * 0.5F;
+        this.wingRight.rotateAngleZ = MathHelper.cos((f * speed * 0.8F) + (float) Math.PI) * (degree * -2.0F) * f1 * 0.5F;
+        //this.head.rotationPointY = MathHelper.cos((f * speed * 0.4F) + (float) Math.PI) * (degree * 0.05F) * f1 * 0.5F;
+        this.tail.rotateAngleX = MathHelper.cos((f * speed * 0.4F) + (float) Math.PI) * (degree * 0.4F) * f1 * 0.5F + -0.2F;
+        this.body.rotateAngleX = MathHelper.cos((f * speed * 0.4F) + (float) Math.PI) * (degree * 0.1F) * f1 * 0.5F + 0.05F;
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

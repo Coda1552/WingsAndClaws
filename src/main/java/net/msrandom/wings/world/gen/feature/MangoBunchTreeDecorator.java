@@ -35,15 +35,13 @@ public class MangoBunchTreeDecorator extends TreeDecorator {
     public void func_225576_a_(IWorld world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, MutableBoundingBox boundingBox) {
         if(random.nextFloat() < probability) return;
 
-        int i = logPositions.get(0).getY();
-
-        logPositions.stream().filter(pos -> pos.getY() - i <= 2).forEach(pos -> {
+        logPositions.forEach(pos -> {
             for(Direction direction : Direction.Plane.HORIZONTAL) {
                 if (random.nextFloat() <= 0.25F) {
                     Direction direction1 = direction.getOpposite();
                     BlockPos blockpos = pos.add(direction1.getXOffset(), 0, direction1.getZOffset());
                     if (AbstractTreeFeature.isAir(world, blockpos)) {
-                        BlockState blockstate = WingsBlocks.MANGO_BUNCH.getDefaultState().with(MangoBlock.MANGOES, random.nextInt(3));
+                        BlockState blockstate = WingsBlocks.MANGO_BUNCH.getDefaultState().with(MangoBlock.MANGOES, random.nextInt(4) + 1);
                         this.func_227423_a_(world, blockpos, blockstate, set, boundingBox);
                     }
                 }
