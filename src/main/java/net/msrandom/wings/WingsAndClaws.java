@@ -53,8 +53,7 @@ public class WingsAndClaws {
             //Biomes.SHATTERED_SAVANNA.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.HB_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(300))));
             //BiomeDictionary.getBiomes(BiomeDictionary.Type.SAVANNA).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HATCHET_BEAK, 1, 1, 1)));
 
-            //Biomes.JUNGLE.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 5, 1, 1));
-            //EntitySpawnPlacementRegistry.register(WingsEntities.MIMANGO, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, MimangoEntity::canSpawn);
+            Biomes.JUNGLE.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 5, 1, 1));
         }
     }
 

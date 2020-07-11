@@ -1,11 +1,14 @@
 package net.msrandom.wings.client;
 
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.renderer.entity.*;
 import net.msrandom.wings.client.renderer.tileentity.DEDNestTileEntityRenderer;
 import net.msrandom.wings.client.renderer.tileentity.HBNestTileEntityRenderer;
@@ -16,6 +19,8 @@ import net.msrandom.wings.tileentity.WingsTileEntities;
 @OnlyIn(Dist.CLIENT)
 public class ClientEventHandler {
     public static void init() {
+        RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH, RenderType.getTranslucent());
+
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST, DEDNestTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST, HBNestTileEntityRenderer::new);
 

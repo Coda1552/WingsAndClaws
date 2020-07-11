@@ -1,7 +1,9 @@
 package net.msrandom.wings.block;
 
 import net.minecraft.block.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -13,10 +15,11 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class MangoBlock extends BushBlock {
+public class MangoBlock extends Block {
     public static final IntegerProperty MANGOES = BlockStateProperties.PICKLES_1_4;
 
     protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
@@ -43,12 +46,10 @@ public class MangoBlock extends BushBlock {
         return super.getLightValue(state) + 3 * state.get(MANGOES);
     }
 
-    @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
     }
 
-    @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.up();
         return this.isValidGround(worldIn.getBlockState(blockpos), worldIn, blockpos);

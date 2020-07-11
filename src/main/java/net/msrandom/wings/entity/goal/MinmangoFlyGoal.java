@@ -4,12 +4,14 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.Vec3d;
+import net.msrandom.wings.entity.TameableDragonEntity;
+import net.msrandom.wings.entity.passive.MimangoEntity;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class MinmangoFlyGoal extends Goal {
-    protected final CreatureEntity creature;
+    protected final MimangoEntity creature;
     protected double x;
     protected double y;
     protected double z;
@@ -17,11 +19,11 @@ public class MinmangoFlyGoal extends Goal {
     protected int executionChance;
     protected boolean mustUpdate;
 
-    public MinmangoFlyGoal(CreatureEntity creatureIn, double speedIn) {
+    public MinmangoFlyGoal(MimangoEntity creatureIn, double speedIn) {
         this(creatureIn, speedIn, 120);
     }
 
-    public MinmangoFlyGoal(CreatureEntity creatureIn, double speedIn, int chance) {
+    public MinmangoFlyGoal(MimangoEntity creatureIn, double speedIn, int chance) {
         this.creature = creatureIn;
         this.speed = speedIn;
         this.executionChance = chance;
@@ -33,7 +35,7 @@ public class MinmangoFlyGoal extends Goal {
      * method as well.
      */
     public boolean shouldExecute() {
-        if (this.creature.isBeingRidden()) {
+        if (this.creature.isBeingRidden() || this.creature.getState() != TameableDragonEntity.WonderState.WONDER) {
             return false;
         } else {
             Vec3d vec3d = this.getPosition();

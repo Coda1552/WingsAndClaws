@@ -43,7 +43,7 @@ public class WingsItems {
     static {
         register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
         register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
-        register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP)));
+        register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
     }
 
     private static Item register(String name, Item item) {

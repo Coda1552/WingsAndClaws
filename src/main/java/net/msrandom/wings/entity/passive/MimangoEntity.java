@@ -70,7 +70,12 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
+            @Override
+            public boolean shouldExecute() {
+                return super.shouldExecute() && getState() == WonderState.FOLLOW;
+            }
+        });
         this.goalSelector.addGoal(3, hangGoal);
         this.goalSelector.addGoal(4, new MinmangoFlyGoal(this, 0.8D));
     }
