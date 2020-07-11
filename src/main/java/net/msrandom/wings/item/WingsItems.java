@@ -31,6 +31,7 @@ public class WingsItems {
     public static final Item GLACIAL_SHRIMP = register("glacial_shrimp", new Item(new Item.Properties().group(GROUP)));
     public static final Item ICY_PLOWHEAD_EGG = register("icy_plowhead_egg", new PlowheadEggItem());
     public static final Item DUMPY_EGG_DRAKE_EGG = register("dumpy_egg_drake_egg", new NestEggItem(WingsBlocks.DED_NEST));
+    public static final Item MIMANGO_EGG = register("mimango_egg", new MimangoEggItem());
     //public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
     //public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
     //public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
@@ -42,7 +43,7 @@ public class WingsItems {
     static {
         register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
         register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, new Item.Properties().setISTER(() -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
-        register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP)));
+        register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
     }
 
     private static Item register(String name, Item item) {

@@ -15,7 +15,7 @@ public class WingsBlocks {
     public static final DeferredRegister<Block> REGISTRY = new DeferredRegister<>(ForgeRegistries.BLOCKS, WingsAndClaws.MOD_ID);
     public static final NestBlock<DEDNestTileEntity> DED_NEST = register("ded_nest", new NestBlock<>(Block.Properties.create(Material.SAND).sound(SoundType.SAND).hardnessAndResistance(1, 0), DumpyEggDrakeEntity.class, DEDNestTileEntity.class));
     public static final NestBlock<HBNestTileEntity> HB_NEST = register("hb_nest", new NestBlock<>(Block.Properties.create(Material.EARTH).sound(SoundType.GROUND).hardnessAndResistance(1, 0), HatchetBeakEntity.class, HBNestTileEntity.class));
-    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock(Block.Properties.create(Material.EARTH).sound(SoundType.CROP).lightValue(3).notSolid()));
+    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock(Block.Properties.create(Material.BAMBOO).sound(SoundType.BAMBOO).lightValue(3).notSolid()));
 
     private static <T extends Block> T register(String name, T block) {
         REGISTRY.register(name, () -> block);

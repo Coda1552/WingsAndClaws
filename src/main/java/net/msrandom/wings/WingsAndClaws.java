@@ -1,15 +1,12 @@
 package net.msrandom.wings;
 
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraft.world.gen.treedecorator.CocoaTreeDecorator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,12 +20,9 @@ import net.msrandom.wings.client.WingsKeys;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.WingsTileEntities;
-import net.msrandom.wings.world.gen.feature.MangoBunchTreeDecorator;
 import net.msrandom.wings.world.gen.feature.WingsFeatures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
 
 @Mod(WingsAndClaws.MOD_ID)
 public class WingsAndClaws {
@@ -59,10 +53,7 @@ public class WingsAndClaws {
             //Biomes.SHATTERED_SAVANNA.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.HB_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(300))));
             //BiomeDictionary.getBiomes(BiomeDictionary.Type.SAVANNA).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HATCHET_BEAK, 1, 1, 1)));
 
-            //Biomes.JUNGLE.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 5, 1, 1));
-            //EntitySpawnPlacementRegistry.register(WingsEntities.MIMANGO, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, MimangoEntity::canSpawn);
-
-            //Registry.register(Registry.TREE_DECORATOR_TYPE, )
+            Biomes.JUNGLE.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 5, 1, 1));
         }
     }
 

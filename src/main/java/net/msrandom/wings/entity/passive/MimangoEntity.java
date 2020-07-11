@@ -1,14 +1,12 @@
 package net.msrandom.wings.entity.passive;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.goal.TemptGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -16,8 +14,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.DamageSource;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,48 +22,69 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.WingsEntities;
+import net.msrandom.wings.entity.goal.MimangoHangGoal;
+import net.msrandom.wings.entity.goal.MinmangoFlyGoal;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
-    private static final DataParameter<Boolean> HIDDEN = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
-    private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(Items.COCOA_BEANS);
+    private static final DataParameter<Byte> HANGING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BYTE);
+
+    private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
+
+    private MimangoHangGoal hangGoal;
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 10, true);
+        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
+        this.setPathPriority(PathNodeType.DAMAGE_FIRE, -1.0F);
+    }
+
+    protected void registerAttributes() {
+        super.registerAttributes();
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue((double)0.8F);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.5F);
     }
 
     @Override
-    public PathNavigator getNavigator() {
-        return new FlyingPathNavigator(this, world);
+    protected PathNavigator createNavigator(World worldIn) {
+        FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn);
+        flyingpathnavigator.setCanOpenDoors(false);
+        flyingpathnavigator.setCanSwim(true);
+        flyingpathnavigator.setCanEnterDoors(true);
+        return flyingpathnavigator;
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new TemptGoal(this, 0.2, TEMPT_ITEM, true));
+        this.hangGoal = new MimangoHangGoal(this, 5.0D);
+
+        this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
+            @Override
+            public boolean shouldExecute() {
+                return super.shouldExecute() && getState() == WonderState.FOLLOW;
+            }
+        });
+        this.goalSelector.addGoal(3, hangGoal);
+        this.goalSelector.addGoal(4, new MinmangoFlyGoal(this, 0.8D));
     }
 
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(HIDDEN, false);
         this.dataManager.register(VARIANT, 0);
-    }
-
-    public boolean isHidden() {
-        return this.dataManager.get(HIDDEN);
-    }
-
-    public void setHidden(boolean hidden) {
-        this.dataManager.set(HIDDEN, hidden);
+        this.dataManager.register(HANGING, (byte)0);
     }
 
     public int getVariant() {
@@ -78,60 +96,25 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (isHidden()) setHidden(false);
-        return super.attackEntityFrom(source, amount);
-    }
-
-    @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == Items.COCOA_BEANS;
-    }
-
-    public boolean canBePushed() {
-        return false;
-    }
-
-    public boolean onLivingFall(float distance, float damageMultiplier) {
-        return false;
-    }
-
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
-    }
-
-    protected void collideWithEntity(Entity entityIn) {
-    }
-
-    protected void collideWithNearbyEntities() {
-    }
-
-    public void tick() {
-        BlockPos pos = new BlockPos(getPosX(), getPosY() + 1, getPosZ());
-        if (world.getBlockState(pos).isAir(world, pos)) setHidden(false);
-
-        super.tick();
-
-        if (isHidden()) {
-            this.setMotion(Vec3d.ZERO);
-            this.setRawPosition(getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), getPosZ());
-        }
+        return stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem();
     }
 
     @Nullable
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setVariant(rand.nextInt(5));
-        setHidden(world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!isHidden() && !isTamed() && stack.getItem() == Items.MELON_SEEDS) {
+        if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                 this.setTamedBy(player);
                 this.navigator.clearPath();
+                this.goalSelector.removeGoal(hangGoal);
                 this.setAttackTarget(null);
                 this.setHealth(20.0F);
                 this.playTameEffect(true);
@@ -156,8 +139,39 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         return mimango;
     }
 
-    public static boolean canSpawn(EntityType<MimangoEntity> type, IWorld world, SpawnReason reason, BlockPos pos, Random rand) {
-        Block block = world.getBlockState(pos.up()).getBlock();
-        return block.isIn(BlockTags.LEAVES) && world.getLightSubtracted(pos, 0) > 8;
+    public boolean isHanging() {
+        return (this.dataManager.get(HANGING) & 1) != 0;
+    }
+
+    public void setHanging(boolean isHanging) {
+        byte b0 = this.dataManager.get(HANGING);
+        if (isHanging) {
+            this.dataManager.set(HANGING, (byte)(b0 | 1));
+        } else {
+            this.dataManager.set(HANGING, (byte)(b0 & -2));
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (this.isHanging()) {
+            this.setMotion(Vec3d.ZERO);
+            this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double)this.getHeight(), this.getPosZ());
+        }
+    }
+
+    public boolean isFlying() {
+        return !this.onGround;
+    }
+
+    public boolean onLivingFall(float distance, float damageMultiplier) {
+        return false;
+    }
+
+    public boolean canBePushed() {
+        return true;
+    }
+
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 }
