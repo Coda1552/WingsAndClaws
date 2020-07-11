@@ -24,7 +24,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
 
     @Override
     public void setRotationAngles(MimangoEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
-/*        if(entityIn.isHanging()) {
+        if(entityIn.isHanging()) {
             this.wingLeft.rotateAngleY = -2.0F;
             this.wingLeft.rotateAngleZ = 1.58F;
             this.wingLeft.rotationPointY = 0.05F;
@@ -35,6 +35,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
             this.body.rotateAngleX = 1.57F;
         }
 
+        /*
         if (entityIn.onGround){
             if(f1 >= 0.1f) {
                 float speed = 1.0f;

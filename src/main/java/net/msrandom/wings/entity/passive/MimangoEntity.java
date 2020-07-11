@@ -17,12 +17,16 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.WingsEntities;
+import net.msrandom.wings.entity.goal.MimangoHangGoal;
+import net.msrandom.wings.entity.goal.MinmangoFlyGoal;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -34,11 +38,20 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
+    private MimangoHangGoal hangGoal;
+
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 10, true);
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
         this.setPathPriority(PathNodeType.DAMAGE_FIRE, -1.0F);
+    }
+
+    protected void registerAttributes() {
+        super.registerAttributes();
+        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue((double)0.8F);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.5F);
     }
 
     @Override
@@ -53,18 +66,13 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.hangGoal = new MimangoHangGoal(this, 5.0D);
+
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
-        this.goalSelector.addGoal(3, new FollowMobGoal(this, 1.0D, 3.0F, 7.0F));
-    }
-
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue((double)0.8F);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.5F);
+        this.goalSelector.addGoal(3, hangGoal);
+        this.goalSelector.addGoal(4, new MinmangoFlyGoal(this, 0.8D));
     }
 
     @Override
@@ -101,6 +109,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             if (rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                 this.setTamedBy(player);
                 this.navigator.clearPath();
+                this.goalSelector.removeGoal(hangGoal);
                 this.setAttackTarget(null);
                 this.setHealth(20.0F);
                 this.playTameEffect(true);
@@ -135,6 +144,14 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             this.dataManager.set(HANGING, (byte)(b0 | 1));
         } else {
             this.dataManager.set(HANGING, (byte)(b0 & -2));
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (this.isHanging()) {
+            this.setMotion(Vec3d.ZERO);
+            this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double)this.getHeight(), this.getPosZ());
         }
     }
 
