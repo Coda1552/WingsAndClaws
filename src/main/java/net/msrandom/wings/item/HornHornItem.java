@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -21,8 +20,8 @@ import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 
 import java.util.Collections;
 
-public class PlowheadHornItem extends ToolItem {
-    public PlowheadHornItem() {
+public class HornHornItem extends ToolItem {
+    public HornHornItem() {
         super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1).setISTER(() -> PlowheadHornRenderer::new));
         this.addPropertyOverride(new ResourceLocation(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
     }
@@ -39,23 +38,8 @@ public class PlowheadHornItem extends ToolItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if (!worldIn.isRemote) {
-            boolean noTag = !stack.hasTag();
-            int lastUsage = noTag ? 0 : stack.getTag().getInt("LastUsage");
-            if (!noTag && lastUsage > playerIn.ticksExisted) {
-                lastUsage = playerIn.ticksExisted - 50;
-                stack.getTag().putInt("LastUsage", lastUsage);
-            }
-            if (noTag || playerIn.ticksExisted - lastUsage > 48) {
-                playerIn.setActiveHand(handIn);
-                worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
-                if (!stack.hasTag()) stack.setTag(new CompoundNBT());
-                stack.getTag().putInt("LastUsage", playerIn.ticksExisted);
-                return ActionResult.resultSuccess(stack);
-            }
-        }
-        return ActionResult.resultFail(stack);
+        worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
+        return ActionResult.resultFail(playerIn.getHeldItem(handIn));
     }
 
     @Override
@@ -73,10 +57,11 @@ public class PlowheadHornItem extends ToolItem {
                         flag = worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
                     } else {
                         TameableDragonEntity entity = (TameableDragonEntity) result.getEntity();
-                        TameableDragonEntity.WonderState state = entity.getState();
-                        TameableDragonEntity.WonderState newState = state == TameableDragonEntity.WonderState.FOLLOW ? TameableDragonEntity.WonderState.WANDER : TameableDragonEntity.WonderState.values()[state.ordinal() + 1];
+                        TameableDragonEntity.WanderState state = entity.getState();
+                        TameableDragonEntity.WanderState newState = state == TameableDragonEntity.WanderState.FOLLOW ? TameableDragonEntity.WanderState.WANDER : TameableDragonEntity.WanderState.values()[state.ordinal() + 1];
                         entity.setState(newState);
                         player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
+                        player.getCooldownTracker().setCooldown(this, 48);
                         return stack;
                     }
                 } else {
@@ -94,10 +79,11 @@ public class PlowheadHornItem extends ToolItem {
                         }
                     }
                     if (last != null) {
-                        if (last.getState() == TameableDragonEntity.WonderState.STAY)
-                            last.setState(TameableDragonEntity.WonderState.WANDER);
+                        if (last.getState() == TameableDragonEntity.WanderState.STAY)
+                            last.setState(TameableDragonEntity.WanderState.WANDER);
                         last.setTarget(mop);
                         last.setHorn(stack);
+                        player.getCooldownTracker().setCooldown(this, 48);
                         return stack;
                     }
                 }

@@ -17,7 +17,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -26,8 +25,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -74,7 +71,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40) {
 			@Override
 			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WonderState.WANDER && getAttackTarget() == null;
+				return super.shouldExecute() && getState() == WanderState.WANDER && getAttackTarget() == null;
 			}
 		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
@@ -96,14 +93,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2);
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 44 : 30);
 		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
-	}
-
-	@Nullable
-	@Override
-	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-		spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-		this.setGender(rand.nextBoolean());
-		return spawnDataIn;
 	}
 
 	@Override
@@ -163,10 +152,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			if (this.rand.nextInt(3) == 0) {
 				this.setTamedBy(player);
 				this.setAttackTarget(null);
-				this.playTameEffect(true);
 				this.world.setEntityState(this, (byte) 7);
 			} else {
-				this.playTameEffect(false);
 				this.world.setEntityState(this, (byte) 6);
 			}
 		}
@@ -213,7 +200,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 			if (!world.isRemote) {
 				if (isTamed()) {
-					if (getState() == WonderState.FOLLOW) {
+					if (getState() == WanderState.FOLLOW) {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
 							getNavigator().tryMoveToEntityLiving(owner, 0.2);

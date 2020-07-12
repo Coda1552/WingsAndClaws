@@ -9,6 +9,8 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class NestTileEntity extends TileEntity implements ITickableTileEntity {
     public NestTileEntity(TileEntityType<?> tileEntityTypeIn) {
@@ -21,12 +23,13 @@ public abstract class NestTileEntity extends TileEntity implements ITickableTile
 
     public abstract int getEggCount();
 
-    public static void render(NestTileEntity tileEntityIn, Model model, ResourceLocation[] textures, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    @OnlyIn(Dist.CLIENT)
+    public static void render(Model model, ResourceLocation textures, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         matrixStackIn.push();
         matrixStackIn.translate(0.5, 1.5, 0.5);
         matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
         RenderSystem.enableRescaleNormal();
-        model.render(matrixStackIn, bufferIn.getBuffer(model.getRenderType(textures[tileEntityIn.getEggCount()])), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+        model.render(matrixStackIn, bufferIn.getBuffer(model.getRenderType(textures)), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
         matrixStackIn.pop();
     }
 }

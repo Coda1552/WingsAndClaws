@@ -71,8 +71,7 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
                 if (removed) player.addItemStackToInventory(new ItemStack(item));
                 return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             } else if (stack.getItem() == item) {
-                boolean added = ((NestTileEntity) te).addEgg();
-                if (added) {
+                if (player.isSneaking() && ((NestTileEntity) te).addEgg()) {
                     player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
                     if (!player.abilities.isCreativeMode) stack.shrink(1);
                     return ActionResultType.SUCCESS;

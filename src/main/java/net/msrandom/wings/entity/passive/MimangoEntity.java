@@ -3,7 +3,9 @@ package net.msrandom.wings.entity.passive;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -34,7 +36,7 @@ import java.util.UUID;
 
 public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> HANGING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> HANGING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
 
     private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
@@ -50,8 +52,8 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     protected void registerAttributes() {
         super.registerAttributes();
         this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue((double)0.8F);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.5F);
+        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.8);
+        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WonderState.FOLLOW;
+                return super.shouldExecute() && getState() == WanderState.FOLLOW;
             }
         });
         this.goalSelector.addGoal(3, hangGoal);
@@ -84,7 +86,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     protected void registerData() {
         super.registerData();
         this.dataManager.register(VARIANT, 0);
-        this.dataManager.register(HANGING, (byte)0);
+        this.dataManager.register(HANGING, false);
     }
 
     public int getVariant() {
@@ -140,16 +142,11 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public boolean isHanging() {
-        return (this.dataManager.get(HANGING) & 1) != 0;
+        return this.dataManager.get(HANGING);
     }
 
     public void setHanging(boolean isHanging) {
-        byte b0 = this.dataManager.get(HANGING);
-        if (isHanging) {
-            this.dataManager.set(HANGING, (byte)(b0 | 1));
-        } else {
-            this.dataManager.set(HANGING, (byte)(b0 & -2));
-        }
+        this.dataManager.set(HANGING, isHanging);
     }
 
     public void tick() {

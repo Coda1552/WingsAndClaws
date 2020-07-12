@@ -1,6 +1,8 @@
 package net.msrandom.wings.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -11,8 +13,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
 public class WingsFeatures {
@@ -27,15 +29,15 @@ public class WingsFeatures {
         return feature;
     }
 
+    @SuppressWarnings("unchecked")
+    @Nonnull
     public static <T extends TreeDecorator> TreeDecoratorType<T> registerTreeDecorator(String name, Function<Dynamic<?>, T> function) {
-        Constructor<TreeDecoratorType> constructor = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
-        constructor.setAccessible(true);
+        @SuppressWarnings("rawtypes") Constructor<TreeDecoratorType> constructor = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
 
         try {
-            return Registry.register(Registry.TREE_DECORATOR_TYPE, name, (TreeDecoratorType<T>)constructor.newInstance(function));
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
+            return Registry.register(Registry.TREE_DECORATOR_TYPE, name, (TreeDecoratorType<T>) constructor.newInstance(function));
+        } catch (ReflectiveOperationException e) {
+            throw new ReportedException(CrashReport.makeCrashReport(e, "Creating " + name + " tree decorator"));
         }
     }
 }

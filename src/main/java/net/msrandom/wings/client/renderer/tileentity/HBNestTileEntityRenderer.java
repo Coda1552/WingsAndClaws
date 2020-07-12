@@ -11,7 +11,7 @@ import net.msrandom.wings.tileentity.HBNestTileEntity;
 import net.msrandom.wings.tileentity.NestTileEntity;
 
 public class HBNestTileEntityRenderer extends TileEntityRenderer<HBNestTileEntity> {
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak/empty.png"), new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak/egg.png")};
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak.png");
     private final HBNestModel model = new HBNestModel();
 
     public HBNestTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
@@ -20,6 +20,7 @@ public class HBNestTileEntityRenderer extends TileEntityRenderer<HBNestTileEntit
 
     @Override
     public void render(HBNestTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        NestTileEntity.render(tileEntityIn, model, TEXTURES, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        model.setHasEgg(tileEntityIn.getEggCount() > 0);
+        NestTileEntity.render(model, TEXTURE, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 }

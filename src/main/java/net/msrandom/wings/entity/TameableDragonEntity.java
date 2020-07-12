@@ -68,11 +68,11 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         this.dataManager.set(GENDER, gender);
     }
 
-    public WonderState getState() {
-        return WonderState.values()[dataManager.get(STATE)];
+    public WanderState getState() {
+        return WanderState.values()[dataManager.get(STATE)];
     }
 
-    public void setState(WonderState state) {
+    public void setState(WanderState state) {
         dataManager.set(STATE, (byte) state.ordinal());
     }
 
@@ -83,7 +83,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         return null;
     }
 
-    public enum WonderState {
+    public enum WanderState {
         WANDER, STAY, FOLLOW
     }
 }

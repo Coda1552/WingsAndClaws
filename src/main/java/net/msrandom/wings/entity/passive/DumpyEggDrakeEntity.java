@@ -32,6 +32,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private int alarmedTimer;
     private int attackCooldown;
     private Vec3d oldPos;
+    private PlayerEntity closestPlayer;
 
     public DumpyEggDrakeEntity(EntityType<? extends DumpyEggDrakeEntity> type, World worldIn) {
         super(type, worldIn);
@@ -52,27 +53,27 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WonderState.FOLLOW;
+                return super.shouldExecute() && getState() == WanderState.FOLLOW;
             }
         });
         this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WonderState.WANDER;
+                return super.shouldExecute() && getState() == WanderState.WANDER;
             }
         });
         this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && target.get() == null;
+                return super.shouldExecute() && target.get() == null && getState() == WanderState.WANDER;
             }
         });
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1) {
             @Override
             public boolean shouldExecute() {
-                boolean execute = isChild() && super.shouldExecute();
-                if (execute && closestEntity != null && getDistanceSq(closestEntity) >= 9) {
+                boolean execute = isChild() && getState() == WanderState.WANDER && super.shouldExecute();
+                if (execute && getDistanceSq(closestEntity) >= 9) {
                     getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
                 }
                 return execute;
@@ -80,6 +81,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
 
             @Override
             public void tick() {
+                closestPlayer = (PlayerEntity) closestEntity;
                 if (getDistanceSq(closestEntity) < 9) {
                     getNavigator().clearPath();
                     getLookController().setLookPositionWithEntity(this.closestEntity, (float) (20 - getHorizontalFaceSpeed()), (float) getVerticalFaceSpeed());
@@ -197,6 +199,13 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             oldPos = null;
         }
         if (!isSleeping()) {
+            if (isChild() && closestPlayer != null) {
+                double x = closestPlayer.getPosX() - getPosX();
+                double z = closestPlayer.getPosZ() - getPosZ();
+
+                rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+                renderYawOffset = rotationYaw;
+            }
             LivingEntity attackTarget = getAttackTarget();
             if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.isCreativeMode) {
                 getNavigator().tryMoveToEntityLiving(attackTarget, 1.2);

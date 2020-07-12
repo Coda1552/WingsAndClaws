@@ -2,6 +2,7 @@ package net.msrandom.wings.entity.item;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -56,26 +57,6 @@ public class PlowheadEggEntity extends LivingEntity {
 		return HandSide.RIGHT;
 	}
 
-	protected void updateAir(int air) {
-		if (this.isAlive() && !this.isInWaterOrBubbleColumn()) {
-			this.setAir(air - 1);
-			if (this.getAir() == -20) {
-				this.setAir(0);
-				this.attackEntityFrom(DamageSource.DROWN, 2.0F);
-			}
-		} else {
-			this.setAir(300);
-		}
-
-	}
-
-	@Override
-	public void baseTick() {
-		int i = this.getAir();
-		super.baseTick();
-		this.updateAir(i);
-	}
-
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return false;
@@ -105,22 +86,15 @@ public class PlowheadEggEntity extends LivingEntity {
 	@Override
 	public void tick() {
 		super.tick();
+		this.setAir(300);
 		if (!this.world.isRemote) {
 			if (isInWaterOrBubbleColumn() && hatchTime++ >= 4800) {
-				if (this.rand.nextInt(8) == 0) {
-					int i = 1;
-					if (this.rand.nextInt(32) == 0) {
-						i = 4;
-					}
-
-					for (int j = 0; j < i; ++j) {
-						IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
-						if (plowhead != null) {
-							plowhead.setGrowingAge(-24000);
-							plowhead.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-							this.world.addEntity(plowhead);
-						}
-					}
+				IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
+				if (plowhead != null) {
+					plowhead.setGrowingAge(-24000);
+					plowhead.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+					plowhead.onInitialSpawn(world, world.getDifficultyForLocation(plowhead.getPosition()), SpawnReason.BREEDING, null, null);
+					this.world.addEntity(plowhead);
 				}
 
 				this.world.setEntityState(this, (byte) 3);
@@ -138,6 +112,7 @@ public class PlowheadEggEntity extends LivingEntity {
 			}
 			return true;
 		}
+
 		return super.processInitialInteract(player, hand);
 	}
 }

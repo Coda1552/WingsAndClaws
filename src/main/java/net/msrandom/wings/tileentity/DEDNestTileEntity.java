@@ -88,7 +88,7 @@ public class DEDNestTileEntity extends NestTileEntity {
                     world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.getDistanceSq(p1) < drake.getDistanceSq(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
                     world.addEntity(drake);
                 }
-                eggs.remove(current);
+                eggs.remove(0);
                 current = null;
             }
         }

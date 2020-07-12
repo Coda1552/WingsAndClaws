@@ -19,24 +19,18 @@ import java.util.Random;
 import java.util.Set;
 
 public class MangoBunchTreeDecorator extends TreeDecorator {
-    private final float probability;
-
-    public MangoBunchTreeDecorator(float probability) {
+    public MangoBunchTreeDecorator() {
         super(WingsFeatures.MANGO_BUNCH);
-        this.probability = probability;
     }
 
-    public <T> MangoBunchTreeDecorator(Dynamic<T> dynamic) {
-        this(dynamic.get("probability").asFloat(0.0F));
+    public <T> MangoBunchTreeDecorator(@SuppressWarnings("unused") Dynamic<T> dynamic) {
+        this();
     }
-
 
     @Override
     public void func_225576_a_(IWorld world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, MutableBoundingBox boundingBox) {
-        if(random.nextFloat() < probability) return;
-
-        logPositions.forEach(pos -> {
-            for(Direction direction : Direction.Plane.HORIZONTAL) {
+        for (BlockPos pos : logPositions) {
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
                 if (random.nextFloat() <= 0.25F) {
                     Direction direction1 = direction.getOpposite();
                     BlockPos blockpos = pos.add(direction1.getXOffset(), 0, direction1.getZOffset());
@@ -46,11 +40,11 @@ public class MangoBunchTreeDecorator extends TreeDecorator {
                     }
                 }
             }
-        });
+        }
     }
 
     @Override
     public <T> T serialize(DynamicOps<T> dynamicOps) {
-        return (new Dynamic<>(dynamicOps, dynamicOps.createMap(ImmutableMap.of(dynamicOps.createString("type"), dynamicOps.createString(Registry.TREE_DECORATOR_TYPE.getKey(this.field_227422_a_).toString()), dynamicOps.createString("probability"), dynamicOps.createFloat(this.probability))))).getValue();
+        return new Dynamic<>(dynamicOps, dynamicOps.createMap(ImmutableMap.of(dynamicOps.createString("type"), dynamicOps.createString(Registry.TREE_DECORATOR_TYPE.getKey(this.field_227422_a_).toString())))).getValue();
     }
 }
