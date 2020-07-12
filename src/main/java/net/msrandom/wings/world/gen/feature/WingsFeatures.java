@@ -3,6 +3,7 @@ package net.msrandom.wings.world.gen.feature;
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -23,6 +24,8 @@ public class WingsFeatures {
     public static final Feature<NoFeatureConfig> HB_NEST = register("hb_nest", new HBNestStructure());
 
     public static final TreeDecoratorType<TreeDecorator> MANGO_BUNCH = registerTreeDecorator("mango_bunch", MangoBunchTreeDecorator::new);
+    @SuppressWarnings("rawtypes")
+    private static final Constructor<TreeDecoratorType> DECORATOR_CONSTRUCTOR = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
 
     private static <T extends Feature<?>> T register(String name, T feature) {
         REGISTRY.register(name, () -> feature);
@@ -32,12 +35,12 @@ public class WingsFeatures {
     @SuppressWarnings("unchecked")
     @Nonnull
     public static <T extends TreeDecorator> TreeDecoratorType<T> registerTreeDecorator(String name, Function<Dynamic<?>, T> function) {
-        @SuppressWarnings("rawtypes") Constructor<TreeDecoratorType> constructor = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
-
+        ResourceLocation id = new ResourceLocation(WingsAndClaws.MOD_ID, name);
         try {
-            return Registry.register(Registry.TREE_DECORATOR_TYPE, name, (TreeDecoratorType<T>) constructor.newInstance(function));
-        } catch (ReflectiveOperationException e) {
-            throw new ReportedException(CrashReport.makeCrashReport(e, "Creating " + name + " tree decorator"));
+            assert DECORATOR_CONSTRUCTOR != null;
+            return Registry.register(Registry.TREE_DECORATOR_TYPE, id, (TreeDecoratorType<T>) DECORATOR_CONSTRUCTOR.newInstance(function));
+        } catch (Throwable e) {
+            throw new ReportedException(CrashReport.makeCrashReport(e, "Creating " + id + " tree decorator"));
         }
     }
 }
