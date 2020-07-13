@@ -53,6 +53,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
         this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.8);
         this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14);
     }
 
     @Override
