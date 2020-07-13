@@ -15,6 +15,8 @@ public class MimangoHangGoal extends Goal {
     private double playerDistance;
     private EntityPredicate builtPredicate;
 
+    private int ticksRunning;
+
     public MimangoHangGoal(MimangoEntity entity, double playerDistance) {
         this.entity = entity;
 
@@ -32,7 +34,10 @@ public class MimangoHangGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return isPlayerNear() && this.entity.world.getBlockState(this.entity.getPosition().up()).isIn(BlockTags.LEAVES);
+        if(ticksRunning % 10 == 0)
+            return isPlayerNear() && this.entity.world.getBlockState(this.entity.getPosition().up()).isIn(BlockTags.LEAVES);
+        else
+            return true;
     }
 
     @Override
@@ -42,11 +47,13 @@ public class MimangoHangGoal extends Goal {
 
     @Override
     public void resetTask() {
+        ticksRunning = 0;
         this.entity.setHanging(false);
     }
 
     @Override
     public void tick() {
+        ticksRunning++;
         this.entity.getNavigator().clearPath();
     }
 
