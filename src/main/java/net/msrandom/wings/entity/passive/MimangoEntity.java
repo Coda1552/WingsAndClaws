@@ -46,7 +46,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 10, true);
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathPriority(PathNodeType.DAMAGE_FIRE, -1.0F);
     }
 
     protected void registerAttributes() {
@@ -69,7 +68,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     protected void registerGoals() {
         super.registerGoals();
         this.hangGoal = new MimangoHangGoal(this, 5.0D);
-
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
