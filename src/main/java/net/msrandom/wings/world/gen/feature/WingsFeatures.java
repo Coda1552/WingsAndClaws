@@ -25,7 +25,7 @@ public class WingsFeatures {
 
     public static final TreeDecoratorType<TreeDecorator> MANGO_BUNCH = registerTreeDecorator("mango_bunch", MangoBunchTreeDecorator::new);
     @SuppressWarnings("rawtypes")
-    private static final Constructor<TreeDecoratorType> DECORATOR_CONSTRUCTOR = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
+    private static Constructor<TreeDecoratorType> decoratorConstructor;
 
     private static <T extends Feature<?>> T register(String name, T feature) {
         REGISTRY.register(name, () -> feature);
@@ -34,11 +34,12 @@ public class WingsFeatures {
 
     @SuppressWarnings("unchecked")
     @Nonnull
-    public static <T extends TreeDecorator> TreeDecoratorType<T> registerTreeDecorator(String name, Function<Dynamic<?>, T> function) {
+    private static <T extends TreeDecorator> TreeDecoratorType<T> registerTreeDecorator(String name, Function<Dynamic<?>, T> function) {
         ResourceLocation id = new ResourceLocation(WingsAndClaws.MOD_ID, name);
+        if (decoratorConstructor == null)
+            decoratorConstructor = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
         try {
-            assert DECORATOR_CONSTRUCTOR != null;
-            return Registry.register(Registry.TREE_DECORATOR_TYPE, id, (TreeDecoratorType<T>) DECORATOR_CONSTRUCTOR.newInstance(function));
+            return Registry.register(Registry.TREE_DECORATOR_TYPE, id, (TreeDecoratorType<T>) decoratorConstructor.newInstance(function));
         } catch (Throwable e) {
             throw new ReportedException(CrashReport.makeCrashReport(e, "Creating " + id + " tree decorator"));
         }
