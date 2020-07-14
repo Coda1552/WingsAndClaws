@@ -1,0 +1,19 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "wings:music_disc_blissful_dunes",
+          "weight": 16
+        },
+        {
+          "type": "empty",
+          "weight": 84
+        }
+      ]
+    }
+  ]
+}

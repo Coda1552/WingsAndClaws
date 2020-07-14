@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;
@@ -43,6 +44,8 @@ public class WingsItems {
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
+
+    public static final Item MUSIC_DISC_BLISSFUL_DUNES = register("music_disc_blissful_dunes", new MusicDiscItem(1, () -> WingsSounds.MUSIC_BLISSFUL_DUNES, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
 
     //Custom block items
     static {

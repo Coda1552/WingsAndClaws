@@ -76,5 +76,13 @@
         "stream": true
       }
     ]
+  },
+  "music.blissful_dunes": {
+    "sounds": [
+      {
+        "name": "wings:music/blissful_dunes_mono",
+        "stream": "true"
+      }
+    ]
   }
 }

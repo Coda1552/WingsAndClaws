@@ -17,6 +17,8 @@ public class WingsSounds {
     public static final SoundEvent PLOWHEAD_ANGRY = create("plowhead.angry");
     public static final SoundEvent BATTLE_HORN = create("horn.use");
 
+    public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
+
     private static SoundEvent create(String name) {
         SoundEvent event = new SoundEvent(new ResourceLocation(WingsAndClaws.MOD_ID, name));
         REGISTRY.register(name, () -> event);
