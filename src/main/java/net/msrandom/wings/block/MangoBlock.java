@@ -1,9 +1,9 @@
 package net.msrandom.wings.block;
 
-import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -13,9 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.ServerWorldAccessReader;
 
 import javax.annotation.Nullable;
 
@@ -46,21 +45,21 @@ public class MangoBlock extends Block {
         return super.getLightValue(state) + 3 * state.get(MANGOES);
     }
 
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    protected boolean isValidGround(BlockState state, IBlockReader world, BlockPos pos) {
         return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
     }
 
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+    public boolean isValidPosition(BlockState state, ServerWorldAccessReader world, BlockPos pos) {
         BlockPos blockpos = pos.up();
-        return this.isValidGround(worldIn.getBlockState(blockpos), worldIn, blockpos);
+        return this.isValidGround(world.getBlockState(blockpos), world, blockpos);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (!stateIn.isValidPosition(worldIn, currentPos)) {
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, ServerWorldAccess world, BlockPos currentPos, BlockPos facingPos) {
+        if (!stateIn.isValidPosition(world, currentPos)) {
             return Blocks.AIR.getDefaultState();
         } else {
-            return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+            return super.updatePostPlacement(stateIn, facing, facingState, world, currentPos, facingPos);
         }
     }
 
@@ -68,8 +67,8 @@ public class MangoBlock extends Block {
         return useContext.getItem().getItem() == this.asItem() && state.get(MANGOES) < 4 || super.isReplaceable(state, useContext);
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        switch(state.get(MANGOES)) {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+        switch (state.get(MANGOES)) {
             case 1:
             default:
                 return ONE_SHAPE;

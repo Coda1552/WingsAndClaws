@@ -3,15 +3,15 @@ package net.msrandom.wings.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Identifier;
 
 public interface IDragonEntity {
     default ItemStack getEgg() {
-        ResourceLocation key = ((Entity) this).getType().getRegistryName();
+        Identifier key = ((Entity) this).getType().getRegistryName();
         if (key != null) {
             ItemStack stack = ItemStack.EMPTY;//ItemStack(WingsItems.DRAGON_EGG); removed the dragon egg here, remove this if no dragons need it
-            CompoundNBT nbt = stack.getOrCreateTag();
+            CompoundTag nbt = stack.getOrCreateTag();
             nbt.putString("type", key.getPath());
             return stack;
         }
@@ -20,7 +20,7 @@ public interface IDragonEntity {
 
     default void createEgg() {
         if (canDragonBreed() && this instanceof AnimalEntity) {
-            ((AnimalEntity) this).entityDropItem(getEgg());
+            ((AnimalEntity) this).dropItem(getEgg());
         }
     }
 

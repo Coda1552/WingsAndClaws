@@ -7,12 +7,11 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -32,10 +31,10 @@ public class CommonEventHandler {
             return;
         World world = event.getWorld().getWorld();
         Material material = event.getState().getMaterial();
-        if (!world.isRemote && (material == Material.ICE || material == Material.PACKED_ICE)) {
-            if (world.rand.nextInt(48) == 0) {
+        if (!world.isClient && (material == Material.ICE || material == Material.PACKED_ICE)) {
+            if (world.random.nextInt(48) == 0) {
                 BlockPos pos = event.getPos();
-                world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, new ItemStack(WingsItems.GLACIAL_SHRIMP)));
+                world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, new ItemStack(WingsItems.GLACIAL_SHRIMP)));
             }
         }
     }
@@ -48,7 +47,7 @@ public class CommonEventHandler {
             ItemStack stack = player.getActiveItemStack();
             if (stack.getItem() == WingsItems.ICY_PLOWHEAD_SHIELD) {
                 double speed = Math.abs(player.getMotion().x * player.getMotion().x + player.getMotion().z * player.getMotion().z);
-                if (!player.abilities.isCreativeMode)
+                if (!player.abilities.creativeMode)
                     stack.damageItem(1, player, entity -> entity.sendBreakAnimation(player.getActiveHand()));
                 DamageSource source = event.getSource();
                 Entity entity = source.getImmediateSource();
@@ -82,7 +81,7 @@ public class CommonEventHandler {
         }
 
         event.getTable().addPool(LootPool.builder().addEntry(
-                TableLootEntry.builder(new ResourceLocation(WingsAndClaws.MOD_ID, "inject/desert_pyramid"))
+                TableLootEntry.builder(new Identifier(WingsAndClaws.MOD_ID, "inject/desert_pyramid"))
                         .weight(1)).bonusRolls(0, 0).name("wings_inject").build());
     }
 }

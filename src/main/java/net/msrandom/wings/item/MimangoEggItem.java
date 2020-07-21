@@ -15,7 +15,7 @@ public class MimangoEggItem extends DragonEggItem {
 
     @Override
     protected Entity createEgg(ItemStack stack, World world, PlayerEntity player) {
-        if(world.getBlockState(player.getPosition().down()).getBlock().isIn(BlockTags.LEAVES))
+        if (world.getBlockState(player.getBlockPos().down()).getBlock().isIn(BlockTags.LEAVES))
             return new MimangoEggEntity(world, player);
 
         return null;

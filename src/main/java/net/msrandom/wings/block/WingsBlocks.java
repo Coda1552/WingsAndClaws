@@ -1,21 +1,18 @@
 package net.msrandom.wings.block;
 
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.block.Material;
+import net.minecraft.sound.BlockSoundGroup;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
 import net.msrandom.wings.entity.passive.HatchetBeakEntity;
-import net.msrandom.wings.tileentity.DEDNestTileEntity;
-import net.msrandom.wings.tileentity.HBNestTileEntity;
 
 public class WingsBlocks {
     public static final DeferredRegister<Block> REGISTRY = new DeferredRegister<>(ForgeRegistries.BLOCKS, WingsAndClaws.MOD_ID);
-    public static final NestBlock<DEDNestTileEntity> DED_NEST = register("ded_nest", new NestBlock<>(Block.Properties.create(Material.SAND).sound(SoundType.SAND).hardnessAndResistance(1, 0), DumpyEggDrakeEntity.class, DEDNestTileEntity.class));
-    public static final NestBlock<HBNestTileEntity> HB_NEST = register("hb_nest", new NestBlock<>(Block.Properties.create(Material.EARTH).sound(SoundType.GROUND).hardnessAndResistance(1, 0), HatchetBeakEntity.class, HBNestTileEntity.class));
-    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock(Block.Properties.create(Material.BAMBOO).sound(SoundType.BAMBOO).notSolid()));
+    public static final NestBlock<DEDNestBlockEntity> DED_NEST = register("ded_nest", new NestBlock<>(FabricBlockSettings.of(Material.AGGREGATE).sounds(BlockSoundGroup.SAND).hardnessAndResistance(1, 0), DumpyEggDrakeEntity.class, DEDNestBlockEntity.class));
+    public static final NestBlock<HBNestBlockEntity> HB_NEST = register("hb_nest", new NestBlock<>(FabricBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRASS).hardnessAndResistance(1, 0), HatchetBeakEntity.class, HBNestBlockEntity.class));
+    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock(FabricBlockSettings.of(Material.BAMBOO).sounds(BlockSoundGroup.BAMBOO).notSolid()));
 
     private static <T extends Block> T register(String name, T block) {
         REGISTRY.register(name, () -> block);

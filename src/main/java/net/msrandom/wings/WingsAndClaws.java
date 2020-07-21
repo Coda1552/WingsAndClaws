@@ -1,14 +1,17 @@
 package net.msrandom.wings;
 
 import com.google.common.collect.ImmutableList;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.DecoratedFeatureConfig;
+import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -20,27 +23,26 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.block.entity.WingsTileEntities;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.WingsKeys;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
-import net.msrandom.wings.tileentity.WingsTileEntities;
 import net.msrandom.wings.world.gen.feature.MangoBunchTreeDecorator;
 import net.msrandom.wings.world.gen.feature.WingsFeatures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(WingsAndClaws.MOD_ID)
-public class WingsAndClaws {
+public class WingsAndClaws implements ModInitializer {
     public static final String MOD_ID = "wings";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public WingsAndClaws() {
+    @Override
+    public void onInitialize() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerClient);
         bus.addListener(this::registerBiomes);

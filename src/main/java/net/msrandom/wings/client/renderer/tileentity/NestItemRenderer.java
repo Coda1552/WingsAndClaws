@@ -1,27 +1,28 @@
 package net.msrandom.wings.client.renderer.tileentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
+import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 
-@OnlyIn(Dist.CLIENT)
-public class NestItemRenderer extends ItemStackTileEntityRenderer {
-    private final TileEntity instance;
+@Environment(EnvType.CLIENT)
+public class NestItemRenderer extends BuiltinModelItemRenderer {
+    private final BlockEntity instance;
 
-    public NestItemRenderer(TileEntityType<?> te) {
-        instance = Objects.requireNonNull(te.create());
+    public NestItemRenderer(BlockEntityType<?> te) {
+        instance = Objects.requireNonNull(te.instantiate());
     }
 
     @Override
-    public void render(ItemStack itemStackIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        TileEntityRendererDispatcher.instance.renderItem(instance, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+    public void render(ItemStack itemStackIn, ModelTransformation.Mode mode, MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        BlockEntityRenderDispatcher.INSTANCE.renderItem(instance, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 }

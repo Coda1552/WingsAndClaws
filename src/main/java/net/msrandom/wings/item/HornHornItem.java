@@ -7,9 +7,16 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsAndClaws;
@@ -23,7 +30,7 @@ import java.util.Collections;
 public class HornHornItem extends ToolItem {
     public HornHornItem() {
         super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1).setISTER(() -> PlowheadHornRenderer::new));
-        this.addPropertyOverride(new ResourceLocation(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
+        this.addPropertyOverride(new Identifier(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
     }
 
     @Override
@@ -37,25 +44,25 @@ public class HornHornItem extends ToolItem {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        playerIn.setActiveHand(handIn);
-        worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
-        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity playerIn, Hand hand) {
+        playerIn.setActiveHand(hand);
+        world.playSound(null, playerIn.getBlockPos(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 1, 1);
+        return ActionResult.resultSuccess(playerIn.getStackInHand(hand));
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+    public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity entityLiving) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
             Vec3d vec = player.getPositionVec().add(player.getLookVec());
-            EntityRayTraceResult entityTrace = worldIn.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
-            RayTraceResult mop = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE) : entityTrace;
+            EntityRayTraceResult entityTrace = world.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.squaredDistanceTo(player) < b.squaredDistanceTo(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
+            RayTraceResult mop = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(world, player, RayTraceContext.FluidMode.NONE) : entityTrace;
             if (mop.getType() != RayTraceResult.Type.MISS) {
                 boolean flag = false;
                 if (mop.getType() == RayTraceResult.Type.ENTITY) {
                     EntityRayTraceResult result = ((EntityRayTraceResult) mop);
                     if (!(result.getEntity() instanceof TameableDragonEntity) || !((TameableDragonEntity) result.getEntity()).isOwner(player)) {
-                        flag = worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
+                        flag = world.getFluidState(result.getEntity().getBlockPos()).getFluid() == Fluids.WATER;
                     } else {
                         TameableDragonEntity entity = (TameableDragonEntity) result.getEntity();
                         TameableDragonEntity.WanderState state = entity.getState();
@@ -68,14 +75,14 @@ public class HornHornItem extends ToolItem {
                 } else {
                     BlockPos pos = ((BlockRayTraceResult) mop).getPos();
                     for (Direction value : Direction.values()) {
-                        flag = worldIn.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
+                        flag = world.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
                         if (flag) break;
                     }
                 }
                 if (flag) {
                     IcyPlowheadEntity last = null;
-                    for (IcyPlowheadEntity entity : worldIn.getEntitiesWithinAABB(IcyPlowheadEntity.class, player.getBoundingBox().grow(64))) {
-                        if (entity.isOwner(player) && (last == null || last.getDistanceSq(player) > entity.getDistanceSq(player))) {
+                    for (IcyPlowheadEntity entity : world.getEntitiesWithinAABB(IcyPlowheadEntity.class, player.getBoundingBox().grow(64))) {
+                        if (entity.isOwner(player) && (last == null || last.squaredDistanceTo(player) > entity.squaredDistanceTo(player))) {
                             last = entity;
                         }
                     }
@@ -90,7 +97,7 @@ public class HornHornItem extends ToolItem {
                 }
             }
         }
-        return super.onItemUseFinish(stack, worldIn, entityLiving);
+        return super.onItemUseFinish(stack, world, entityLiving);
     }
 
     @Override

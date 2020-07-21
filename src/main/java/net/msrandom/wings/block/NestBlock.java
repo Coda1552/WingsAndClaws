@@ -1,43 +1,39 @@
 package net.msrandom.wings.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.tileentity.NestTileEntity;
 
-import javax.annotation.Nullable;
-
-public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
-    private static final VoxelShape AABB = VoxelShapes.create(0.05, 0, 0.05, 0.95, 0.3, 0.95);
+public class NestBlock<T extends NestBlockEntity> extends BlockWithEntity {
+    private static final VoxelShape AABB = VoxelShapes.cuboid(0.05, 0, 0.05, 0.95, 0.3, 0.95);
     private final Class<? extends TameableDragonEntity> entity;
     private final Class<T> tile;
-    private TileEntityType<T> type;
+    private BlockEntityType<T> type;
     private Item item;
 
-    public NestBlock(Block.Properties properties, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
+    public NestBlock(Block.Settings properties, Class<? extends TameableDragonEntity> entity, Class<T> tile) {
         super(properties);
         this.entity = entity;
         this.tile = tile;
     }
 
-    public void setItem(TileEntityType<T> value) {
+    public void setItem(BlockEntityType<T> value) {
         this.type = value;
     }
 
@@ -45,49 +41,48 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
         this.item = value;
     }
 
-    @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
-        return type.create();
+    public BlockEntity createBlockEntity(BlockView world) {
+        return type.instantiate();
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return AABB;
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.INVISIBLE;
+    public BlockRenderLayer getLayer(BlockState state) {
+        return BlockRenderLayer.INVISIBLE;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        ItemStack stack = player.getHeldItem(handIn);
-        TileEntity te = worldIn.getTileEntity(pos);
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
+        BlockEntity te = world.getBlockEntity(pos);
         if (tile.isInstance(te)) {
             if (stack.isEmpty()) {
-                boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.addItemStackToInventory(new ItemStack(item));
-                return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
+                boolean removed = ((NestBlockEntity) te).removeEgg();
+                if (removed) player.giveItemStack(new ItemStack(item));
+                return removed ? ActionResult.SUCCESS : ActionResult.PASS;
             } else if (stack.getItem() == item) {
-                if (player.isSneaking() && ((NestTileEntity) te).addEgg()) {
+                if (player.isSneaking() && ((NestBlockEntity) te).addEgg()) {
                     player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1, 1);
-                    if (!player.abilities.isCreativeMode) stack.shrink(1);
-                    return ActionResultType.SUCCESS;
+                    if (!player.abilities.creativeMode) stack.decrement(1);
+                    return ActionResult.SUCCESS;
                 }
-                boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.addItemStackToInventory(new ItemStack(item));
-                return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
+                boolean removed = ((NestBlockEntity) te).removeEgg();
+                if (removed) player.giveItemStack(new ItemStack(item));
+                return removed ? ActionResult.SUCCESS : ActionResult.PASS;
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
-    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
-        if (!player.abilities.isCreativeMode)
-            worldIn.getEntitiesWithinAABB(entity, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
+    public void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack) {
+        if (!player.abilities.creativeMode)
+            world.getNonSpectatingEntities(entity, player.getBoundingBox().expand(32)).stream().filter(entity -> !entity.isBaby() && entity.getGender() && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setTarget(player));
+        super.afterBreak(world, player, pos, state, te, stack);
     }
 }

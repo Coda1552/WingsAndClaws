@@ -1,43 +1,43 @@
 package net.msrandom.wings.client.renderer.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.feature.FeatureRendererContext;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.util.Identifier;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.model.PlowheadEggModel;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
 
-public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> implements IEntityRenderer<PlowheadEggEntity, PlowheadEggModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/egg.png");
+public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> implements FeatureRendererContext<PlowheadEggEntity, PlowheadEggModel> {
+    private static final Identifier TEXTURE = new Identifier(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead/egg.png");
     private final PlowheadEggModel model = new PlowheadEggModel();
 
-    public PlowheadEggRenderer(EntityRendererManager renderManager) {
+    public PlowheadEggRenderer(EntityRenderDispatcher renderManager) {
         super(renderManager);
     }
 
     @Override
-    public void render(PlowheadEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(PlowheadEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.push();
         matrixStackIn.translate(0, 1.5, 0);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entityIn))), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(false)), 1, 1, 1, 1);
+        matrixStackIn.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(180));
+        getModel().render(matrixStackIn, bufferIn.getBuffer(RenderLayer.getEntityTranslucent(getTexture(entityIn))), packedLightIn, OverlayTexture.packUv(OverlayTexture.getU(0), OverlayTexture.getV(false)), 1, 1, 1, 1);
         matrixStackIn.pop();
     }
 
     @Override
-    public ResourceLocation getEntityTexture(PlowheadEggEntity entity) {
+    public Identifier getTexture(PlowheadEggEntity entity) {
         return TEXTURE;
     }
 
     @Override
-    public PlowheadEggModel getEntityModel() {
+    public PlowheadEggModel getModel() {
         return model;
     }
 }

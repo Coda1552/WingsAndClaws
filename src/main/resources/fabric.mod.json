@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "wings",
+  "version": "${version}",
+  "name": "Wings and Claws",
+  "description": "Credits: Mr. Esuoh & Redkoopa",
+  "authors": [
+    "Coda",
+    "Tazz",
+    "Ms. Random"
+  ],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.msrandom.wings.WingsAndClaws"
+    ],
+    "client": [
+      "net.msrandom.wings.client.ClientEventHandler"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  }
+}

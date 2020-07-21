@@ -1,21 +1,23 @@
 package net.msrandom.wings.entity.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
@@ -29,107 +31,94 @@ public class MimangoEggEntity extends LivingEntity {
         setSilent(true);
     }
 
-    public MimangoEggEntity(World worldIn, LivingEntity placer) {
-        this(WingsEntities.MIMANGO_EGG, worldIn);
-        setPosition(placer.getPosX(), placer.getPosY(), placer.getPosZ());
+    public MimangoEggEntity(World world, LivingEntity placer) {
+        this(WingsEntities.MIMANGO_EGG, world);
+        setPos(placer.getX(), placer.getY(), placer.getZ());
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {}
-
-    @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
-        return false;
-    }
-
-    @Override
-    public HandSide getPrimaryHand() {
-        return HandSide.RIGHT;
-    }
-
-    protected void updateAir(int air) {
-        if (this.isAlive() && !this.isInWaterOrBubbleColumn()) {
-            this.setAir(air - 1);
-            if (this.getAir() == -20) {
-                this.setAir(0);
-                this.attackEntityFrom(DamageSource.DROWN, 2.0F);
-            }
-        } else {
-            this.setAir(300);
-        }
-
+    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
     }
 
     @Override
     public void baseTick() {
-        int i = this.getAir();
         super.baseTick();
-        this.updateAir(i);
+        this.setAir(300);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean damage(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readCustomDataFromTag(CompoundTag compound) {
+        super.readCustomDataFromTag(compound);
         this.hatchTime = compound.getInt("HatchTime");
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void writeCustomDataToTag(CompoundTag compound) {
+        super.writeCustomDataToTag(compound);
         compound.putInt("HatchTime", hatchTime);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    @Environment(EnvType.CLIENT)
+    public void handleStatus(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.MIMANGO_EGG)), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
+                this.world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(WingsItems.MIMANGO_EGG)), this.getX(), this.getY(), this.getZ(), ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
+    }
+
+    @Override
+    public Iterable<ItemStack> getArmorItems() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public ItemStack getEquippedStack(EquipmentSlot slot) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void equipStack(EquipmentSlot slot, ItemStack stack) {
+
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.world.isRemote) {
+        if (!this.world.isClient) {
             if (hatchTime++ >= 200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
-                    mimangoEntity.setGrowingAge(-24000);
-                    mimangoEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                    this.world.addEntity(mimangoEntity);
+                    mimangoEntity.setBreedingAge(-24000);
+                    mimangoEntity.setLocationAndAngles(this.getX(), this.getY(), this.getZ(), this.rotationYaw, 0.0F);
+                    this.world.spawnEntity(mimangoEntity);
                 }
 
-                this.world.setEntityState(this, (byte) 3);
+                this.world.sendEntityStatus(this, (byte) 3);
                 this.remove();
             }
         }
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public Arm getMainArm() {
+        return Arm.RIGHT;
+    }
+
+    @Override
+    public ActionResult interact(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getStackInHand(hand);
         if (stack.isEmpty()) {
-            if (player.addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG))) {
+            if (player.giveItemStack(new ItemStack(WingsItems.MIMANGO_EGG))) {
                 remove();
             }
-            return true;
+            return ActionResult.SUCCESS;
         }
-        return super.processInitialInteract(player, hand);
+        return super.interact(player, hand);
     }
 }

@@ -1,16 +1,14 @@
 package net.msrandom.wings.world.gen.feature;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.feature.AbstractTreeFeature;
-import net.minecraft.world.gen.treedecorator.TreeDecorator;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.gen.decorator.TreeDecorator;
+import net.minecraft.world.gen.decorator.TreeDecoratorType;
+import net.minecraft.world.gen.feature.Feature;
 import net.msrandom.wings.block.MangoBlock;
 import net.msrandom.wings.block.WingsBlocks;
 
@@ -20,33 +18,32 @@ import java.util.Set;
 
 public class MangoBunchTreeDecorator extends TreeDecorator {
     public MangoBunchTreeDecorator() {
-        super(WingsFeatures.MANGO_BUNCH);
     }
 
-    public <T> MangoBunchTreeDecorator(@SuppressWarnings("unused") Dynamic<T> dynamic) {
+    public MangoBunchTreeDecorator(Codec<?> codec) {
         this();
     }
 
     @Override
-    public void func_225576_a_(IWorld world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, MutableBoundingBox boundingBox) {
+    protected TreeDecoratorType<?> getType() {
+        return WingsFeatures.MANGO_BUNCH;
+    }
+
+    @Override
+    public void generate(WorldAccess world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, BlockBox box) {
         if (random.nextFloat() <= 0.2f) {
             for (BlockPos pos : logPositions) {
-                for (Direction direction : Direction.Plane.HORIZONTAL) {
+                for (Direction direction : Direction.Type.HORIZONTAL) {
                     if (random.nextFloat() <= 0.25F) {
                         Direction direction1 = direction.getOpposite();
-                        BlockPos blockpos = pos.add(direction1.getXOffset(), 0, direction1.getZOffset());
-                        if (AbstractTreeFeature.isAir(world, blockpos)) {
+                        BlockPos blockpos = pos.add(direction1.getOffsetX(), 0, direction1.getOffsetZ());
+                        if (Feature.method_27370(world, blockpos)) {
                             BlockState blockstate = WingsBlocks.MANGO_BUNCH.getDefaultState().with(MangoBlock.MANGOES, random.nextInt(4) + 1);
-                            this.func_227423_a_(world, blockpos, blockstate, set, boundingBox);
+                            this.setBlockStateAndEncompassPosition(world, blockpos, blockstate, set, box);
                         }
                     }
                 }
             }
         }
-    }
-
-    @Override
-    public <T> T serialize(DynamicOps<T> dynamicOps) {
-        return new Dynamic<>(dynamicOps, dynamicOps.createMap(ImmutableMap.of(dynamicOps.createString("type"), dynamicOps.createString(Registry.TREE_DECORATOR_TYPE.getKey(this.field_227422_a_).toString())))).getValue();
     }
 }

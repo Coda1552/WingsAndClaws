@@ -7,10 +7,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.block.entity.WingsTileEntities;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadShieldRenderer;
-import net.msrandom.wings.tileentity.WingsTileEntities;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -26,7 +26,7 @@ public class WingsItems {
     };
     public static final Item GLISTENING_GLACIAL_SHRIMP = register("glistening_glacial_shrimp", new Item(new Item.Properties().group(GROUP)) {
         @Override
-        public boolean hasEffect(ItemStack stack) {
+        public boolean hasGlint(ItemStack stack) {
             return true;
         }
     });

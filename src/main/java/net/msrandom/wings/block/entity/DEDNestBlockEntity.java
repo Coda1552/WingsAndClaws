@@ -1,11 +1,12 @@
-package net.msrandom.wings.tileentity;
+package net.msrandom.wings.block.entity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.network.play.IClientPlayNetHandler;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.network.play.server.SUpdateBlockEntityPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
@@ -18,26 +19,26 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class DEDNestTileEntity extends NestTileEntity {
+public class DEDNestBlockEntity extends NestBlockEntity {
     private List<AtomicInteger> eggs = new ArrayList<>();
     private AtomicInteger current;
 
-    public DEDNestTileEntity() {
+    public DEDNestBlockEntity() {
         super(WingsTileEntities.DED_NEST);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundTag toTag(CompoundTag compound) {
         compound.putIntArray("Eggs", eggs.stream().map(AtomicInteger::get).collect(Collectors.toList()));
-        return super.write(compound);
+        return super.toTag(compound);
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void fromTag(BlockState state, CompoundTag compound) {
         List<AtomicInteger> list = new ArrayList<>();
         for (int i : compound.getIntArray("Eggs")) list.add(new AtomicInteger(i));
         this.eggs = list;
-        super.read(compound);
+        super.fromTag(state, compound);
     }
 
     public boolean addEgg() {
@@ -82,11 +83,11 @@ public class DEDNestTileEntity extends NestTileEntity {
                 BlockPos pos = getPos();
                 DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.create(world);
                 if (drake != null) {
-                    drake.setGrowingAge(-24000);
+                    drake.setBreedingAge(-24000);
                     drake.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                    drake.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.getDistanceSq(p1) < drake.getDistanceSq(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
-                    world.addEntity(drake);
+                    drake.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
+                    world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.squaredDistanceTo(p1) < drake.squaredDistanceTo(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
+                    world.spawnEntity(drake);
                 }
                 eggs.remove(0);
                 current = null;
@@ -95,18 +96,18 @@ public class DEDNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
+    public void handleUpdateTag(CompoundTag tag) {
         read(tag);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        return write(new CompoundNBT());
+    public CompoundTag getUpdateTag() {
+        return write(new CompoundTag());
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 1, getUpdateTag());
+    public SUpdateBlockEntityPacket getUpdatePacket() {
+        return new SUpdateBlockEntityPacket(getPos(), 1, getUpdateTag());
     }
 }

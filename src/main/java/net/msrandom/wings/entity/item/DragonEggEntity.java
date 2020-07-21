@@ -1,53 +1,51 @@
 package net.msrandom.wings.entity.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.network.Packet;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 
-public class DragonEggEntity extends ProjectileItemEntity {
+public class DragonEggEntity extends ThrownItemEntity {
     private EntityType<?> eggType;
 
     public DragonEggEntity(EntityType<? extends DragonEggEntity> type, World world) {
         super(type, world);
     }
 
-    /*public DragonEggEntity(EntityType<?> type, World worldIn, LivingEntity throwerIn) {
-        super(WingsEntities.DRAGON_EGG, throwerIn, worldIn);
+    /*public DragonEggEntity(EntityType<?> type, World world, LivingEntity throwerIn) {
+        super(WingsEntities.DRAGON_EGG, throwerIn, world);
         this.eggType = type;
     }*/
 
-    @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    @Environment(EnvType.CLIENT)
+    public void handleStatus(byte id) {
         if (id == 3) {
             double d = 0.08D;
             for (int i = 0; i < 8; ++i)
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.getItem()), getPosX(), getPosY(), getPosZ(), (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d, (this.rand.nextDouble() - 0.5) * d);
+                this.world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, this.getItem()), getX(), getY(), getZ(), (this.random.nextDouble() - 0.5) * d, (this.random.nextDouble() - 0.5) * d, (this.random.nextDouble() - 0.5) * d);
         }
-
     }
 
-    protected void onImpact(RayTraceResult result) {
-        if (result.getType() == RayTraceResult.Type.ENTITY) {
-            ((EntityRayTraceResult) result).getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0.0F);
+    protected void onImpact(HitResult result) {
+        if (result.getType() == HitResult.Type.ENTITY) {
+            ((EntityHitResult) result).getEntity().damage(DamageSource.thrownProjectile(this, this.getOwner()), 0.0F);
         }
 
-        if (!this.world.isRemote) {
-            if (this.rand.nextInt(8) == 0) {
+        if (!this.world.isClient) {
+            if (this.random.nextInt(8) == 0) {
                 int i = 1;
-                if (this.rand.nextInt(32) == 0) {
+                if (this.random.nextInt(32) == 0) {
                     i = 4;
                 }
 
@@ -55,14 +53,14 @@ public class DragonEggEntity extends ProjectileItemEntity {
                     Entity entity = this.eggType.create(this.world);
                     if (entity instanceof AnimalEntity) {
                         AnimalEntity animal = (AnimalEntity) entity;
-                        animal.setGrowingAge(-24000);
-                        animal.setLocationAndAngles(getPosX(), getPosY(), getPosZ(), this.rotationYaw, 0.0F);
-                        this.world.addEntity(animal);
+                        animal.setBreedingAge(-24000);
+                        animal.setLocationAndAngles(getX(), getY(), getZ(), this.rotationYaw, 0.0F);
+                        this.world.spawnEntity(animal);
                     }
                 }
             }
 
-            this.world.setEntityState(this, (byte) 3);
+            this.world.sendEntityStatus(this, (byte) 3);
             this.remove();
         }
 
@@ -73,7 +71,7 @@ public class DragonEggEntity extends ProjectileItemEntity {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public Packet<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

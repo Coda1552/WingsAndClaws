@@ -4,40 +4,35 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonReader;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.passive.IFlyingAnimal;
+import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.ai.control.FlightMoveControl;
+import net.minecraft.entity.ai.goal.LookAroundGoal;
+import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.pathing.BirdNavigation;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.resources.IResource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.tag.Tag;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.TameableDragonEntity;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,20 +43,20 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
-    private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
+public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer {
+    private static final TrackedData<Boolean> SADDLE = DataTracker.registerData(HatchetBeakEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static Map<Item, Integer> points;
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
 
-    public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
-        super(type, worldIn);
-        moveController = new FlyingMovementController(this, 30, false);
+    public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World world) {
+        super(type, world);
+        moveControl = new FlightMoveControl(this, 30, false);
         setNoGravity(true);
-        if (!worldIn.isRemote && points == null) {
+        if (!world.isClient && points == null) {
             ImmutableMap.Builder<Item, Integer> builder = ImmutableMap.builder();
-            MinecraftServer server = Objects.requireNonNull(worldIn.getServer());
+            MinecraftServer server = Objects.requireNonNull(world.getServer());
             try {
-                IResource resource = server.getResourceManager().getResource(new ResourceLocation(WingsAndClaws.MOD_ID, "tame_items/hatchet_beak.json"));
+                IResource resource = server.getResourceManager().getResource(new Identifier(WingsAndClaws.MOD_ID, "tame_items/hatchet_beak.json"));
                 InputStream stream = resource.getInputStream();
                 JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
                 reader.beginObject();
@@ -69,13 +64,13 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                     String name = reader.nextName();
                     int points = reader.nextInt();
                     if (name.startsWith("#")) {
-                        Tag<Item> items = ItemTags.getCollection().getOrCreate(new ResourceLocation(name.replace("#", "")));
-                        for (Item element : items.getAllElements()) {
+                        Tag<Item> items = ItemTags.getContainer().getOrCreate(new Identifier(name.replace("#", "")));
+                        for (Item element : items.values()) {
                             builder.put(element, points);
                         }
                     } else {
-                        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
-                        if (item != null && item != Items.AIR) {
+                        Item item = Registry.ITEM.get(new Identifier(name));
+                        if (item != Items.AIR) {
                             builder.put(item, points);
                         }
                     }
@@ -89,46 +84,46 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        //this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1, 40));
-        //this.goalSelector.addGoal(6, new RandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
-        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
+    protected void initGoals() {
+        super.initGoals();
+        //this.goalSelector.add(1, new RandomSwimmingGoal(this, 1, 40));
+        //this.goalSelector.add(6, new RandomWalkingGoal(this, 1.0D));
+        this.goalSelector.add(9, new LookAroundGoal(this));
+        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 15, 1));
+        this.goalSelector.add(2, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
             @Nullable
             @Override
-            protected Vec3d getPosition() {
-                return RandomPositionGenerator.findAirTarget(HatchetBeakEntity.this, 32, 32, getLookVec(), ((float)Math.PI / 2F), 2, 1);
+            protected Vec3d getBlockPos() {
+                return RandomPositionGenerator.findAirTarget(HatchetBeakEntity.this, 32, 32, getLookVec(), ((float) Math.PI / 2F), 2, 1);
             }
         });
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(SADDLE, false);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SADDLE, false);
     }
 
     @Override
-    protected PathNavigator createNavigator(World worldIn) {
-        return new FlyingPathNavigator(this, worldIn);
+    protected EntityNavigation createNavigation(World world) {
+        return new BirdNavigation(this, world);
     }
 
     @Override
     protected void registerAttributes() {
         super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(10);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
+        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_FLYING_SPEED).setBaseValue(10);
+        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
     }
 
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
+        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
     }
 
     public boolean onLivingFall(float distance, float damageMultiplier) {
@@ -143,8 +138,8 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void mobTick() {
+        super.mobTick();
 
         Vec3d vec3d = this.getMotion();
         if (!this.onGround && vec3d.y < 0.0D) {
@@ -158,34 +153,34 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (!isChild() && isTamed() && isOwner(player)) {
-            if (stack.getItem() == Items.SADDLE && !this.dataManager.get(SADDLE))
-                this.dataManager.set(SADDLE, true);
-            else if (stack.getItem() == Items.SHEARS && this.dataManager.get(SADDLE))
-                this.dataManager.set(SADDLE, false);
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getStackInHand(hand);
+        if (!isBaby() && isTamed() && isOwner(player)) {
+            if (stack.getItem() == Items.SADDLE && !this.dataTracker.get(SADDLE))
+                this.dataTracker.set(SADDLE, true);
+            else if (stack.getItem() == Items.SHEARS && this.dataTracker.get(SADDLE))
+                this.dataTracker.set(SADDLE, false);
             else if (stack.isEmpty()) player.startRiding(this);
         } else {
             if (points.containsKey(stack.getItem())) {
-                AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
+                AtomicInteger playerPoints = players.computeIfAbsent(player.getUuid(), k -> new AtomicInteger());
                 playerPoints.set(playerPoints.get() + points.get(stack.getItem()));
-                if (!player.abilities.isCreativeMode) stack.shrink(1);
-                if (playerPoints.get() >= 100 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                if (!player.abilities.creativeMode) stack.decrement(1);
+                if (playerPoints.get() >= 100) {
                     this.setTamedBy(player);
-                    this.navigator.clearPath();
-                    this.setAttackTarget(null);
+                    this.navigation.stop();
+                    this.setTarget(null);
                     this.setHealth(20.0F);
                     this.playTameEffect(true);
                     players.clear();
-                    this.world.setEntityState(this, (byte) 7);
+                    this.world.sendEntityStatus(this, (byte) 7);
                 } else {
                     this.playTameEffect(false);
-                    this.world.setEntityState(this, (byte) 6);
+                    this.world.sendEntityStatus(this, (byte) 6);
                 }
             }
         }
-        return super.processInteract(player, hand);
+        return super.interactMob(player, hand);
     }
 
     @Override
@@ -194,14 +189,14 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        compound.putBoolean("Saddle", this.dataManager.get(SADDLE));
+    public void writeCustomDataToTag(CompoundTag compound) {
+        super.writeCustomDataToTag(compound);
+        compound.putBoolean("Saddle", this.dataTracker.get(SADDLE));
         if (!players.isEmpty()) {
-            ListNBT list = new ListNBT();
+            ListTag list = new ListTag();
             for (Map.Entry<UUID, AtomicInteger> entry : players.entrySet()) {
-                CompoundNBT nbt = new CompoundNBT();
-                nbt.putUniqueId("UUID", entry.getKey());
+                CompoundTag nbt = new CompoundTag();
+                nbt.putUuid("UUID", entry.getKey());
                 nbt.putInt("Value", entry.getValue().get());
                 list.add(nbt);
             }
@@ -210,14 +205,14 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.dataManager.set(SADDLE, compound.getBoolean("Saddle"));
+    public void readCustomDataFromTag(CompoundTag compound) {
+        super.readCustomDataFromTag(compound);
+        this.dataTracker.set(SADDLE, compound.getBoolean("Saddle"));
         if (compound.contains("Players")) {
-            ListNBT list = compound.getList("Players", 10);
-            for (INBT entry : list) {
-                CompoundNBT nbt = (CompoundNBT) entry;
-                players.put(nbt.getUniqueId("UUID"), new AtomicInteger(nbt.getInt("Values")));
+            ListTag list = compound.getList("Players", 10);
+            for (net.minecraft.nbt.Tag entry : list) {
+                CompoundTag nbt = (CompoundTag) entry;
+                players.put(nbt.getUuid("UUID"), new AtomicInteger(nbt.getInt("Values")));
             }
         }
     }

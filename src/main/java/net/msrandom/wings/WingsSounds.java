@@ -1,9 +1,7 @@
 package net.msrandom.wings;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 public class WingsSounds {
 
@@ -20,7 +18,7 @@ public class WingsSounds {
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
 
     private static SoundEvent create(String name) {
-        SoundEvent event = new SoundEvent(new ResourceLocation(WingsAndClaws.MOD_ID, name));
+        SoundEvent event = new SoundEvent(new Identifier(WingsAndClaws.MOD_ID, name));
         REGISTRY.register(name, () -> event);
         return event;
     }

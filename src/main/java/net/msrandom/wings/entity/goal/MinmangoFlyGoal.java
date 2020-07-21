@@ -29,11 +29,11 @@ public class MinmangoFlyGoal extends Goal {
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
-    public boolean shouldExecute() {
+    public boolean canStart() {
         if (this.creature.isBeingRidden() || this.creature.getState() != TameableDragonEntity.WanderState.WANDER) {
             return false;
         } else {
-            Vec3d vec3d = this.getPosition();
+            Vec3d vec3d = this.getBlockPos();
             if (vec3d == null) {
                 return false;
             } else {
@@ -47,20 +47,20 @@ public class MinmangoFlyGoal extends Goal {
     }
 
     @Nullable
-    protected Vec3d getPosition() {
-        return RandomPositionGenerator.findAirTarget(this.creature, 15, 15, this.creature.getLook(0.0F), ((float)Math.PI / 2F), 6, 3);
+    protected Vec3d getBlockPos() {
+        return RandomPositionGenerator.findAirTarget(this.creature, 15, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 6, 3);
     }
 
     public boolean shouldContinueExecuting() {
-        return !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden();
+        return !this.creature.getNavigation().noPath() && !this.creature.isBeingRidden();
     }
 
     public void startExecuting() {
-        this.creature.getNavigator().tryMoveToXYZ(this.x, this.y, this.z, this.speed);
+        this.creature.getNavigation().startMovingTo(this.x, this.y, this.z, this.speed);
     }
 
     public void resetTask() {
-        this.creature.getNavigator().clearPath();
+        this.creature.getNavigation().stop();
         super.resetTask();
     }
 }
