@@ -9,17 +9,15 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
-version = "1.15.2-1.1.4"
-group = "random.wings"
-archivesBaseName = "WingsAndClaws"
+version = project.modVersion
+group = project.mavenGroup
+archivesBaseName = project.archiveName
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200701-1.15.1'
+    mappings channel: project.mappingsChannel, version: project.mappingsVersion
 
         runs {
         client {
@@ -47,7 +45,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
+    minecraft "net.minecraftforge:forge:${project.loaderVersion}"
 }
 
 jar {
@@ -58,26 +56,7 @@ jar {
             "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"random",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Vendor" :"msrandom",
         ])
-    }
-}
-
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact reobfArtifact
-        }
-    }
-    repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
     }
 }
