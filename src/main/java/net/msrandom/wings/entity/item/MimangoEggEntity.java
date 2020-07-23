@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
@@ -57,24 +56,10 @@ public class MimangoEggEntity extends LivingEntity {
         return HandSide.RIGHT;
     }
 
-    protected void updateAir(int air) {
-        if (this.isAlive() && !this.isInWaterOrBubbleColumn()) {
-            this.setAir(air - 1);
-            if (this.getAir() == -20) {
-                this.setAir(0);
-                this.attackEntityFrom(DamageSource.DROWN, 2.0F);
-            }
-        } else {
-            this.setAir(300);
-        }
-
-    }
-
     @Override
     public void baseTick() {
-        int i = this.getAir();
         super.baseTick();
-        this.updateAir(i);
+        this.setAir(300);
     }
 
     @Override
