@@ -40,8 +40,8 @@ public class HBNestModel extends Model {
     }
 
     public void setRotateAngle(ModelPart modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+        modelRenderer.pitch = x;
+        modelRenderer.yaw = y;
+        modelRenderer.roll = z;
     }
 }

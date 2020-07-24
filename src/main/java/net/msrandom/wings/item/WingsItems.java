@@ -7,7 +7,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
-import net.msrandom.wings.block.entity.WingsTileEntities;
+import net.msrandom.wings.block.entity.WingsBlockEntities;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadShieldRenderer;
@@ -49,8 +49,8 @@ public class WingsItems {
 
     //Custom block items
     static {
-        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
-        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
+        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsBlockEntities.DED_NEST))));
+        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsBlockEntities.HB_NEST))));
         register("mango", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
     }
 

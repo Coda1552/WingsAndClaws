@@ -12,7 +12,7 @@ public class WingsBlocks {
     public static final DeferredRegister<Block> REGISTRY = new DeferredRegister<>(ForgeRegistries.BLOCKS, WingsAndClaws.MOD_ID);
     public static final NestBlock<DEDNestBlockEntity> DED_NEST = register("ded_nest", new NestBlock<>(FabricBlockSettings.of(Material.AGGREGATE).sounds(BlockSoundGroup.SAND).hardnessAndResistance(1, 0), DumpyEggDrakeEntity.class, DEDNestBlockEntity.class));
     public static final NestBlock<HBNestBlockEntity> HB_NEST = register("hb_nest", new NestBlock<>(FabricBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRASS).hardnessAndResistance(1, 0), HatchetBeakEntity.class, HBNestBlockEntity.class));
-    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock(FabricBlockSettings.of(Material.BAMBOO).sounds(BlockSoundGroup.BAMBOO).notSolid()));
+    public static final MangoBlock MANGO_BUNCH = register("mango_bunch", new MangoBlock());
 
     private static <T extends Block> T register(String name, T block) {
         REGISTRY.register(name, () -> block);

@@ -1,9 +1,6 @@
 package net.msrandom.wings.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -52,8 +49,8 @@ public class NestBlock<T extends NestBlockEntity> extends BlockWithEntity {
     }
 
     @Override
-    public BlockRenderLayer getLayer(BlockState state) {
-        return BlockRenderLayer.INVISIBLE;
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.INVISIBLE;
     }
 
     @Override

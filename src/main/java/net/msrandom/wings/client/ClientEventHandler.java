@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.msrandom.wings.block.WingsBlocks;
-import net.msrandom.wings.block.entity.WingsTileEntities;
+import net.msrandom.wings.block.entity.WingsBlockEntities;
 import net.msrandom.wings.client.renderer.entity.*;
 import net.msrandom.wings.client.renderer.tileentity.DEDNestBlockEntityRenderer;
 import net.msrandom.wings.client.renderer.tileentity.HBNestBlockEntityRenderer;
@@ -23,8 +23,8 @@ public class ClientEventHandler implements ClientModInitializer {
     public void onInitializeClient() {
         RenderLayerLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH, RenderLayer.getTranslucent());
 
-        ClientRegistry.bindBlockEntityRenderer(WingsTileEntities.DED_NEST, DEDNestBlockEntityRenderer::new);
-        ClientRegistry.bindBlockEntityRenderer(WingsTileEntities.HB_NEST, HBNestBlockEntityRenderer::new);
+        ClientRegistry.bindBlockEntityRenderer(WingsBlockEntities.DED_NEST, DEDNestBlockEntityRenderer::new);
+        ClientRegistry.bindBlockEntityRenderer(WingsBlockEntities.HB_NEST, HBNestBlockEntityRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.DUMPY_EGG_DRAKE, DumpyEggDrakeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HATCHET_BEAK, HatchetBeakRenderer::new);

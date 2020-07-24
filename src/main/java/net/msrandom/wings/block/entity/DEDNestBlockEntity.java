@@ -24,7 +24,7 @@ public class DEDNestBlockEntity extends NestBlockEntity {
     private AtomicInteger current;
 
     public DEDNestBlockEntity() {
-        super(WingsTileEntities.DED_NEST);
+        super(WingsBlockEntities.DED_NEST);
     }
 
     @Override

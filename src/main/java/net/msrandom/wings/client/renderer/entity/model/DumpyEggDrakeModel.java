@@ -39,51 +39,51 @@ public abstract class DumpyEggDrakeModel extends CompositeEntityModel<DumpyEggDr
     public void animateModel(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
         super.animateModel(entityIn, limbSwing, limbSwingAmount, partialTick);
         if (entityIn.isSleeping()) {
-            body.rotateAngleZ = 1.6f;
-            armLeft.rotateAngleZ = 0.23f;
-            armRight.rotateAngleZ = -0.28f;
-            legLeft.rotateAngleZ = 0.1f;
-            legRight.rotateAngleZ = -0.02f;
-            legRight.rotateAngleX = -0.01f;
-            tail1.rotateAngleX = -0.5f;
-            tail1.rotateAngleY = 0.1f;
-            tail2.rotateAngleX = -0.6f;
-            headJoint.rotateAngleX = 0.6f;
+            body.roll = 1.6f;
+            armLeft.roll = 0.23f;
+            armRight.roll = -0.28f;
+            legLeft.roll = 0.1f;
+            legRight.roll = -0.02f;
+            legRight.pitch = -0.01f;
+            tail1.pitch = -0.5f;
+            tail1.yaw = 0.1f;
+            tail2.pitch = -0.6f;
+            headJoint.pitch = 0.6f;
         } else {
             LivingEntity target = entityIn.getTarget();
             boolean attacking = target != null && entityIn.squaredDistanceTo(target) < 4;
             if (attacking) {
-                jaw.rotateAngleX = MathHelper.cos(entityIn.age * 0.4f) * 0.16f + 0.2f;
-                legLeft.rotateAngleX = MathHelper.cos(entityIn.age * 0.3f) * -0.01f + 0.05f;
-                legRight.rotateAngleX = MathHelper.cos(entityIn.age * 0.3f) * -0.01f + 0.05f;
-                tail1.rotateAngleY = 0.2f;
-                tail2.rotateAngleY = 0.3f;
+                jaw.pitch = MathHelper.cos(entityIn.age * 0.4f) * 0.16f + 0.2f;
+                legLeft.pitch = MathHelper.cos(entityIn.age * 0.3f) * -0.01f + 0.05f;
+                legRight.pitch = MathHelper.cos(entityIn.age * 0.3f) * -0.01f + 0.05f;
+                tail1.yaw = 0.2f;
+                tail2.yaw = 0.3f;
             } else {
-                jaw.rotateAngleX = 0;
-                tail1.rotateAngleY = MathHelper.cos(entityIn.age * 0.1f + 0.2f) * 0.15f;
-                tail2.rotateAngleY = MathHelper.cos(entityIn.age * 0.1f + 0.15f) * (0.13f + (limbSwingAmount / 2));
-                tailTip.rotateAngleY = MathHelper.cos(entityIn.age * 0.1f + 0.1f) * 0.1f;
-                legLeft.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.age * 0.3f) * 0.01f + 0.1f;
-                legRight.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * -limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.age * 0.3f) * 0.01f + 0.1f;
+                jaw.pitch = 0;
+                tail1.yaw = MathHelper.cos(entityIn.age * 0.1f + 0.2f) * 0.15f;
+                tail2.yaw = MathHelper.cos(entityIn.age * 0.1f + 0.15f) * (0.13f + (limbSwingAmount / 2));
+                tailTip.yaw = MathHelper.cos(entityIn.age * 0.1f + 0.1f) * 0.1f;
+                legLeft.pitch = (MathHelper.cos(limbSwing * 0.5f) * limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.age * 0.3f) * 0.01f + 0.1f;
+                legRight.pitch = (MathHelper.cos(limbSwing * 0.5f) * -limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.age * 0.3f) * 0.01f + 0.1f;
             }
-            body.rotateAngleX = MathHelper.cos(entityIn.age * (attacking ? 0.1f : 0.3f)) * (0.01f + (attacking ? 0.1f : 0)) - (0.1f + (attacking ? -0.1f : 0));
-            armLeft.rotateAngleX = MathHelper.cos(entityIn.age * 0.1f + 0.3f) * (-(limbSwingAmount / (attacking ? 2 : 4)) - 0.1f) + 0.1f;
-            armRight.rotateAngleX = MathHelper.cos(entityIn.age * 0.1f + 0.3f) * ((limbSwingAmount / (attacking ? 2 : 4)) + 0.1f) + 0.1f;
-            body.rotateAngleZ = 0;
-            armLeft.rotateAngleZ = 0;
-            armRight.rotateAngleZ = 0;
-            legLeft.rotateAngleZ = 0;
-            legRight.rotateAngleZ = 0;
-            tail1.rotateAngleX = 0;
-            tail2.rotateAngleX = 0;
-            headJoint.rotateAngleX = 0;
+            body.pitch = MathHelper.cos(entityIn.age * (attacking ? 0.1f : 0.3f)) * (0.01f + (attacking ? 0.1f : 0)) - (0.1f + (attacking ? -0.1f : 0));
+            armLeft.pitch = MathHelper.cos(entityIn.age * 0.1f + 0.3f) * (-(limbSwingAmount / (attacking ? 2 : 4)) - 0.1f) + 0.1f;
+            armRight.pitch = MathHelper.cos(entityIn.age * 0.1f + 0.3f) * ((limbSwingAmount / (attacking ? 2 : 4)) + 0.1f) + 0.1f;
+            body.roll = 0;
+            armLeft.roll = 0;
+            armRight.roll = 0;
+            legLeft.roll = 0;
+            legRight.roll = 0;
+            tail1.pitch = 0;
+            tail2.pitch = 0;
+            headJoint.pitch = 0;
         }
     }
 
     @Override
     public void setAngles(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.neck.rotateAngleX = Math.min(headPitch + 10, 0) * ((float) Math.PI / 180F);
-        this.headJoint.rotateAngleZ = headPitch * ((float) Math.PI / 180F);
+        this.neck.pitch = Math.min(headPitch + 10, 0) * ((float) Math.PI / 180F);
+        this.headJoint.roll = headPitch * ((float) Math.PI / 180F);
     }
 
     public static class Adult extends DumpyEggDrakeModel {
@@ -94,7 +94,7 @@ public abstract class DumpyEggDrakeModel extends CompositeEntityModel<DumpyEggDr
             this.hornRight = new ModelPart(this, 10, 0);
             this.hornRight.setPivot(-1.5F, -4.0F, -3.0F);
             this.hornRight.addCuboid(-1.0F, -2.0F, -1.0F, 1, 2, 2, 0.0F);
-            this.hornRight.rotateAngleZ = -0.4363323129985824F;
+            this.hornRight.roll = -0.4363323129985824F;
             this.tailTip = new ModelPart(this, 92, 19);
             this.tailTip.setPivot(0.0F, 0.0F, 14.0F);
             this.tailTip.addCuboid(-2.5F, -2.5F, 0.0F, 5, 5, 6, 0.0F);
@@ -104,7 +104,7 @@ public abstract class DumpyEggDrakeModel extends CompositeEntityModel<DumpyEggDr
             this.hornLeft = new ModelPart(this, 10, 0);
             this.hornLeft.setPivot(1.5F, -4.0F, -3.0F);
             this.hornLeft.addCuboid(0.0F, -2.0F, -1.0F, 1, 2, 2, 0.0F);
-            this.hornLeft.rotateAngleZ = 0.4363323129985824F;
+            this.hornLeft.roll = 0.4363323129985824F;
             this.jaw = new ModelPart(this, 64, 20);
             this.jaw.setPivot(0.0F, 1.5F, 0.0F);
             this.jaw.addCuboid(-2.0F, 0.0F, -5.5F, 4, 1, 6, 0.0F);
@@ -187,11 +187,11 @@ public abstract class DumpyEggDrakeModel extends CompositeEntityModel<DumpyEggDr
             this.hornLeft = new ModelPart(this, 53, 0);
             this.hornLeft.setPivot(0.5F, -2.0F, -1.0F);
             this.hornLeft.addCuboid(0.0F, -1.0F, -0.5F, 1, 1, 1, 0.0F);
-            this.hornLeft.rotateAngleZ = 0.4363323129985824F;
+            this.hornLeft.roll = 0.4363323129985824F;
             this.hornRight = new ModelPart(this, 53, 0);
             this.hornRight.setPivot(-0.5F, -2.0F, -1.0F);
             this.hornRight.addCuboid(-1.0F, -1.0F, -0.5F, 1, 1, 1, 0.0F);
-            this.hornRight.rotateAngleZ = -0.4363323129985824F;
+            this.hornRight.roll = -0.4363323129985824F;
             this.headJoint = new ModelPart(this, 34, 0);
             this.headJoint.setPivot(0.0F, 0.5F, -5.0F);
             this.headJoint.addCuboid(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);

@@ -15,7 +15,7 @@ public class HBNestBlockEntity extends NestBlockEntity {
     private int eggTimer = -1;
 
     public HBNestBlockEntity() {
-        super(WingsTileEntities.HB_NEST);
+        super(WingsBlockEntities.HB_NEST);
     }
 
     @Override

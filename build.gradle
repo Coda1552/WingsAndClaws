@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.modVersion
+version = "${project.minecraftVersion}-${project.modVersion}"
 group = project.mavenGroup
 archivesBaseName = project.archiveName
 
@@ -11,7 +11,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraftVersion}"
-    mappings "net.fabricmc:yarn:${project.mappings}:v2"
+    mappings "net.fabricmc:yarn:${project.minecraftVersion}+${project.mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricVersion}"
 }

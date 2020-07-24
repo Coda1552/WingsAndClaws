@@ -27,7 +27,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.block.WingsBlocks;
-import net.msrandom.wings.block.entity.WingsTileEntities;
+import net.msrandom.wings.block.entity.WingsBlockEntities;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.WingsKeys;
 import net.msrandom.wings.entity.WingsEntities;
@@ -50,7 +50,7 @@ public class WingsAndClaws implements ModInitializer {
         WingsItems.REGISTRY.register(bus);
         WingsSounds.REGISTRY.register(bus);
         WingsEntities.REGISTRY.register(bus);
-        WingsTileEntities.REGISTRY.register(bus);
+        WingsBlockEntities.REGISTRY.register(bus);
         WingsFeatures.REGISTRY.register(bus);
         WingsKeys.init();
     }

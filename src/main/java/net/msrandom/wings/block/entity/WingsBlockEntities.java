@@ -7,7 +7,7 @@ import net.msrandom.wings.block.WingsBlocks;
 
 import java.util.function.Supplier;
 
-public class WingsTileEntities {
+public class WingsBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> REGISTRY = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, WingsAndClaws.MOD_ID);
     public static final BlockEntityType<DEDNestBlockEntity> DED_NEST = create("ded_nest", DEDNestBlockEntity::new, WingsBlocks.DED_NEST);
     public static final BlockEntityType<HBNestBlockEntity> HB_NEST = create("hb_nest", HBNestBlockEntity::new, WingsBlocks.HB_NEST);

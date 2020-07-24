@@ -1,43 +1,40 @@
 package net.msrandom.wings.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
+import com.sun.istack.internal.Nullable;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.*;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.ServerWorldAccessReader;
 
-import javax.annotation.Nullable;
 
 public class MangoBlock extends Block {
-    public static final IntegerProperty MANGOES = BlockStateProperties.PICKLES_1_4;
+    public static final IntProperty MANGOES = Properties.PICKLES;
 
-    protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
-    protected static final VoxelShape TWO_SHAPE = Block.makeCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
-    protected static final VoxelShape THREE_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
-    protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    protected static final VoxelShape ONE_SHAPE = Block.createCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape TWO_SHAPE = Block.createCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
+    protected static final VoxelShape THREE_SHAPE = Block.createCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    protected static final VoxelShape FOUR_SHAPE = Block.createCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
-    protected MangoBlock(Properties properties) {
-        super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(MANGOES, 1));
+    protected MangoBlock() {
+        super(FabricBlockSettings.of(Material.BAMBOO).sounds(BlockSoundGroup.BAMBOO).nonOpaque());
+        this.setDefaultState(this.getStateManager().getDefaultState().with(MANGOES, 1));
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockState blockstate = context.getWorld().getBlockState(context.getPos());
+    public BlockState getPlacementState(ItemPlacementContext context) {
+        BlockState blockstate = context.getWorld().getBlockState(context.getBlockPos());
         if (blockstate.getBlock() == this) {
             return blockstate.with(MANGOES, Math.min(4, blockstate.get(MANGOES) + 1));
         }
-        return super.getStateForPlacement(context);
+        return super.getPlacementState(context);
     }
 
     @Override
@@ -45,7 +42,7 @@ public class MangoBlock extends Block {
         return super.getLightValue(state) + 3 * state.get(MANGOES);
     }
 
-    protected boolean isValidGround(BlockState state, IBlockReader world, BlockPos pos) {
+    protected boolean isValidGround(BlockState state, BlockView world, BlockPos pos) {
         return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
     }
 
@@ -63,11 +60,11 @@ public class MangoBlock extends Block {
         }
     }
 
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+    public boolean isReplaceable(BlockState state, ItemPlacementContext useContext) {
         return useContext.getItem().getItem() == this.asItem() && state.get(MANGOES) < 4 || super.isReplaceable(state, useContext);
     }
 
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         switch (state.get(MANGOES)) {
             case 1:
             default:
@@ -82,7 +79,7 @@ public class MangoBlock extends Block {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(MANGOES);
     }
 }

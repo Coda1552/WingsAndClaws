@@ -27,45 +27,45 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
     @Override
     public void setAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entityIn.isHanging()) {
-            this.wingLeft.rotateAngleY = -2.0F;
-            this.wingLeft.rotateAngleZ = 1.58F;
+            this.wingLeft.yaw = -2.0F;
+            this.wingLeft.roll = 1.58F;
             this.wingLeft.rotationPointY = 0.05F;
-            this.wingRight.rotateAngleY = 2.0F;
-            this.wingRight.rotateAngleZ = -1.58F;
+            this.wingRight.yaw = 2.0F;
+            this.wingRight.roll = -1.58F;
             this.wingRight.rotationPointY = 0.05F;
-            this.head.rotateAngleX = 1.5F;
-            this.body.rotateAngleX = 1.57F;
+            this.head.pitch = 1.5F;
+            this.body.pitch = 1.57F;
         } else {
-            this.head.rotateAngleX = 0;
-            this.body.rotateAngleX = 0;
+            this.head.pitch = 0;
+            this.body.pitch = 0;
 
             if (entityIn.isFlying()) {
-                this.wingLeft.rotateAngleY = 0;
-                this.wingLeft.rotateAngleZ = 0;
-                this.wingRight.rotateAngleY = 0;
-                this.wingRight.rotateAngleZ = 0;
-                this.wingLeft.rotateAngleZ = MathHelper.cos(limbSwing * 0.8F + (float) Math.PI) * limbSwingAmount;
-                this.wingRight.rotateAngleZ = MathHelper.cos(limbSwing * 0.8F + (float) Math.PI) * -limbSwingAmount;
-                this.tail.rotateAngleX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.2F - 0.2F;
-                this.body.rotateAngleX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 0.05F;
+                this.wingLeft.yaw = 0;
+                this.wingLeft.roll = 0;
+                this.wingRight.yaw = 0;
+                this.wingRight.roll = 0;
+                this.wingLeft.roll = MathHelper.cos(limbSwing * 0.8F + (float) Math.PI) * limbSwingAmount;
+                this.wingRight.roll = MathHelper.cos(limbSwing * 0.8F + (float) Math.PI) * -limbSwingAmount;
+                this.tail.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.2F - 0.2F;
+                this.body.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 0.05F;
             } else {
-                this.wingLeft.rotateAngleY = -2.0F;
-                this.wingLeft.rotateAngleZ = 1.58F;
-                this.wingRight.rotateAngleY = 2.0F;
-                this.wingRight.rotateAngleZ = -1.58F;
+                this.wingLeft.yaw = -2.0F;
+                this.wingLeft.roll = 1.58F;
+                this.wingRight.yaw = 2.0F;
+                this.wingRight.roll = -1.58F;
                 if (limbSwingAmount >= 0.2f) {
-                    this.body.rotateAngleY = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.3F;
-                    this.tail.rotateAngleY = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.4F;
-                    this.head.rotateAngleY = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.2F;
+                    this.body.yaw = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.3F;
+                    this.tail.yaw = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.4F;
+                    this.head.yaw = MathHelper.cos(limbSwing * 0.4F) * limbSwingAmount * 0.2F;
                 }
             }
         }
     }
 
     public void setRotateAngle(ModelPart modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+        modelRenderer.pitch = x;
+        modelRenderer.yaw = y;
+        modelRenderer.roll = z;
     }
 
     public static class Adult extends MimangoModel {

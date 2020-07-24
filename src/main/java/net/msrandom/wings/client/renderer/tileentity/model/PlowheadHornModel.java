@@ -20,7 +20,7 @@ public class PlowheadHornModel extends Model {
         this.shape2 = new ModelPart(this, 30, 0);
         this.shape2.setPivot(0.0F, 0.0F, 4.0F);
         this.shape2.addCuboid(-1.5F, -2.0F, 0.0F, 3, 4, 8, 0.0F);
-        shape2.rotateAngleX = 0.39269908169872414F;
+        shape2.pitch = 0.39269908169872414F;
         this.shape1.addChild(this.shape2);
     }
 
