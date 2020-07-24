@@ -249,10 +249,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                                         this.navigator.clearPath();
                                         this.setAttackTarget(null);
                                         this.setHealth(40);
-                                        this.playTameEffect(true);
                                         this.world.setEntityState(this, (byte) 7);
                                     } else {
-                                        this.playTameEffect(false);
                                         this.world.setEntityState(this, (byte) 6);
                                     }
                                 }
