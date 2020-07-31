@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+
+    " h ",
+    " s ",
+    " s "
+  ],
+  "key": {
+    "h": {
+      "item": "wings:st_horn"
+    },
+    "s": {
+      "item" : "minecraft:stick"
+    }
+
+  },
+
+  "result":{
+    "item": "wings:st_spear",
+    "count": 1
+  }
+}
