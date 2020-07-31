@@ -11,6 +11,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -28,9 +29,9 @@ public class MimangoEggEntity extends LivingEntity {
         setSilent(true);
     }
 
-    public MimangoEggEntity(World worldIn, LivingEntity placer) {
+    public MimangoEggEntity(World worldIn, BlockPos pos) {
         this(WingsEntities.MIMANGO_EGG, worldIn);
-        setPosition(placer.getPosX(), placer.getPosY(), placer.getPosZ());
+        setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
     }
 
     @Override

@@ -29,9 +29,9 @@ public class PlowheadEggEntity extends LivingEntity {
 		setSilent(true);
 	}
 
-	public PlowheadEggEntity(World worldIn, LivingEntity placer) {
+	public PlowheadEggEntity(World worldIn, double x, double y, double z) {
 		this(WingsEntities.PLOWHEAD_EGG, worldIn);
-		setPosition(placer.getPosX(), placer.getPosY(), placer.getPosZ());
+		setPosition(x, y, z);
 	}
 
 	@Override

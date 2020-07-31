@@ -11,9 +11,9 @@ import net.msrandom.wings.entity.passive.MimangoEntity;
 import java.util.function.Predicate;
 
 public class MimangoHangGoal extends Goal {
-    private MimangoEntity entity;
-    private double playerDistance;
-    private EntityPredicate builtPredicate;
+    private final MimangoEntity entity;
+    private final double playerDistance;
+    private final EntityPredicate builtPredicate;
 
     private int ticksRunning;
 
@@ -34,10 +34,7 @@ public class MimangoHangGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        if(ticksRunning % 10 == 0)
-            return isPlayerNear() && this.entity.world.getBlockState(this.entity.getPosition().up()).isIn(BlockTags.LEAVES);
-        else
-            return true;
+        return ticksRunning % 10 == 0 && isPlayerNear() && this.entity.world.getBlockState(this.entity.getPosition().up()).isIn(BlockTags.LEAVES);
     }
 
     @Override
@@ -58,6 +55,6 @@ public class MimangoHangGoal extends Goal {
     }
 
     private boolean isPlayerNear() {
-        return this.entity.world.func_225318_b(PlayerEntity.class, builtPredicate, this.entity, this.entity.getPosX(), this.entity.getPosY(), this.entity.getPosZ(), this.entity.getBoundingBox().grow((double)this.playerDistance, 3.0D, (double)this.playerDistance)) == null;
+        return this.entity.world.func_225318_b(PlayerEntity.class, builtPredicate, this.entity, this.entity.getPosX(), this.entity.getPosY(), this.entity.getPosZ(), this.entity.getBoundingBox().grow(this.playerDistance, 3.0D, this.playerDistance)) == null;
     }
 }

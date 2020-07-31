@@ -5,12 +5,13 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
@@ -25,22 +26,30 @@ public class DragonEggItem extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if (!playerIn.abilities.isCreativeMode) {
-            itemstack.shrink(1);
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
+
+        if (player != null) {
+            ItemStack itemstack = player.getHeldItem(context.getHand());
+            if (!player.abilities.isCreativeMode) {
+                itemstack.shrink(1);
+            }
+
+            World world = context.getWorld();
+            if (!world.isRemote) {
+                Entity entity = createEgg(itemstack, context.getPos(), context.getFace(), world, player);
+                if (entity == null) return super.onItemUse(context);
+                world.addEntity(entity);
+            }
+
+            player.addStat(Stats.ITEM_USED.get(this));
+            return ActionResultType.SUCCESS;
         }
 
-        if (!worldIn.isRemote) {
-            Entity entity = createEgg(itemstack, worldIn, playerIn);
-            if (entity != null) worldIn.addEntity(entity);
-        }
-
-        playerIn.addStat(Stats.ITEM_USED.get(this));
-        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+        return super.onItemUse(context);
     }
 
-    protected Entity createEgg(ItemStack stack, World world, PlayerEntity player) {
+    protected Entity createEgg(ItemStack stack, BlockPos pos, Direction direction, World world, PlayerEntity player) {
         if (stack.hasTag()) {
             CompoundNBT nbt = stack.getTag();
             assert nbt != null;

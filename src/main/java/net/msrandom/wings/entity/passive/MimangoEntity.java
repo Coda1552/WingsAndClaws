@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -98,7 +99,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem();
+        return stack.getItem() == Items.COCOA_BEANS;
     }
 
     @Nullable
@@ -138,6 +139,20 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             mimango.setTamed(true);
         }
         return mimango;
+    }
+
+    @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putInt("Variant", getVariant());
+        compound.putBoolean("Hanging", isHanging());
+    }
+
+    @Override
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        setVariant(compound.getInt("Variant"));
+        setHanging(compound.getBoolean("Hanging"));
     }
 
     public boolean isHanging() {

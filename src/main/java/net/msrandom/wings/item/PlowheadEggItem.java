@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
 
@@ -13,7 +15,8 @@ public class PlowheadEggItem extends DragonEggItem {
     }
 
     @Override
-    protected Entity createEgg(ItemStack stack, World world, PlayerEntity player) {
-        return new PlowheadEggEntity(world, player);
+    protected Entity createEgg(ItemStack stack, BlockPos pos, Direction direction, World world, PlayerEntity player) {
+        pos = pos.offset(direction);
+        return new PlowheadEggEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
     }
 }
