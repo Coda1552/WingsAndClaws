@@ -20,6 +20,7 @@ public class WingsSounds {
     public static final SoundEvent MIMANGO_DEATH = create("mimango.death");
     public static final SoundEvent MIMANGO_HIDE = create("mimango.hide");
     public static final SoundEvent MIMANGO_UNHIDE = create("mimango.unhide");
+    public static final SoundEvent MIMANGO_HAPPY = create("mimango.happy");
     public static final SoundEvent BATTLE_HORN = create("horn.use");
 
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");

@@ -140,6 +140,11 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty()) {
+            playSound(WingsSounds.MIMANGO_HAPPY, getSoundVolume(), getSoundPitch());
+            return true;
+        }
+
         if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                 this.setTamedBy(player);
@@ -147,12 +152,11 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 this.goalSelector.removeGoal(hangGoal);
                 this.setAttackTarget(null);
                 this.setHealth(20.0F);
-                this.playTameEffect(true);
                 this.world.setEntityState(this, (byte) 7);
             } else {
-                this.playTameEffect(false);
                 this.world.setEntityState(this, (byte) 6);
             }
+            return true;
         }
         return super.processInteract(player, hand);
     }
