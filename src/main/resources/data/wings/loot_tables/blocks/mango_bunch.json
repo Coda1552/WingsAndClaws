@@ -12,7 +12,7 @@
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "wings:mango",
+                  "block": "wings:mango_bunch",
                   "properties": {
                     "mangos": "2"
                   }
@@ -25,7 +25,7 @@
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "wings:mango",
+                  "block": "wings:mango_bunch",
                   "properties": {
                     "mangos": "3"
                   }
@@ -38,7 +38,7 @@
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "wings:mango",
+                  "block": "wings:mango_bunch",
                   "properties": {
                     "mangos": "4"
                   }
@@ -50,7 +50,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "wings:mango"
+          "name": "wings:mango_bunch"
         }
       ]
     }

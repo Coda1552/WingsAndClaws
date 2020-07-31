@@ -15,6 +15,11 @@ public class WingsSounds {
     public static final SoundEvent PLOWHEAD_HURT = create("plowhead.hurt");
     public static final SoundEvent PLOWHEAD_DEATH = create("plowhead.death");
     public static final SoundEvent PLOWHEAD_ANGRY = create("plowhead.angry");
+    public static final SoundEvent MIMANGO_AMBIENT = create("mimango.ambient");
+    public static final SoundEvent MIMANGO_HURT = create("mimango.hurt");
+    public static final SoundEvent MIMANGO_DEATH = create("mimango.death");
+    public static final SoundEvent MIMANGO_HIDE = create("mimango.hide");
+    public static final SoundEvent MIMANGO_UNHIDE = create("mimango.unhide");
     public static final SoundEvent BATTLE_HORN = create("horn.use");
 
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");

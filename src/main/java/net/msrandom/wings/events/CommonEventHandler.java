@@ -6,21 +6,23 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.item.WingsItems;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -71,6 +73,17 @@ public class CommonEventHandler {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void playerInteract(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getWorld().getBlockState(event.getPos()).isIn(BlockTags.LEAVES)) {
+            MimangoEggEntity egg = MimangoEggEntity.getEgg(event.getWorld(), event.getPos());
+            if (egg != null) {
+                event.getPlayer().addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG));
+                egg.remove();
             }
         }
     }

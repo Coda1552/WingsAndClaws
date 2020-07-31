@@ -1,79 +1,114 @@
 {
   "ded.ambient": {
-    "category": "ambient",
     "subtitle": "wings.subtitle.ded.ambient",
     "sounds": [
       {
         "name": "wings:ded.ambient",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "ded.hurt": {
-    "category": "hurt",
     "subtitle": "wings.subtitle.ded.hurt",
     "sounds": [
       {
         "name": "wings:ded.hurt",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "ded.death": {
-    "category": "death",
     "subtitle": "wings.subtitle.ded.death",
     "sounds": [
       {
         "name": "wings:ded.death",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "plowhead.ambient": {
-    "category": "ambient",
     "subtitle": "wings.subtitle.plowhead.ambient",
     "sounds": [
       {
         "name": "wings:plowhead.ambient",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "plowhead.hurt": {
-    "category": "hurt",
     "subtitle": "wings.subtitle.plowhead.hurt",
     "sounds": [
       {
         "name": "wings:plowhead.hurt",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "plowhead.death": {
-    "category": "death",
     "subtitle": "wings.subtitle.plowhead.death",
     "sounds": [
       {
         "name": "wings:plowhead.death",
-        "stream": true
+        "streaming": true
       }
     ]
   },
   "plowhead.angry": {
-    "subtitle": "wings.subtitle.plowhead.angry",
     "sounds": [
       {
         "name": "wings:plowhead.angry",
-        "stream": true
+        "streaming": true
+      }
+    ]
+  },
+  "mimango.ambient": {
+    "subtitle": "wings.subtitle.mimango.ambient",
+    "sounds": [
+      {
+        "name": "wings:mimango.ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "mimango.hurt": {
+    "subtitle": "wings.subtitle.mimango.hurt",
+    "sounds": [
+      {
+        "name": "wings:mimango.hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "mimango.death": {
+    "subtitle": "wings.subtitle.mimango.death",
+    "sounds": [
+      {
+        "name": "wings:mimango.death",
+        "streaming": true
+      }
+    ]
+  },
+  "mimango.hide": {
+    "sounds": [
+      {
+        "name": "wings:mimango.hide",
+        "streaming": true
+      }
+    ]
+  },
+  "mimango.unhide": {
+    "sounds": [
+      {
+        "name": "wings:mimango.unhide",
+        "streaming": true
       }
     ]
   },
   "horn.use": {
-    "subtitle": "wings.subtitle.horn.use",
     "sounds": [
       {
         "name": "wings:battle.horn",
-        "stream": true
+        "streaming": true
       }
     ]
   },
@@ -81,7 +116,7 @@
     "sounds": [
       {
         "name": "wings:music/blissful_dunes_mono",
-        "stream": "true"
+        "streaming": "true"
       }
     ]
   }

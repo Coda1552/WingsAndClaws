@@ -31,14 +31,14 @@ public class DragonEggItem extends Item {
 
         if (player != null) {
             ItemStack itemstack = player.getHeldItem(context.getHand());
-            if (!player.abilities.isCreativeMode) {
-                itemstack.shrink(1);
-            }
 
             World world = context.getWorld();
             if (!world.isRemote) {
                 Entity entity = createEgg(itemstack, context.getPos(), context.getFace(), world, player);
                 if (entity == null) return super.onItemUse(context);
+                if (!player.abilities.isCreativeMode) {
+                    itemstack.shrink(1);
+                }
                 world.addEntity(entity);
             }
 

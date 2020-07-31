@@ -3,6 +3,8 @@ package net.msrandom.wings.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -25,8 +27,8 @@ public class MangoBlock extends Block {
     protected static final VoxelShape THREE_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
-    protected MangoBlock(Properties properties) {
-        super(properties);
+    protected MangoBlock() {
+        super(Block.Properties.create(Material.BAMBOO).sound(SoundType.BAMBOO).notSolid());
         this.setDefaultState(this.stateContainer.getBaseState().with(MANGOES, 1));
     }
 

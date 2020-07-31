@@ -8,9 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,6 +22,7 @@ import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
 import java.util.Collections;
+import java.util.List;
 
 public class MimangoEggEntity extends LivingEntity {
     private int hatchTime;
@@ -31,7 +34,7 @@ public class MimangoEggEntity extends LivingEntity {
 
     public MimangoEggEntity(World worldIn, BlockPos pos) {
         this(WingsEntities.MIMANGO_EGG, worldIn);
-        setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 
     @Override
@@ -91,7 +94,8 @@ public class MimangoEggEntity extends LivingEntity {
 
     @Override
     public void tick() {
-        super.tick();
+        if (!this.world.getBlockState(getPosition()).isIn(BlockTags.LEAVES)) super.tick();
+
         if (!this.world.isRemote) {
             if (hatchTime++ >= 200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
@@ -117,5 +121,10 @@ public class MimangoEggEntity extends LivingEntity {
             return true;
         }
         return super.processInitialInteract(player, hand);
+    }
+
+    public static MimangoEggEntity getEgg(World world, BlockPos pos) {
+        List<MimangoEggEntity> list = world.getEntitiesWithinAABB(MimangoEggEntity.class, new AxisAlignedBB(pos));
+        return list.isEmpty() ? null : list.get(0);
     }
 }

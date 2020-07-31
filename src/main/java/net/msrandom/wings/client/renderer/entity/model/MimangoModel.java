@@ -26,7 +26,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
 
     @Override
     public void setRotationAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityIn.isHanging()) {
+        if (entityIn.isHiding()) {
             this.wingLeft.rotateAngleY = -2.0F;
             this.wingLeft.rotateAngleZ = 1.58F;
             this.wingLeft.rotationPointY = 0.05F;
@@ -116,7 +116,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
         @Override
         public void setRotationAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
             super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            if (!entityIn.isHanging()) {
+            if (!entityIn.isHiding()) {
                 if (entityIn.isFlying()) {
                     this.wingLeft.rotationPointY = -1.5F;
                     this.wingRight.rotationPointY = -1.5F;
@@ -148,7 +148,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
             this.snout.addBox(-0.5F, -0.5F, -1.0F, 1, 1, 1, 0.0F);
             this.head = new ModelRenderer(this, 0, 8);
             this.head.setRotationPoint(0.0F, 0.0F, -0.5F);
-            this.head.addBox(-0.5F, -2.0F, -2.0F, 1, 2, 2, 0.0F);
+            this.head.addBox(-1F, -2.0F, -2.0F, 2, 2, 2, 0.0F);
             this.hair3 = new ModelRenderer(this, 0, 0);
             this.hair3.setRotationPoint(0.4F, -2.0F, -0.4F);
             this.hair3.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
@@ -180,7 +180,7 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
         @Override
         public void setRotationAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
             super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            if (!entityIn.isHanging()) {
+            if (!entityIn.isHiding()) {
                 if (entityIn.isFlying()) {
                     this.wingLeft.rotationPointY = -1;
                     this.wingRight.rotationPointY = -1;
