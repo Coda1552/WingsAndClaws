@@ -2,6 +2,7 @@ package net.msrandom.wings.entity.goal;
 
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
@@ -34,7 +35,7 @@ public class MinmangoFlyGoal extends Goal {
             return false;
         } else {
             Vec3d vec3d = this.getPosition();
-            if (vec3d == null) {
+            if (vec3d == null || creature.world.getBlockState(new BlockPos(vec3d.getX(), vec3d.getY() + 1, vec3d.getZ())).isSolid()) {
                 return false;
             } else {
                 this.x = vec3d.x;
