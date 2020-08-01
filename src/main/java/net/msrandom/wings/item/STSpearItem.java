@@ -1,10 +1,14 @@
 package net.msrandom.wings.item;
 
+import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
@@ -17,9 +21,7 @@ import net.minecraft.world.World;
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 public class STSpearItem extends TridentItem {
-
     // TODO Bind ISTER to the model
-    // TODO Change Melee Damage (Apparently it may be hard-coded in the game)
 
     public STSpearItem() {
         super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100));
@@ -75,6 +77,16 @@ public class STSpearItem extends TridentItem {
                 worldIn.playMovingSound(null, playerEntity, soundEvent, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }
         }
+    }
+
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+
+        if (equipmentSlot == EquipmentSlotType.MAINHAND) {
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 5, AttributeModifier.Operation.ADDITION));
+        }
+
+        return multimap;
     }
 
     @Override
