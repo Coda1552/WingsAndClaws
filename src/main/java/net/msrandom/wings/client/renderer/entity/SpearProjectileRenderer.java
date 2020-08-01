@@ -16,9 +16,8 @@ import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 
 public class SpearProjectileRenderer extends EntityRenderer<SpearProjectileEntity> implements IEntityRenderer<SpearProjectileEntity, SpearProjectileModel> {
-
-    public static final ResourceLocation SPEAR = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/st_spear/st_projectile_entity.png");
-    private final SpearProjectileModel spearModel = new SpearProjectileModel();
+    public static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/st_spear/st_projectile_entity.png");
+    private final SpearProjectileModel model = new SpearProjectileModel();
 
     public SpearProjectileRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -30,20 +29,18 @@ public class SpearProjectileRenderer extends EntityRenderer<SpearProjectileEntit
         matrixStackIn.push();
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch) + 90.0F));
-        IVertexBuilder ivertexbuilder = net.minecraft.client.renderer.ItemRenderer.getBuffer(bufferIn, this.spearModel.getRenderType(this.getEntityTexture(entityIn)), false, entityIn.isInWater());
+        IVertexBuilder ivertexbuilder = net.minecraft.client.renderer.ItemRenderer.getBuffer(bufferIn, this.model.getRenderType(this.getEntityTexture(entityIn)), false, entityIn.isInWater());
         getEntityModel().render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
-
     }
-
 
     @Override
     public SpearProjectileModel getEntityModel() {
-        return spearModel;
+        return model;
     }
 
     @Override
     public ResourceLocation getEntityTexture(SpearProjectileEntity entity) {
-        return SPEAR;
+        return TEXTURE;
     }
 }

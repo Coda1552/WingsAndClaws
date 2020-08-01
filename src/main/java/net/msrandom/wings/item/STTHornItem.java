@@ -2,9 +2,9 @@ package net.msrandom.wings.item;
 
 import net.minecraft.item.Item;
 
+//If this isn't changed to include logic then it should be removed.
 public class STTHornItem extends Item {
-
-    public STTHornItem(Properties properties) {
-        super(properties);
+    public STTHornItem() {
+        super(new Item.Properties().group(WingsItems.GROUP));
     }
 }

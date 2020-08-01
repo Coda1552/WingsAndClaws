@@ -1,10 +1,5 @@
 package net.msrandom.wings.entity.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -20,7 +15,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -35,12 +29,9 @@ import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 public class SpearProjectileEntity extends AbstractArrowEntity {
     private static final DataParameter<Byte> LOYALTY_LEVEL = EntityDataManager.createKey(SpearProjectileEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Boolean> bool = EntityDataManager.createKey(SpearProjectileEntity.class, DataSerializers.BOOLEAN);
     private ItemStack thrownStack = new ItemStack(WingsItems.ST_SPEAR);
     private boolean dealtDamage;
     public int returningTicks;
@@ -50,21 +41,14 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
         createSpawnPacket();
     }
 
-
     public SpearProjectileEntity(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
         super(WingsEntities.ST_PROJECTILE_ENTITY, thrower, worldIn);
         this.thrownStack = thrownStackIn.copy();
         this.dataManager.set(LOYALTY_LEVEL, (byte) EnchantmentHelper.getLoyaltyModifier(thrownStackIn));
-        this.dataManager.set(bool, thrownStackIn.hasEffect());
         createSpawnPacket();
     }
 
-
-    @OnlyIn(Dist.CLIENT)
-    public SpearProjectileEntity(World worldIn, double x, double y, double z) {
-        super(WingsEntities.ST_PROJECTILE_ENTITY, x, y, z, worldIn);
-    }
-
+    @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -73,7 +57,6 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(LOYALTY_LEVEL, (byte) 0);
-        this.dataManager.register(bool, false);
     }
 
     public void tick() {
@@ -125,11 +108,6 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
         return this.thrownStack.copy();
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public boolean isDealtDamage() {
-        return this.dataManager.get(bool);
-    }
-
     @Nullable
     @Override
     protected EntityRayTraceResult rayTraceEntities(Vec3d startVec, Vec3d endVec) {
@@ -145,7 +123,7 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
         }
 
         Entity entity1 = this.getShooter();
-        DamageSource damagesource = DamageSource.causeTridentDamage(this, (Entity) (entity1 == null ? this : entity1));
+        DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
         this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
         if (entity.attackEntityFrom(damagesource, f)) {
@@ -169,7 +147,7 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
         if (this.world instanceof ServerWorld && this.world.isThundering() && EnchantmentHelper.hasChanneling(this.thrownStack)) {
             BlockPos blockpos = entity.getPosition();
             if (this.world.canSeeSky(blockpos)) {
-                LightningBoltEntity lightningboltentity = new LightningBoltEntity(this.world, (double) blockpos.getX() + 0.5D, (double) blockpos.getY(), (double) blockpos.getZ() + 0.5D, false);
+                LightningBoltEntity lightningboltentity = new LightningBoltEntity(this.world, (double) blockpos.getX() + 0.5D, blockpos.getY(), (double) blockpos.getZ() + 0.5D, false);
                 lightningboltentity.setCaster(entity1 instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity1 : null);
                 ((ServerWorld) this.world).addLightningBolt(lightningboltentity);
                 soundevent = SoundEvents.ITEM_TRIDENT_THUNDER;
