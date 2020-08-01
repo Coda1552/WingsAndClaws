@@ -31,7 +31,7 @@ public class MinmangoFlyGoal extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (this.creature.isBeingRidden() || this.creature.getState() != TameableDragonEntity.WanderState.WANDER) {
+        if (this.creature.isBeingRidden() || this.creature.getState() != TameableDragonEntity.WanderState.WANDER || this.creature.isHiding()) {
             return false;
         } else {
             Vec3d vec3d = this.getPosition();

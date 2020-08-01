@@ -1,7 +1,6 @@
 package net.msrandom.wings.entity.goal;
 
 import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.BlockTags;
@@ -9,23 +8,15 @@ import net.minecraft.util.EntityPredicates;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
-import java.util.function.Predicate;
-
 public class MimangoHangGoal extends Goal {
     private final MimangoEntity entity;
     private final double playerDistance;
     private final EntityPredicate builtPredicate;
 
-    private int ticksRunning;
-
     public MimangoHangGoal(MimangoEntity entity, double playerDistance) {
         this.entity = entity;
-
         this.playerDistance = playerDistance;
-        Predicate<LivingEntity> entityPredicate = EntityPredicates.CAN_AI_TARGET::test;
-        this.builtPredicate = (new EntityPredicate()).setDistance(playerDistance).setCustomPredicate(entityPredicate.and((entity1) -> {
-            return true;
-        }));
+        this.builtPredicate = new EntityPredicate().setDistance(playerDistance).setCustomPredicate(EntityPredicates.CAN_AI_TARGET::test);
     }
 
     @Override
@@ -34,31 +25,16 @@ public class MimangoHangGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return ticksRunning % 10 == 0 && isPlayerNear() && this.entity.world.getBlockState(this.entity.getPosition().up()).isIn(BlockTags.LEAVES);
-    }
-
-    @Override
     public void startExecuting() {
-        if (!this.entity.isHiding()) {
-            this.entity.setHiding(true);
-            this.entity.playSound(WingsSounds.MIMANGO_HIDE, 1, 1);
-        }
+        this.entity.getNavigator().clearPath();
+        this.entity.setHiding(true);
+        this.entity.playSound(WingsSounds.MIMANGO_HIDE, 1, 1);
     }
 
     @Override
     public void resetTask() {
-        ticksRunning = 0;
-        if (this.entity.isHiding()) {
-            this.entity.setHiding(false);
-            this.entity.playSound(WingsSounds.MIMANGO_UNHIDE, 1, 1);
-        }
-    }
-
-    @Override
-    public void tick() {
-        ticksRunning++;
-        this.entity.getNavigator().clearPath();
+        this.entity.setHiding(false);
+        this.entity.playSound(WingsSounds.MIMANGO_UNHIDE, 1, 1);
     }
 
     private boolean isPlayerNear() {

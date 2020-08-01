@@ -41,11 +41,6 @@ public class MangoBlock extends Block {
         return super.getStateForPlacement(context);
     }
 
-    @Override
-    public int getLightValue(BlockState state) {
-        return super.getLightValue(state) + 3 * state.get(MANGOES);
-    }
-
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
     }

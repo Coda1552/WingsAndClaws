@@ -138,6 +138,12 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        this.setHiding(false);
+        return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
