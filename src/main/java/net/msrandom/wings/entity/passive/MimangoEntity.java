@@ -3,12 +3,10 @@ package net.msrandom.wings.entity.passive;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.goal.BreedGoal;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.PanicGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IFlyingAnimal;
+import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -108,6 +106,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         });
         this.goalSelector.addGoal(3, hangGoal);
         this.goalSelector.addGoal(4, new MinmangoFlyGoal(this, 0.8D));
+        this.targetSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1));
     }
 
     @Override

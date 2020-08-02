@@ -3,7 +3,10 @@ package net.msrandom.wings.events;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -16,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -23,6 +27,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
+import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -85,6 +90,13 @@ public class CommonEventHandler {
                 event.getPlayer().addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG));
                 egg.remove();
             }
+        }
+    }
+
+    public static void spawnEntity(EntityJoinWorldEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof OcelotEntity) {
+            ((OcelotEntity) entity).targetSelector.addGoal(0, new NearestAttackableTargetGoal<>((MobEntity) entity, MimangoEntity.class, true));
         }
     }
 
