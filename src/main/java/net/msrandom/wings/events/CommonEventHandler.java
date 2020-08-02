@@ -93,6 +93,7 @@ public class CommonEventHandler {
         }
     }
 
+    @SubscribeEvent
     public static void spawnEntity(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof OcelotEntity) {
