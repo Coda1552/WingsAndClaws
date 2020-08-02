@@ -4,13 +4,14 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.gen.Heightmap;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class MinmangoFlyGoal extends Goal {
+public class MimangoFlyGoal extends Goal {
     protected final MimangoEntity creature;
     protected double x;
     protected double y;
@@ -19,11 +20,11 @@ public class MinmangoFlyGoal extends Goal {
     protected int executionChance;
     protected boolean mustUpdate;
 
-    public MinmangoFlyGoal(MimangoEntity creatureIn, double speedIn) {
+    public MimangoFlyGoal(MimangoEntity creatureIn, double speedIn) {
         this(creatureIn, speedIn, 120);
     }
 
-    public MinmangoFlyGoal(MimangoEntity creatureIn, double speedIn, int chance) {
+    public MimangoFlyGoal(MimangoEntity creatureIn, double speedIn, int chance) {
         this.creature = creatureIn;
         this.speed = speedIn;
         this.executionChance = chance;
@@ -31,9 +32,18 @@ public class MinmangoFlyGoal extends Goal {
     }
 
     public boolean shouldExecute() {
-        if (this.creature.isBeingRidden() || this.creature.getState() != TameableDragonEntity.WanderState.WANDER || this.creature.isHiding()) {
+        if (this.creature.isBeingRidden() || this.creature.isHiding()) {
             return false;
         } else {
+            if (this.creature.getState() == TameableDragonEntity.WanderState.STAY) {
+                BlockPos height = this.creature.world.getHeight(Heightmap.Type.MOTION_BLOCKING, creature.getPosition());
+                this.x = height.getX();
+                this.y = height.getY();
+                this.z = height.getZ();
+                this.mustUpdate = false;
+                return true;
+            }
+
             Vec3d vec3d = this.getPosition();
             if (vec3d == null || creature.world.getBlockState(new BlockPos(vec3d.getX(), vec3d.getY() + 1, vec3d.getZ())).isSolid()) {
                 return false;

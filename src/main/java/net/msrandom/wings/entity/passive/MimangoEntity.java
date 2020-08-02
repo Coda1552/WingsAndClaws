@@ -30,14 +30,11 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.WingsEntities;
+import net.msrandom.wings.entity.goal.MimangoFlyGoal;
 import net.msrandom.wings.entity.goal.MimangoHangGoal;
-import net.msrandom.wings.entity.goal.MinmangoFlyGoal;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final EntityPredicate CAN_BREED = new EntityPredicate().setDistance(64.0D).allowInvulnerable().allowFriendlyFire().setLineOfSiteRequired();
@@ -105,7 +102,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             }
         });
         this.goalSelector.addGoal(3, hangGoal);
-        this.goalSelector.addGoal(4, new MinmangoFlyGoal(this, 0.8D));
+        this.goalSelector.addGoal(4, new MimangoFlyGoal(this, 0.8D));
         this.targetSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1));
     }
 
@@ -166,18 +163,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         return super.processInteract(player, hand);
     }
 
-    @Nullable
-    @Override
-    public AgeableEntity createChild(AgeableEntity ageable) {
-        MimangoEntity mimango = Objects.requireNonNull(WingsEntities.MIMANGO.create(this.world));
-        UUID uuid = this.getOwnerId();
-        if (uuid != null) {
-            mimango.setOwnerId(uuid);
-            mimango.setTamed(true);
-        }
-        return mimango;
-    }
-
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
@@ -227,7 +212,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public boolean isFlying() {
-        return !this.onGround;
+        return !this.onGround && getState() != WanderState.STAY && !world.getBlockState(new BlockPos(getPosX() + 0.5, getPosY() - 0.5, getPosZ() + 0.5)).isSolid();
     }
 
     public boolean onLivingFall(float distance, float damageMultiplier) {
