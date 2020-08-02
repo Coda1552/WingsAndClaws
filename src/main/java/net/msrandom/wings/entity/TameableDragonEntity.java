@@ -79,7 +79,13 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Nullable
     @Override
     public AgeableEntity createChild(AgeableEntity ageable) {
-        createEgg();
+        if (getClass().isInstance(ageable)) {
+            createEgg();
+            resetInLove();
+            setGrowingAge(600);
+            ((AnimalEntity) ageable).resetInLove();
+            ageable.setGrowingAge(600);
+        }
         return null;
     }
 
