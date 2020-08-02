@@ -187,8 +187,8 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
                     this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 23F;
                     this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
-                    this.wingLeft.rotationPointY = -9.95F;
-                    this.wingRight.rotationPointY = -9.95F;
+                    this.wingLeft.rotationPointY = -0.95F;
+                    this.wingRight.rotationPointY = -0.95F;
                     this.body.rotationPointY = 22.5F;
                     this.head.rotationPointY = 0;
                 }
