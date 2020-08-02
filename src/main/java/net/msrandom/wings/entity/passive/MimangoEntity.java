@@ -205,6 +205,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     public void tick() {
         super.tick();
+        if (getState() == WanderState.STAY) setMotion(getMotion().add(0, -0.05, 0));
         if (this.isHiding()) {
             this.setMotion(Vec3d.ZERO);
             this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), this.getPosZ());
@@ -212,7 +213,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public boolean isFlying() {
-        return !this.onGround && getState() != WanderState.STAY && !world.getBlockState(new BlockPos(getPosX() + 0.5, getPosY() - 0.5, getPosZ() + 0.5)).isSolid();
+        return !this.onGround && !world.getBlockState(new BlockPos(getPosX() + 0.5, getPosY() - 0.5, getPosZ() + 0.5)).isSolid();
     }
 
     public boolean onLivingFall(float distance, float damageMultiplier) {

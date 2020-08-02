@@ -123,8 +123,8 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
                     this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 22.5F;
                     this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
-                    this.wingLeft.rotationPointY = -1.45F;
-                    this.wingRight.rotationPointY = -1.45F;
+                    this.wingLeft.rotationPointY = -0.6F;
+                    this.wingRight.rotationPointY = -0.6F;
                     this.body.rotationPointY = 22.5F;
                     this.head.rotationPointY = -0.5F;
                 }
@@ -184,11 +184,15 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
                 if (entityIn.isFlying()) {
                     this.wingLeft.rotationPointY = -1;
                     this.wingRight.rotationPointY = -1;
+                    this.wingLeft.rotationPointX = -0.5f;
+                    this.wingRight.rotationPointZ = -0.5f;
                     this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 23F;
                     this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
                     this.wingLeft.rotationPointY = -0.95F;
                     this.wingRight.rotationPointY = -0.95F;
+                    this.wingLeft.rotationPointX = -0.3f;
+                    this.wingRight.rotationPointZ = -0.3f;
                     this.body.rotationPointY = 22.5F;
                     this.head.rotationPointY = 0;
                 }
