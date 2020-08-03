@@ -1,4 +1,4 @@
-/*
+
 package net.msrandom.wings.item;
 
 import com.google.common.collect.Multimap;
@@ -23,6 +23,7 @@ import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 public class STSpearItem extends TridentItem {
     // TODO Bind ISTER to the model
+
 
     public STSpearItem() {
         super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100));
@@ -97,4 +98,4 @@ public class STSpearItem extends TridentItem {
 }
 
 
-*/
+

@@ -1,4 +1,4 @@
-/*
+
 package net.msrandom.wings.entity.item;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -206,4 +206,4 @@ public class SpearProjectileEntity extends AbstractArrowEntity {
 }
 
 
-*/
+
