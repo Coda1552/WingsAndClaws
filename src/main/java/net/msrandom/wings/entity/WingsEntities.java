@@ -8,9 +8,9 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.util.registry.Registry;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.WingsRegisterer;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
@@ -20,7 +20,7 @@ import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
 public class WingsEntities {
-    public static final DeferredRegister<EntityType<?>> REGISTRY = new DeferredRegister<>(ForgeRegistries.ENTITIES, WingsAndClaws.MOD_ID);
+    public static final WingsRegisterer<EntityType<?>> REGISTRY = new WingsRegisterer<>(Registry.ENTITIES, WingsAndClaws.MOD_ID);
     //public static final EntityType<DragonEggEntity> DRAGON_EGG = createEgg("dragon_egg", DragonEggEntity::new, () -> WingsEntities.DRAGON_EGG, 0.2f, 0.2f);
     public static final EntityType<DumpyEggDrakeEntity> DUMPY_EGG_DRAKE = create("dumpy_egg_drake", DumpyEggDrakeEntity::new, SpawnGroup.CREATURE, 1.2f, 1.3f, 0xddbc8b, 0xbc9161);
     public static final EntityType<HatchetBeakEntity> HATCHET_BEAK = create("hatchet_beak", HatchetBeakEntity::new, SpawnGroup.CREATURE, 2.3f, 2.5f/*, 0x785028, 0x167a6d*/);

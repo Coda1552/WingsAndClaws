@@ -29,7 +29,7 @@ import java.util.Collections;
 
 public class HornHornItem extends ToolItem {
     public HornHornItem() {
-        super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1).setISTER(() -> PlowheadHornRenderer::new));
+        super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxCount(1).setISTER(() -> PlowheadHornRenderer::new));
         this.addPropertyOverride(new Identifier(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
     }
 

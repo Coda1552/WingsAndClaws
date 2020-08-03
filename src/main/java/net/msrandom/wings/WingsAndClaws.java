@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
@@ -22,10 +23,7 @@ import net.minecraft.world.gen.treedecorator.TrunkVineTreeDecorator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.block.entity.WingsBlockEntities;
 import net.msrandom.wings.client.ClientEventHandler;
@@ -43,24 +41,23 @@ public class WingsAndClaws implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerClient);
         bus.addListener(this::registerBiomes);
-        WingsBlocks.REGISTRY.register(bus);
-        WingsItems.REGISTRY.register(bus);
-        WingsSounds.REGISTRY.register(bus);
-        WingsEntities.REGISTRY.register(bus);
-        WingsBlockEntities.REGISTRY.register(bus);
-        WingsFeatures.REGISTRY.register(bus);
+        WingsBlocks.REGISTRY.register();
+        WingsItems.REGISTRY.register();
+        WingsSounds.REGISTRY.register();
+        WingsEntities.REGISTRY.register();
+        WingsBlockEntities.REGISTRY.register();
+        WingsFeatures.REGISTRY.register();
         WingsKeys.init();
     }
 
     public void registerBiomes(RegistryEvent.Register<Biome> event) {
         if (event.getRegistry().getRegistrySuperType() == Biome.class) {
             Biomes.DESERT.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.DED_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(300))));
-            ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.DESERT))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.DUMPY_EGG_DRAKE, 1, 1, 1)));
+            Registry.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.DESERT))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.DUMPY_EGG_DRAKE, 1, 1, 1)));
 
-            ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.FROZEN_OCEAN))).forEach(biome -> biome.getSpawns(EntityClassification.WATER_CREATURE).add(new Biome.SpawnListEntry(WingsEntities.ICY_PLOWHEAD, 30, 1, 2)));
+            Registry.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.FROZEN_OCEAN))).forEach(biome -> biome.getSpawns(EntityClassification.WATER_CREATURE).add(new Biome.SpawnListEntry(WingsEntities.ICY_PLOWHEAD, 30, 1, 2)));
             //EntitySpawnPlacementRegistry.register(WingsEntities.ICY_PLOWHEAD, EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, IcyPlowheadEntity::canSpawn);
 
             //Biomes.SHATTERED_SAVANNA.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.HB_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE_HEIGHTMAP.configure(new ChanceConfig(300))));

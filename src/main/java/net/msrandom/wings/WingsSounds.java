@@ -2,10 +2,10 @@ package net.msrandom.wings;
 
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class WingsSounds {
-
-    public static final DeferredRegister<SoundEvent> REGISTRY = new DeferredRegister<>(ForgeRegistries.SOUND_EVENTS, WingsAndClaws.MOD_ID);
+    public static final WingsRegisterer<SoundEvent> REGISTRY = new WingsRegisterer<>(Registry.SOUND_EVENT);
     public static final SoundEvent DED_AMBIENT = create("ded.ambient");
     public static final SoundEvent DED_HURT = create("ded.hurt");
     public static final SoundEvent DED_DEATH = create("ded.death");
@@ -19,7 +19,7 @@ public class WingsSounds {
 
     private static SoundEvent create(String name) {
         SoundEvent event = new SoundEvent(new Identifier(WingsAndClaws.MOD_ID, name));
-        REGISTRY.register(name, () -> event);
+        REGISTRY.register(name, event);
         return event;
     }
 }

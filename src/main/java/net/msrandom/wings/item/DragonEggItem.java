@@ -11,16 +11,16 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 
 public class DragonEggItem extends Item {
     public DragonEggItem() {
-        this(new Item.Properties().group(WingsItems.GROUP));
+        this(new Settings().group(WingsItems.GROUP));
     }
 
-    public DragonEggItem(Properties properties) {
+    public DragonEggItem(Settings properties) {
         super(properties);
     }
 
@@ -44,7 +44,7 @@ public class DragonEggItem extends Item {
         if (stack.hasTag()) {
             CompoundTag nbt = stack.getTag();
             assert nbt != null;
-            EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new Identifier(WingsAndClaws.MOD_ID, nbt.getString("type")));
+            EntityType<?> type = Registry.ENTITIES.getValue(new Identifier(WingsAndClaws.MOD_ID, nbt.getString("type")));
             if (type != null) {
                 /*ThrownItemEntity entity = new DragonEggEntity(type, world, player);
                 entity.func_213884_b(stack);

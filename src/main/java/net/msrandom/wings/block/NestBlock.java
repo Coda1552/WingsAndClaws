@@ -15,6 +15,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.msrandom.wings.block.entity.NestBlockEntity;
 import net.msrandom.wings.entity.TameableDragonEntity;
 
 public class NestBlock<T extends NestBlockEntity> extends BlockWithEntity {

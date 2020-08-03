@@ -10,12 +10,13 @@ import net.minecraft.world.gen.decorator.TreeDecoratorType;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.WingsRegisterer;
 
 import java.lang.reflect.Constructor;
 import java.util.function.Function;
 
 public class WingsFeatures {
-    public static final DeferredRegister<Feature<?>> REGISTRY = new DeferredRegister<>(ForgeRegistries.FEATURES, WingsAndClaws.MOD_ID);
+    public static final WingsRegisterer<Feature<?>> REGISTRY = new WingsRegisterer<>(Registry.FEATURE);
     public static final Feature<DefaultFeatureConfig> DED_NEST = register("ded_nest", new DEDNestStructure());
     public static final Feature<DefaultFeatureConfig> HB_NEST = register("hb_nest", new HBNestStructure());
 
@@ -24,7 +25,7 @@ public class WingsFeatures {
     public static final TreeDecoratorType<TreeDecorator> MANGO_BUNCH = registerTreeDecorator("mango_bunch", MangoBunchTreeDecorator::new);
 
     private static <T extends Feature<?>> T register(String name, T feature) {
-        REGISTRY.register(name, () -> feature);
+        REGISTRY.register(name, feature);
         return feature;
     }
 

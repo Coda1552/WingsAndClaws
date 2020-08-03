@@ -1,18 +1,14 @@
 package net.msrandom.wings.block.entity;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.network.play.IClientPlayNetHandler;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.play.server.SUpdateBlockEntityPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
