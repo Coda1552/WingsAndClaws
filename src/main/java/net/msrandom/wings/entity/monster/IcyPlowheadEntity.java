@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.AnimalMateGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.ai.pathing.SwimNavigation;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -20,6 +21,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -149,7 +153,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		if (!world.isClient && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_SHRIMP) {
 			if (!player.abilities.creativeMode) stack.decrement(1);
 			if (this.random.nextInt(3) == 0) {
-				this.setTamedBy(player);
+				this.setOwner(player);
 				this.setTarget((LivingEntity) null);
 				this.world.sendEntityStatus(this, (byte) 7);
 			} else {
@@ -192,7 +196,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 		if (!isSleeping()) {
 			if (this.inWater) {
-				this.pitch = (float) MathHelper.clampedLerp(this.pitch, -(this.getMotion().getY() * 180), MathHelper.sin(age) * 2);
+				this.pitch = (float) MathHelper.clampedLerp(this.pitch, -(this.getVelocity().getY() * 180), MathHelper.sin(age) * 2);
 			} else {
 				this.pitch = 0;
 			}
@@ -206,7 +210,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 							if (onGround) {
 								double x = owner.getX() - getX();
 								double z = owner.getZ() - getZ();
-								setMotion(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
+								setVelocity(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
 
 								rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
 								renderYawOffset = rotationYaw;
@@ -227,7 +231,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					if (attackTarget != null && attackTarget.isAlive()) {
 						getNavigation().startMovingTo(attackTarget, 0.4);
 						if (squaredDistanceTo(attackTarget) <= 4) {
-							attackEntityAsMob(attackTarget);
+							tryAttack(attackTarget);
 						}
 					} else if (attacking) {
 						getNavigation().stop();
@@ -243,15 +247,15 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 					getNavigation().startMovingTo(target.getX(), target.getY(), target.getZ(), 0.4);
 
-					double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+					double speed = getVelocity().x * getVelocity().x + getVelocity().y * getVelocity().y + getVelocity().z + getVelocity().z;
 					if (speed > 0.05) {
-						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-							entity.damage(DamageSource.causeMobDamage(this), (float) getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).getValue());
+						for (Entity entity : world.getEntities(this, getBoundingBox().expand(1), entity -> entity instanceof LivingEntity)) {
+							entity.damage(DamageSource.mob(this), (float) getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).getValue());
 						}
 					}
 
 					if (collidedHorizontally) {
-						breakBlock(new BlockPos(getPositionVec().add(getMotion())), false);
+						breakBlock(new BlockPos(getPos().add(getVelocity())), false);
 						target = null;
 					} else if (squaredDistanceTo(target.getX(), target.getY(), target.getZ()) <= 4) {
 						breakBlock(target, true);
@@ -269,13 +273,13 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						} else --startedCharging;
 						getNavigation().startMovingTo(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.4);
 
-						double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+						double speed = getVelocity().x * getVelocity().x + getVelocity().y * getVelocity().y + getVelocity().z + getVelocity().z;
 						if (speed > 0.05) {
-							for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-								entity.damage(DamageSource.causeMobDamage(this), (float) getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).getValue());
+							for (Entity entity : world.getEntities(this, getBoundingBox().expand(1), entity -> entity instanceof LivingEntity)) {
+								entity.damage(DamageSource.mob(this), (float) getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).getValue());
 							}
 						}
-						if (iceBlock.distanceSq(getX(), getY(), getZ(), true) <= 4) {
+						if (iceBlock.getSquaredDistance(getX(), getY(), getZ(), true) <= 4) {
 							breakBlock(iceBlock, false);
 							iceBlock = null;
 							ramTime = random.nextInt(1200) + 1200;
@@ -333,7 +337,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			return alarmedTimer == 0;
 		} else if (sleepTarget != null) {
 			sleepTarget = null;
-			setMotion(getMotion().add(0, 0.2, 0));
+			setVelocity(getVelocity().add(0, 0.2, 0));
 		}
 		return false;
 	}
@@ -376,8 +380,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 				}
 
-				for (ItemStack drop : state.getDroppedStacks(new LootContext.Builder((ServerWorld) world).withRandom(rand).withParameter(LootParameters.POSITION, pos).withParameter(LootParameters.TOOL, stack))) {
-					dropItem(drop, (float) (pos.getY() - getY()));
+				for (ItemStack drop : state.getDroppedStacks(new LootContext.Builder((ServerWorld) world).random(random).parameter(LootContextParameters.POSITION, pos).parameter(LootContextParameters.TOOL, stack))) {
+					dropStack(drop, (float) (pos.getY() - getY()));
 				}
 			}
 			world.removeBlock(pos, false);
@@ -412,13 +416,13 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	public void travel(Vec3d p_213352_1_) {
 		if (this.isServerWorld() && this.isInWater()) {
 			this.moveRelative(0.1F, p_213352_1_);
-			this.move(MoverType.SELF, this.getMotion());
-			this.setMotion(this.getMotion().scale(0.9D));
+			this.move(MoverType.SELF, this.getVelocity());
+			this.setVelocity(this.getVelocity().scale(0.9D));
 			if (this.collidedHorizontally) {
-				this.setMotion(this.getMotion().x, 0.1F, this.getMotion().z);
+				this.setVelocity(this.getVelocity().x, 0.1F, this.getVelocity().z);
 			}
 			if (this.getTarget() == null) {
-				this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
+				this.setVelocity(this.getVelocity().add(0.0D, -0.005D, 0.0D));
 			}
 		} else {
 			super.travel(p_213352_1_);
@@ -438,8 +442,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 
 		public void tick() {
-			this.plowhead.setMotion(this.plowhead.getMotion().add(0.0D, 0.005D, 0.0D));
-			if (this.state == State.MOVE_TO && !this.plowhead.getNavigation().noPath()) {
+			this.plowhead.setVelocity(this.plowhead.getVelocity().add(0.0D, 0.005D, 0.0D));
+			if (this.state == State.MOVE_TO && !this.plowhead.getNavigation().isIdle()) {
 				double d0 = this.posX - this.plowhead.getX();
 				double d1 = this.posY - this.plowhead.getY();
 				double d2 = this.posZ - this.plowhead.getZ();
@@ -450,7 +454,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				this.plowhead.renderYawOffset = this.plowhead.rotationYaw;
 				float f1 = (float) (this.speed * this.plowhead.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue());
 				this.plowhead.setAIMoveSpeed(MathHelper.lerp(0.125F, this.plowhead.getAIMoveSpeed(), f1));
-				this.plowhead.setMotion(this.plowhead.getMotion().add(MathHelper.clamp(d0, speed / -10, speed / 10), this.plowhead.getAIMoveSpeed() * d1 * 0.1D, MathHelper.clamp(d2, speed / -10, speed / 10)));
+				this.plowhead.setVelocity(this.plowhead.getVelocity().add(MathHelper.clamp(d0, speed / -10, speed / 10), this.plowhead.getAIMoveSpeed() * d1 * 0.1D, MathHelper.clamp(d2, speed / -10, speed / 10)));
 			} else {
 				this.plowhead.setAIMoveSpeed(0.0F);
 			}

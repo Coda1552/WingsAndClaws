@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.Tag;
@@ -56,7 +58,8 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
             ImmutableMap.Builder<Item, Integer> builder = ImmutableMap.builder();
             MinecraftServer server = Objects.requireNonNull(world.getServer());
             try {
-                IResource resource = server.getResourceManager().getResource(new Identifier(WingsAndClaws.MOD_ID, "tame_items/hatchet_beak.json"));
+                //Probably crashes
+                Resource resource = ((ResourceManager) server.getDataPackManager()).getResource(new Identifier(WingsAndClaws.MOD_ID, "tame_items/hatchet_beak.json"));
                 InputStream stream = resource.getInputStream();
                 JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
                 reader.beginObject();
@@ -126,11 +129,13 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
     }
 
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    @Override
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier) {
         return false;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    @Override
+    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
     }
 
     public boolean isFlying() {
@@ -141,9 +146,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
     public void mobTick() {
         super.mobTick();
 
-        Vec3d vec3d = this.getMotion();
+        Vec3d vec3d = this.getVelocity();
         if (!this.onGround && vec3d.y < 0.0D) {
-            this.setMotion(vec3d.mul(1.0D, 0.6D, 1.0D));
+            this.setVelocity(vec3d.multiply(1.0D, 0.6D, 1.0D));
         }
     }
 
@@ -167,15 +172,13 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
                 playerPoints.set(playerPoints.get() + points.get(stack.getItem()));
                 if (!player.abilities.creativeMode) stack.decrement(1);
                 if (playerPoints.get() >= 100) {
-                    this.setTamedBy(player);
+                    this.setOwner(player);
                     this.navigation.stop();
                     this.setTarget(null);
                     this.setHealth(20.0F);
-                    this.playTameEffect(true);
                     players.clear();
                     this.world.sendEntityStatus(this, (byte) 7);
                 } else {
-                    this.playTameEffect(false);
                     this.world.sendEntityStatus(this, (byte) 6);
                 }
             }

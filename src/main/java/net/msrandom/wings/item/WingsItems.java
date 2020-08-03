@@ -39,7 +39,7 @@ public class WingsItems {
     public static final Item MIMANGO_EGG = register("mimango_egg", new MimangoEggItem());
     //public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
     //public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Settings().group(GROUP)));
-    //public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Settings().group(GROUP)));
+    //public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ToolMaterials.DIAMOND, 5.0F, -3.0F, new Item.Settings().group(GROUP)));
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", getWithISTER(new ShieldItem(new Item.Settings().group(GROUP).maxDamage(678)), () -> PlowheadShieldRenderer::new));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Settings().group(GROUP)));

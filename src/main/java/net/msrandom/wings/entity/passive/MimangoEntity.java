@@ -30,15 +30,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.goal.MimangoHangGoal;
 import net.msrandom.wings.entity.goal.MinmangoFlyGoal;
 
-import java.util.Objects;
-import java.util.UUID;
-
 public class MimangoEntity extends TameableDragonEntity implements Flutterer {
-    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MimangoEntity.class, TrackedDataHandlerRegistry.VARINT);
+    private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MimangoEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Boolean> HANGING = DataTracker.registerData(MimangoEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     private static final Ingredient TEMPT_ITEM = Ingredient.ofItems(WingsBlocks.MANGO_BUNCH.asItem());
@@ -115,31 +111,17 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
         ItemStack stack = player.getStackInHand(hand);
         if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (random.nextInt(3) == 0) {
-                this.setTamedBy(player);
-                this.navigator.stop();
-                this.goalSelector.removeGoal(hangGoal);
+                this.setOwner(player);
+                this.navigation.stop();
+                this.goalSelector.remove(hangGoal);
                 this.setTarget(null);
                 this.setHealth(20.0F);
-                this.playTameEffect(true);
                 this.world.sendEntityStatus(this, (byte) 7);
             } else {
-                this.playTameEffect(false);
                 this.world.sendEntityStatus(this, (byte) 6);
             }
         }
         return super.interactMob(player, hand);
-    }
-
-    @Nullable
-    @Override
-    public PassiveEntity createChild(PassiveEntity ageable) {
-        MimangoEntity mimango = Objects.requireNonNull(WingsEntities.MIMANGO.create(this.world));
-        UUID uuid = this.getOwnerId();
-        if (uuid != null) {
-            mimango.setOwnerId(uuid);
-            mimango.setTamed(true);
-        }
-        return mimango;
     }
 
     public boolean isHanging() {
@@ -153,8 +135,8 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
     public void tick() {
         super.tick();
         if (this.isHanging()) {
-            this.setMotion(Vec3d.ZERO);
-            this.setRawPosition(this.getX(), (double) MathHelper.floor(this.getY()) + 1.0D - (double) this.getHeight(), this.getZ());
+            this.setVelocity(Vec3d.ZERO);
+            this.setPos(this.getX(), (double) MathHelper.floor(this.getY()) + 1.0D - (double) this.getHeight(), this.getZ());
         }
     }
 
@@ -162,14 +144,16 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
         return !this.onGround;
     }
 
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    @Override
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier) {
         return false;
     }
 
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return true;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    @Override
+    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
     }
 }

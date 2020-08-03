@@ -158,17 +158,17 @@ public class HatchetBeakModel extends CompositeEntityModel<HatchetBeakEntity> {
 
     @Override
     public void setAngles(HatchetBeakEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.body.rotationPointX = -4;
-        this.wingLeftBone1.rotationPointX = -5;
-        this.wingRightBone1.rotationPointX = -5;
-        this.thighLeft.rotationPointX = -1;
-        this.thighRight.rotationPointX = -1;
+        this.body.pivotX = -4;
+        this.wingLeftBone1.pivotX = -5;
+        this.wingRightBone1.pivotX = -5;
+        this.thighLeft.pivotX = -1;
+        this.thighRight.pivotX = -1;
 
         if (entityIn.isFlying()) {
             wingLeftBone1.roll = wingLeftBone2.roll = wingRightBone1.roll = wingRightBone2.roll = 0;
-            wingLeftBone1.rotationPointY = -5;
+            wingLeftBone1.pivotY = -5;
         } else {
-            wingLeftBone1.rotationPointX = 5;
+            wingLeftBone1.pivotX = 5;
             wingLeftBone1.roll = 0.8f;
             wingRightBone1.roll = -wingLeftBone1.roll;
             wingLeftBone2.roll = -1.6f;
@@ -180,11 +180,11 @@ public class HatchetBeakModel extends CompositeEntityModel<HatchetBeakEntity> {
             this.tail2.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F + 0.2F;
             this.wingRightBone1.yaw = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.4F * limbSwingAmount * 0.5F;
             this.wingLeftBone1.yaw = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.4F * limbSwingAmount * 0.5F;
-            this.body.rotationPointX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F - 4;
-            this.wingLeftBone1.rotationPointX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 5F;
-            this.wingRightBone1.rotationPointX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 5F;
-            this.thighLeft.rotationPointX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 1;
-            this.thighRight.rotationPointX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 1;
+            this.body.pivotX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F - 4;
+            this.wingLeftBone1.pivotX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 5F;
+            this.wingRightBone1.pivotX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 5F;
+            this.thighLeft.pivotX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 1;
+            this.thighRight.pivotX = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * -0.2F * limbSwingAmount * 0.5F - 1;
             this.neck1.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F + -0.4F;
             this.neck2.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F + 0.1F;
             this.head.pitch = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * 0.2F * limbSwingAmount * 0.5F + 0.5F;

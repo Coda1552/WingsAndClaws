@@ -1,30 +1,23 @@
 package net.msrandom.wings.entity.goal;
 
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.EntityPredicates;
+import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.tag.BlockTags;
 import net.msrandom.wings.entity.passive.MimangoEntity;
-
-import java.util.function.Predicate;
 
 public class MimangoHangGoal extends Goal {
     private final MimangoEntity entity;
     private final double playerDistance;
-    private final EntityPredicate builtPredicate;
+    private final TargetPredicate builtPredicate;
 
     private int ticksRunning;
 
     public MimangoHangGoal(MimangoEntity entity, double playerDistance) {
         this.entity = entity;
-
         this.playerDistance = playerDistance;
-        Predicate<LivingEntity> entityPredicate = EntityPredicates.CAN_AI_TARGET::test;
-        this.builtPredicate = (new EntityPredicate()).setDistance(playerDistance).setCustomPredicate(entityPredicate.and((entity1) -> {
-            return true;
-        }));
+        this.builtPredicate = new TargetPredicate().setBaseMaxDistance(playerDistance).setPredicate(EntityPredicates.EXCEPT_CREATIVE_SPECTATOR_OR_PEACEFUL::test);
     }
 
     @Override
@@ -33,20 +26,12 @@ public class MimangoHangGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        if(ticksRunning % 10 == 0)
-            return isPlayerNear() && this.entity.world.getBlockState(this.entity.getBlockPos().up()).isIn(BlockTags.LEAVES);
-        else
-            return true;
-    }
-
-    @Override
-    public void startExecuting() {
+    public void start() {
         this.entity.setHanging(true);
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         ticksRunning = 0;
         this.entity.setHanging(false);
     }
@@ -58,6 +43,6 @@ public class MimangoHangGoal extends Goal {
     }
 
     private boolean isPlayerNear() {
-        return this.entity.world.func_225318_b(PlayerEntity.class, builtPredicate, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().grow((double) this.playerDistance, 3.0D, (double) this.playerDistance)) == null;
+        return this.entity.world.getClosestEntity(PlayerEntity.class, builtPredicate, this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), this.entity.getBoundingBox().expand(this.playerDistance, 3.0D, this.playerDistance)) == null;
     }
 }

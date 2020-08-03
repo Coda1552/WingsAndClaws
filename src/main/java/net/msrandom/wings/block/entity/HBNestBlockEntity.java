@@ -64,7 +64,7 @@ public class HBNestBlockEntity extends NestBlockEntity {
                     hatchetBeak.setBreedingAge(-24000);
                     hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
                     hatchetBeak.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, hatchetBeak.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> hatchetBeak.squaredDistanceTo(p1) < hatchetBeak.squaredDistanceTo(p2) ? p1 : p2).ifPresent(hatchetBeak::setTamedBy);
+                    world.getNonSpectatingEntities(PlayerEntity.class, hatchetBeak.getBoundingBox().expand(15)).stream().reduce((p1, p2) -> hatchetBeak.squaredDistanceTo(p1) < hatchetBeak.squaredDistanceTo(p2) ? p1 : p2).ifPresent(hatchetBeak::setOwner);
                     world.spawnEntity(hatchetBeak);
                 }
                 eggTimer = -1;

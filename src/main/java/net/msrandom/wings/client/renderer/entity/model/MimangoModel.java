@@ -29,10 +29,10 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
         if (entityIn.isHanging()) {
             this.wingLeft.yaw = -2.0F;
             this.wingLeft.roll = 1.58F;
-            this.wingLeft.rotationPointY = 0.05F;
+            this.wingLeft.pivotY = 0.05F;
             this.wingRight.yaw = 2.0F;
             this.wingRight.roll = -1.58F;
-            this.wingRight.rotationPointY = 0.05F;
+            this.wingRight.pivotY = 0.05F;
             this.head.pitch = 1.5F;
             this.body.pitch = 1.57F;
         } else {
@@ -118,15 +118,15 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
             super.setAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             if (!entityIn.isHanging()) {
                 if (entityIn.isFlying()) {
-                    this.wingLeft.rotationPointY = -1.5F;
-                    this.wingRight.rotationPointY = -1.5F;
-                    this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 22.5F;
-                    this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
+                    this.wingLeft.pivotY = -1.5F;
+                    this.wingRight.pivotY = -1.5F;
+                    this.body.pivotY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 22.5F;
+                    this.head.pivotY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
-                    this.wingLeft.rotationPointY = -1.45F;
-                    this.wingRight.rotationPointY = -1.45F;
-                    this.body.rotationPointY = 22.5F;
-                    this.head.rotationPointY = -0.5F;
+                    this.wingLeft.pivotY = -1.45F;
+                    this.wingRight.pivotY = -1.45F;
+                    this.body.pivotY = 22.5F;
+                    this.head.pivotY = -0.5F;
                 }
             }
         }
@@ -182,15 +182,15 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
             super.setAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             if (!entityIn.isHanging()) {
                 if (entityIn.isFlying()) {
-                    this.wingLeft.rotationPointY = -1;
-                    this.wingRight.rotationPointY = -1;
-                    this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 23F;
-                    this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
+                    this.wingLeft.pivotY = -1;
+                    this.wingRight.pivotY = -1;
+                    this.body.pivotY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 23F;
+                    this.head.pivotY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
-                    this.wingLeft.rotationPointY = -9.95F;
-                    this.wingRight.rotationPointY = -9.95F;
-                    this.body.rotationPointY = 22.5F;
-                    this.head.rotationPointY = 0;
+                    this.wingLeft.pivotY = -9.95F;
+                    this.wingRight.pivotY = -9.95F;
+                    this.body.pivotY = 22.5F;
+                    this.head.pivotY = 0;
                 }
             }
         }

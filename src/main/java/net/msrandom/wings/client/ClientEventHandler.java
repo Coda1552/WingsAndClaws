@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -13,6 +14,8 @@ import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
+import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.block.entity.WingsBlockEntities;
 import net.msrandom.wings.client.renderer.entity.*;
@@ -27,6 +30,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ClientEventHandler implements ClientModInitializer {
+    //TODO mixin these
     private static final Map<Item, BuiltinModelItemRenderer> BUILT_IN_MODELS = new HashMap<>();
 
     @Override
@@ -42,6 +46,9 @@ public class ClientEventHandler implements ClientModInitializer {
         registerRenderer(WingsEntities.PLOWHEAD_EGG, PlowheadEggRenderer::new);
         registerRenderer(WingsEntities.MIMANGO, MimangoRenderer::new);
         registerRenderer(WingsEntities.MIMANGO_EGG, MimangoEggRenderer::new);
+
+        FabricModelPredicateProviderRegistry.register(new Identifier(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
+        FabricModelPredicateProviderRegistry.register(new Identifier("blocking"), (itemStack, clientWorld, livingEntity) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F);
     }
 
     private static <T extends Entity> void registerRenderer(EntityType<T> entity, Function<EntityRenderDispatcher, EntityRenderer<T>> renderer) {

@@ -7,15 +7,17 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
 
 public class MangoBlock extends Block {
-    public static final IntProperty MANGOES = Properties.PICKLES;
+    public static final IntProperty MANGOES = IntProperty.of("mangos", 1, 4);
 
     protected static final VoxelShape ONE_SHAPE = Block.createCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape TWO_SHAPE = Block.createCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
@@ -30,37 +32,32 @@ public class MangoBlock extends Block {
     @Nullable
     public BlockState getPlacementState(ItemPlacementContext context) {
         BlockState blockstate = context.getWorld().getBlockState(context.getBlockPos());
-        if (blockstate.getBlock() == this) {
+        if (blockstate.isOf(this)) {
             return blockstate.with(MANGOES, Math.min(4, blockstate.get(MANGOES) + 1));
         }
         return super.getPlacementState(context);
     }
 
-    @Override
-    public int getLightValue(BlockState state) {
-        return super.getLightValue(state) + 3 * state.get(MANGOES);
-    }
-
-    protected boolean isValidGround(BlockState state, BlockView world, BlockPos pos) {
+    protected boolean canPlantOnTop(BlockState state, BlockView world, BlockPos pos) {
         return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
     }
 
-    public boolean isValidPosition(BlockState state, ServerWorldAccessReader world, BlockPos pos) {
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos blockpos = pos.up();
-        return this.isValidGround(world.getBlockState(blockpos), world, blockpos);
+        return this.canPlantOnTop(world.getBlockState(blockpos), world, blockpos);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, ServerWorldAccess world, BlockPos currentPos, BlockPos facingPos) {
-        if (!stateIn.isValidPosition(world, currentPos)) {
+    public BlockState getStateForNeighborUpdate(BlockState stateIn, Direction facing, BlockState facingState, WorldAccess world, BlockPos currentPos, BlockPos facingPos) {
+        if (!stateIn.canPlaceAt(world, currentPos)) {
             return Blocks.AIR.getDefaultState();
         } else {
-            return super.updatePostPlacement(stateIn, facing, facingState, world, currentPos, facingPos);
+            return super.getStateForNeighborUpdate(stateIn, facing, facingState, world, currentPos, facingPos);
         }
     }
 
-    public boolean isReplaceable(BlockState state, ItemPlacementContext useContext) {
-        return useContext.getItem().getItem() == this.asItem() && state.get(MANGOES) < 4 || super.isReplaceable(state, useContext);
+    public boolean canReplace(BlockState state, ItemPlacementContext useContext) {
+        return useContext.getStack().getItem() == this.asItem() && state.get(MANGOES) < 4 || super.canReplace(state, useContext);
     }
 
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {

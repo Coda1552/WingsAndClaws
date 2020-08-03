@@ -26,7 +26,7 @@ public class MinmangoFlyGoal extends Goal {
         this.creature = creatureIn;
         this.speed = speedIn;
         this.executionChance = chance;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setControls(EnumSet.of(Control.MOVE));
     }
 
     public boolean canStart() {
@@ -51,16 +51,17 @@ public class MinmangoFlyGoal extends Goal {
         return RandomPositionGenerator.findAirTarget(this.creature, 15, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 6, 3);
     }
 
-    public boolean shouldContinueExecuting() {
-        return !this.creature.getNavigation().noPath() && !this.creature.isBeingRidden();
+    @Override
+    public boolean shouldContinue() {
+        return !this.creature.getNavigation().isIdle() && !this.creature.isBeingRidden();
     }
 
-    public void startExecuting() {
+    public void start() {
         this.creature.getNavigation().startMovingTo(this.x, this.y, this.z, this.speed);
     }
 
-    public void resetTask() {
+    public void stop() {
         this.creature.getNavigation().stop();
-        super.resetTask();
+        super.stop();
     }
 }

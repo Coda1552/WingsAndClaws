@@ -46,7 +46,7 @@ public class CommonEventHandler {
         if (player.isHandActive()) {
             ItemStack stack = player.getActiveItemStack();
             if (stack.getItem() == WingsItems.ICY_PLOWHEAD_SHIELD) {
-                double speed = Math.abs(player.getMotion().x * player.getMotion().x + player.getMotion().z * player.getMotion().z);
+                double speed = Math.abs(player.getVelocity().x * player.getVelocity().x + player.getVelocity().z * player.getVelocity().z);
                 if (!player.abilities.creativeMode)
                     stack.damageItem(1, player, entity -> entity.sendBreakAnimation(player.getActiveHand()));
                 DamageSource source = event.getSource();
@@ -62,9 +62,9 @@ public class CommonEventHandler {
                                 ((LivingEntity) entity).knockBack(player, (float) speed * 3.325f, MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), MathHelper.cos((float) Math.toRadians(entity.rotationYaw)));
                             } else {
                                 double strength = speed * 3.325;
-                                Vec3d vec3d3 = entity.getMotion();
+                                Vec3d vec3d3 = entity.getVelocity();
                                 Vec3d vec3d4 = new Vec3d(MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), 0.0D, MathHelper.cos((float) Math.toRadians(entity.rotationYaw))).normalize().scale(strength);
-                                entity.setMotion(vec3d3.x / 2.0D - vec3d4.x, entity.onGround ? Math.min(0.4D, vec3d3.y / 2.0D + strength) : vec3d3.y, vec3d3.z / 2.0D - vec3d4.z);
+                                entity.setVelocity(vec3d3.x / 2.0D - vec3d4.x, entity.onGround ? Math.min(0.4D, vec3d3.y / 2.0D + strength) : vec3d3.y, vec3d3.z / 2.0D - vec3d4.z);
                             }
                             event.setCanceled(true);
                         }

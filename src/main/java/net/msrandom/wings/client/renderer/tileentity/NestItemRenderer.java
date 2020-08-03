@@ -23,6 +23,6 @@ public class NestItemRenderer extends BuiltinModelItemRenderer {
 
     @Override
     public void render(ItemStack itemStackIn, ModelTransformation.Mode mode, MatrixStack matrixStackIn, VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        BlockEntityRenderDispatcher.INSTANCE.renderItem(instance, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+        BlockEntityRenderDispatcher.INSTANCE.renderEntity(instance, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 }

@@ -82,7 +82,7 @@ public class DEDNestBlockEntity extends NestBlockEntity {
                     drake.setBreedingAge(-24000);
                     drake.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
                     drake.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.squaredDistanceTo(p1) < drake.squaredDistanceTo(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
+                    world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.squaredDistanceTo(p1) < drake.squaredDistanceTo(p2) ? p1 : p2).ifPresent(drake::setOwner);
                     world.spawnEntity(drake);
                 }
                 eggs.remove(0);
