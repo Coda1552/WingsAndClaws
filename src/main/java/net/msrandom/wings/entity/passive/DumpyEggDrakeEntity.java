@@ -14,6 +14,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
@@ -21,12 +23,15 @@ import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
+
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> RARE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
@@ -105,8 +110,17 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.RED.getId());
+        this.dataManager.register(RARE, false);
+    }
+    
+    @Override
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    	spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setRarity(rand.nextInt(5) == 1);
+        return spawnDataIn;
     }
 
+    
     @Override
     public EntitySize getSize(Pose poseIn) {
         return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
@@ -309,4 +323,13 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private void setBandanaColor(DyeColor color) {
         this.dataManager.set(BANDANA_COLOR, (byte) color.getId());
     }
+    
+    public boolean getRarity() {
+        return this.dataManager.get(RARE);
+    }
+
+    public void setRarity(boolean rarity) {
+        this.dataManager.set(RARE, rarity);
+    }
+
 }
