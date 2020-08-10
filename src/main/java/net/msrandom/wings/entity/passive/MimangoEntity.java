@@ -31,7 +31,7 @@ import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.goal.MimangoFlyGoal;
-import net.msrandom.wings.entity.goal.MimangoHangGoal;
+import net.msrandom.wings.entity.goal.MimangoHideGoal;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,7 +42,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     //private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
-    private MimangoHangGoal hangGoal;
+    private MimangoHideGoal hangGoal;
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
@@ -70,7 +70,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.hangGoal = new MimangoHangGoal(this, 5.0D);
+        this.hangGoal = new MimangoHideGoal(this, 5.0D);
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new BreedGoal(this, 1) {
@@ -102,8 +102,8 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             }
         });
         this.goalSelector.addGoal(3, hangGoal);
-        this.goalSelector.addGoal(4, new MimangoFlyGoal(this, 0.8D));
-        this.targetSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1));
+        this.goalSelector.addGoal(4, new MimangoFlyGoal(this));
+        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
 
     @Override
@@ -136,6 +136,10 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         this.setHiding(false);
+        if (source == DamageSource.IN_WALL && !world.getBlockState(getPosition()).isSolid()) {
+            setMotion(getMotion().add(0, -0.05, 0));
+            return false;
+        }
         return super.attackEntityFrom(source, amount);
     }
 
@@ -146,6 +150,8 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
             playSound(WingsSounds.MIMANGO_HAPPY, getSoundVolume(), getSoundPitch());
             return true;
         }
+
+        if (handleSpawnEgg(player, stack)) return true;
 
         if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {

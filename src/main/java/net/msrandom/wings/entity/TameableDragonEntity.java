@@ -6,6 +6,9 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -87,6 +90,29 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
             ageable.setGrowingAge(600);
         }
         return null;
+    }
+
+    public boolean handleSpawnEgg(PlayerEntity player, ItemStack stack) {
+        if (stack.getItem() instanceof SpawnEggItem && ((SpawnEggItem) stack.getItem()).hasType(stack.getTag(), this.getType())) {
+            if (!this.world.isRemote) {
+                TameableDragonEntity child = (TameableDragonEntity) getType().create(world);
+                if (child != null) {
+                    child.setGrowingAge(-24000);
+                    child.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
+                    child.onInitialSpawn(world, world.getDifficultyForLocation(child.getPosition()), SpawnReason.SPAWN_EGG, null, null);
+                    this.world.addEntity(child);
+                    if (stack.hasDisplayName()) {
+                        child.setCustomName(stack.getDisplayName());
+                    }
+
+                    if (!player.abilities.isCreativeMode) {
+                        stack.shrink(1);
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     public enum WanderState {

@@ -1,14 +1,15 @@
 package net.msrandom.wings.entity.item;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
@@ -48,11 +49,16 @@ public class MimangoEggEntity extends LivingEntity {
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {}
+    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    }
 
     @Override
     public boolean onLivingFall(float distance, float damageMultiplier) {
         return false;
+    }
+
+    @Override
+    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Override
@@ -94,14 +100,14 @@ public class MimangoEggEntity extends LivingEntity {
 
     @Override
     public void tick() {
-        if (!this.world.getBlockState(getPosition()).isIn(BlockTags.LEAVES)) super.tick();
-
         if (!this.world.isRemote) {
-            if (hatchTime++ >= 200) {
+            if (hatchTime++ >= 1200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
                     mimangoEntity.setGrowingAge(-24000);
                     mimangoEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+                    mimangoEntity.onInitialSpawn(world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
+                    world.getEntitiesWithinAABB(PlayerEntity.class, mimangoEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> mimangoEntity.getDistanceSq(p1) < mimangoEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(mimangoEntity::setTamedBy);
                     this.world.addEntity(mimangoEntity);
                 }
 

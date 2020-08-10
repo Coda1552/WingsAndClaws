@@ -89,6 +89,7 @@
     ]
   },
   "mimango.hide": {
+    "subtitle": "wings.subtitle.mimango.hide",
     "sounds": [
       {
         "name": "wings:mimango.hide",
@@ -97,6 +98,7 @@
     ]
   },
   "mimango.unhide": {
+    "subtitle": "wings.subtitle.mimango.unhide",
     "sounds": [
       {
         "name": "wings:mimango.unhide",
@@ -105,6 +107,7 @@
     ]
   },
   "mimango.happy": {
+    "subtitle": "wings.subtitle.mimango.happy",
     "sounds": [
       {
         "name": "wings:mimango.happy",
@@ -113,6 +116,7 @@
     ]
   },
   "horn.use": {
+    "subtitle": "wings.subtitle.horn.use",
     "sounds": [
       {
         "name": "wings:battle.horn",
@@ -121,6 +125,7 @@
     ]
   },
   "music.blissful_dunes": {
+    "subtitle": "wings.subtitle.music.blissful_dunes",
     "sounds": [
       {
         "name": "wings:music/blissful_dunes_mono",
