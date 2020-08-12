@@ -15,8 +15,6 @@
   "item.wings.plowhead_horn": "Icy Plowhead Horn",
   "item.wings.st_spear": "Saddled Thunder Tail Spear",
   "item.wings.st_horn": "Saddled Thunder Tail Horn",
-  "item.wings.music_disc_blissful_dunes": "Music Disc",
-  "item.wings.music_disc_blissful_dunes.desc": "Mr. Esuoh - Blissful Dunes",
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
   "block.wings.mango_bunch": "Mango",
   "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake",
@@ -37,5 +35,14 @@
   "wings.subtitle.horn.use": "Horn Horn use",
   "entity.wings.state.wander": "Wander",
   "entity.wings.state.stay": "Stay",
-  "entity.wings.state.follow": "Follow"
+  "entity.wings.state.follow": "Follow",
+
+  "item.wings.music_disc_blissful_dunes": "Music Disc",
+  "item.wings.music_disc_blissful_dunes.desc": "Mr. Esuoh - Blissful Dunes",
+  "item.wings.music_disc_ashen_lands": "Music Disc",
+  "item.wings.music_disc_ashen_lands.desc": "Mr. Esuoh - Ashen Lands",
+  "item.wings.music_disc_island_hoppers": "Music Disc",
+  "item.wings.music_disc_island_hoppers.desc": "Mr. Esuoh - Island Hoppers",
+  "item.wings.music_disc_mantas_melody": "Music Disc",
+  "item.wings.music_disc_mantas_melody.desc": "Mr. Esuoh - Manta's Melody"
 }

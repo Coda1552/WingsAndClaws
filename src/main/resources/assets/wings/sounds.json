@@ -125,10 +125,33 @@
     ]
   },
   "music.blissful_dunes": {
-    "subtitle": "wings.subtitle.music.blissful_dunes",
     "sounds": [
       {
-        "name": "wings:music/blissful_dunes_mono",
+        "name": "wings:music/blissful_dunes",
+        "streaming": "true"
+      }
+    ]
+  },
+  "music.ashen_lands": {
+    "sounds": [
+      {
+        "name": "wings:music/ashen_lands",
+        "streaming": "true"
+      }
+    ]
+  },
+  "music.island_hoppers": {
+    "sounds": [
+      {
+        "name": "wings:music/island_hoppers",
+        "streaming": "true"
+      }
+    ]
+  },
+  "music.mantas_melody": {
+    "sounds": [
+      {
+        "name": "wings:music/mantas_melody",
         "streaming": "true"
       }
     ]

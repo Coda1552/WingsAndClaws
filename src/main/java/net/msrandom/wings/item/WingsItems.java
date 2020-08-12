@@ -1,6 +1,7 @@
 package net.msrandom.wings.item;
 
 import net.minecraft.item.*;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -47,7 +48,10 @@ public class WingsItems {
     //public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
     //public static final Item ST_HORN = register("st_horn", new STTHornItem());
 
-    public static final Item MUSIC_DISC_BLISSFUL_DUNES = register("music_disc_blissful_dunes", new MusicDiscItem(1, () -> WingsSounds.MUSIC_BLISSFUL_DUNES, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
+    public static final Item MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes", () -> WingsSounds.MUSIC_BLISSFUL_DUNES);
+    public static final Item MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands", () -> WingsSounds.MUSIC_ASHEN_LANDS);
+    public static final Item MUSIC_DISC_ISLAND_HOPPERS = registerMusicDisc("music_disc_island_hoppers", () -> WingsSounds.MUSIC_ISLAND_HOPPERS);
+    public static final Item MUSIC_DISC_MANTAS_MELODY = registerMusicDisc("music_disc_mantas_melody", () -> WingsSounds.MUSIC_MANTAS_MELODY);
 
     //Custom block items
     static {
@@ -59,6 +63,10 @@ public class WingsItems {
     private static Item register(String name, Item item) {
         REGISTRY.register(name, () -> item);
         return item;
+    }
+
+    private static Item registerMusicDisc(String name, Supplier<SoundEvent> soundEventSupplier) {
+        return register(name, new MusicDiscItem(1, soundEventSupplier, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
     }
 
     private static Item.Properties getWithISTER(Item.Properties properties, Supplier<Callable<Object>> ister) {

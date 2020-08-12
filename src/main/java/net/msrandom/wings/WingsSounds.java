@@ -24,6 +24,9 @@ public class WingsSounds {
     public static final SoundEvent BATTLE_HORN = create("horn.use");
 
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
+    public static final SoundEvent MUSIC_ASHEN_LANDS = create("music.ashen_lands");
+    public static final SoundEvent MUSIC_ISLAND_HOPPERS = create("music.island_hoppers");
+    public static final SoundEvent MUSIC_MANTAS_MELODY = create("music.mantas_melody");
 
     private static SoundEvent create(String name) {
         SoundEvent event = new SoundEvent(new ResourceLocation(WingsAndClaws.MOD_ID, name));
