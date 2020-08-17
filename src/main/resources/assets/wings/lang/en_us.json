@@ -9,6 +9,7 @@
   "item.wings.icy_plowhead_spawn_egg": "Icy Plowhead Spawn Egg",
   "item.wings.icy_plowhead_egg": "Icy Plowhead Egg",
   "item.wings.mimango_spawn_egg": "Mimango Spawn Egg",
+  "item.wings.hatchet_beak_spawn_egg": "Hatchet Beak Spawn Egg",
   "item.wings.mimango_egg": "Mimango Egg",
   "item.wings.horn_horn": "Horn Horn",
   "item.wings.icy_plowhead_shield": "Icy Plowhead Shield",
@@ -16,6 +17,7 @@
   "item.wings.st_spear": "Saddled Thunder Tail Spear",
   "item.wings.st_horn": "Saddled Thunder Tail Horn",
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
+  "block.wings.hb_nest": "Hatchet Beak Nest",
   "block.wings.mango_bunch": "Mango",
   "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake",
   "entity.wings.icy_plowhead": "Icy Plowhead",
@@ -36,7 +38,6 @@
   "entity.wings.state.wander": "Wander",
   "entity.wings.state.stay": "Stay",
   "entity.wings.state.follow": "Follow",
-
   "item.wings.music_disc_blissful_dunes": "Music Disc",
   "item.wings.music_disc_blissful_dunes.desc": "Mr. Esuoh - Blissful Dunes",
   "item.wings.music_disc_ashen_lands": "Music Disc",
