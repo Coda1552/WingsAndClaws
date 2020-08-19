@@ -34,14 +34,15 @@ public class MimangoFlyGoal extends Goal {
 
                 Vec3d vec3d = RandomPositionGenerator.findAirTarget(this.creature, 48, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 12, 6);
                 if (vec3d == null) {
-                    return false;
+                    goToGround();
                 } else {
                     this.x = vec3d.x;
                     this.y = vec3d.y;
                     this.z = vec3d.z;
-                    this.mustUpdate = false;
-                    return true;
                 }
+
+                this.mustUpdate = false;
+                return true;
             }
             return true;
         }
@@ -52,11 +53,10 @@ public class MimangoFlyGoal extends Goal {
         this.x = height.getX();
         this.y = height.getY();
         this.z = height.getZ();
-        this.mustUpdate = false;
     }
 
     public boolean shouldContinueExecuting() {
-        return this.creature.getDistanceSq(x, y, z) < 4 && !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden();
+        return this.creature.getDistanceSq(x, y, z) > 4 && !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden();
     }
 
     public void startExecuting() {

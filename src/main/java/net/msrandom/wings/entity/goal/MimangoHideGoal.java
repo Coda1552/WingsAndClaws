@@ -13,7 +13,8 @@ public class MimangoHideGoal extends Goal {
     private final MimangoEntity entity;
     private final double playerDistance;
     private final EntityPredicate builtPredicate;
-    private BlockPos lastPos;
+    private BlockPos target;
+    private boolean searched;
 
     public MimangoHideGoal(MimangoEntity entity, double playerDistance) {
         this.entity = entity;
@@ -26,51 +27,63 @@ public class MimangoHideGoal extends Goal {
         boolean scared = isPlayerNear();
         if (!scared && !entity.isTamed()) return false;
 
-        BlockPos pos = entity.getPosition();
-        if (lastPos == null) {
-            if (validBlock(pos.up())) {
-                lastPos = pos;
+        if (searched) {
+            if (entity.ticksExisted % 20 != 0) {
+                return false;
             }
-        } else {
-            if (!lastPos.equals(pos) && entity.world.getBlockState(lastPos).isAir(entity.world, lastPos)) {
-                entity.getNavigator().tryMoveToXYZ(lastPos.getX(), lastPos.getY(), lastPos.getZ(), 0.5);
-            }
+
+            searched = false;
         }
 
-        if (validBlock(pos.up()) && (scared || entity.getRNG().nextInt(10) == 0)) {
+        BlockPos pos = entity.getPosition();
+        if (target == null) {
+            if (validBlock(pos.up())) {
+                target = pos;
+            }
+
+            searched = true;
+        }
+
+        if (target != null && (scared || entity.getRNG().nextInt(10) == 0)) {
             return true;
-        } else if (lastPos == null) {
+        } else if (target == null) {
             for (BlockPos blockPos : BlockPos.getAllInBoxMutable(pos.add(-16, -16, -16), pos.add(16, 16, 16))) {
                 if (validBlock(blockPos)) {
-                    lastPos = blockPos.down();
+                    target = blockPos.down();
                     break;
                 }
             }
+            searched = true;
         }
         return false;
     }
 
     private boolean validBlock(BlockPos pos) {
-        return this.entity.world.getBlockState(pos).isIn(BlockTags.LEAVES);
+        BlockPos down = pos.down();
+        return this.entity.world.getBlockState(pos).isIn(BlockTags.LEAVES) && entity.world.getBlockState(down).isAir(entity.world, down);
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return (isPlayerNear() || entity.isTamed()) && validBlock(entity.getPosition().up()) && entity.getRNG().nextInt(100) != 0;
+        return entity.getRNG().nextInt(100) != 0 && validBlock(entity.getPosition().up()) && (entity.isTamed() || entity.ticksExisted % 20 != 0 || isPlayerNear());
     }
 
     @Override
     public void startExecuting() {
-        this.entity.getNavigator().clearPath();
-        this.entity.setHiding(true);
-        this.entity.playSound(WingsSounds.MIMANGO_HIDE, 1, 1);
+        if (target.equals(entity.getPosition())) {
+            this.entity.getNavigator().clearPath();
+            this.entity.setHiding(true);
+            this.entity.playSound(WingsSounds.MIMANGO_HIDE, 1, 1);
+        } else {
+            entity.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 0.5);
+        }
     }
 
     @Override
     public void resetTask() {
         this.entity.setHiding(false);
         this.entity.playSound(WingsSounds.MIMANGO_UNHIDE, 1, 1);
-        lastPos = null;
+        target = null;
     }
 
     private boolean isPlayerNear() {
