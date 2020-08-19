@@ -62,7 +62,7 @@ public class HBNestBlockEntity extends NestBlockEntity {
                 HatchetBeakEntity hatchetBeak = WingsEntities.HATCHET_BEAK.create(world);
                 if (hatchetBeak != null) {
                     hatchetBeak.setBreedingAge(-24000);
-                    hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
+                    hatchetBeak.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
                     hatchetBeak.initialize(world, world.getLocalDifficulty(pos), SpawnReason.NATURAL, null, null);
                     world.getNonSpectatingEntities(PlayerEntity.class, hatchetBeak.getBoundingBox().expand(15)).stream().reduce((p1, p2) -> hatchetBeak.squaredDistanceTo(p1) < hatchetBeak.squaredDistanceTo(p2) ? p1 : p2).ifPresent(hatchetBeak::setOwner);
                     world.spawnEntity(hatchetBeak);

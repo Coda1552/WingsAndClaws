@@ -86,17 +86,17 @@ public class PlowheadEggEntity extends LivingEntity {
 		super.tick();
 		this.setAir(300);
 		if (!this.world.isClient) {
-			if (isInWaterOrBubbleColumn() && hatchTime++ >= 4800) {
-				IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
-				if (plowhead != null) {
-					plowhead.setBreedingAge(-24000);
-					plowhead.setLocationAndAngles(this.getX(), this.getY(), this.getZ(), this.rotationYaw, 0.0F);
-					plowhead.initialize(world, world.getLocalDifficulty(plowhead.getBlockPos()), SpawnReason.BREEDING, null, null);
-					this.world.spawnEntity(plowhead);
-				}
+            if (isInsideWaterOrBubbleColumn() && hatchTime++ >= 4800) {
+                IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.create(this.world);
+                if (plowhead != null) {
+                    plowhead.setBreedingAge(-24000);
+                    plowhead.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), this.yaw, 0.0F);
+                    plowhead.initialize(world, world.getLocalDifficulty(plowhead.getBlockPos()), SpawnReason.BREEDING, null, null);
+                    this.world.spawnEntity(plowhead);
+                }
 
-				this.world.sendEntityStatus(this, (byte) 3);
-				this.remove();
+                this.world.sendEntityStatus(this, (byte) 3);
+                this.remove();
 			}
 		}
 	}

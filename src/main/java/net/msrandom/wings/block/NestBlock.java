@@ -31,8 +31,9 @@ public class NestBlock<T extends NestBlockEntity> extends BlockWithEntity {
         this.tile = tile;
     }
 
-    public void setItem(BlockEntityType<T> value) {
+    public BlockEntityType<T> setItem(BlockEntityType<T> value) {
         this.type = value;
+        return value;
     }
 
     public void setItem(Item value) {

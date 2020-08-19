@@ -46,7 +46,7 @@ public class DragonEggItem extends Item {
             Registry.ENTITY_TYPE.getOrEmpty(new Identifier(WingsAndClaws.MOD_ID, nbt.getString("type"))).ifPresent(type -> {
                 /*ThrownItemEntity entity = new DragonEggEntity(type, world, player);
                 entity.func_213884_b(stack);
-                entity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
+                entity.shoot(player, player.rotationPitch, player.yaw, 0.0F, 1.5F, 1.0F);
                 world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
                 return entity;*/
             });

@@ -18,8 +18,6 @@ public class WingsSounds {
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
 
     private static SoundEvent create(String name) {
-        SoundEvent event = new SoundEvent(new Identifier(WingsAndClaws.MOD_ID, name));
-        REGISTRY.register(name, event);
-        return event;
+        return REGISTRY.register(name, new SoundEvent(new Identifier(WingsAndClaws.MOD_ID, name)));
     }
 }

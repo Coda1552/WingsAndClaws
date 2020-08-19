@@ -17,12 +17,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class MangoBunchTreeDecorator extends TreeDecorator {
-    public MangoBunchTreeDecorator() {
-    }
-
-    public MangoBunchTreeDecorator(Codec<?> codec) {
-        this();
-    }
+    public static final Codec<MangoBunchTreeDecorator> CODEC = Codec.unit(new MangoBunchTreeDecorator());
 
     @Override
     protected TreeDecoratorType<?> getType() {

@@ -27,13 +27,13 @@ public class MimangoHangGoal extends Goal {
 
     @Override
     public void start() {
-        this.entity.setHanging(true);
+        this.entity.setHiding(true);
     }
 
     @Override
     public void stop() {
         ticksRunning = 0;
-        this.entity.setHanging(false);
+        this.entity.setHiding(false);
     }
 
     @Override

@@ -22,6 +22,6 @@ public interface IDragonEntity {
     }
 
     default boolean canDragonBreed() {
-        return this instanceof AnimalEntity && ((AnimalEntity) this).canBreed();
+        return this instanceof AnimalEntity && ((AnimalEntity) this).canEat();
     }
 }

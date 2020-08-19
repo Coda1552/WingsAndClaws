@@ -18,6 +18,9 @@
       "net.msrandom.wings.client.ClientEventHandler"
     ]
   },
+  "mixins": [
+    "wings.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",

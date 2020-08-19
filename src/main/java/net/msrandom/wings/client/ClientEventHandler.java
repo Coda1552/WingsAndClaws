@@ -30,8 +30,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ClientEventHandler implements ClientModInitializer {
-    //TODO mixin these
-    private static final Map<Item, BuiltinModelItemRenderer> BUILT_IN_MODELS = new HashMap<>();
+    public static final Map<Item, BuiltinModelItemRenderer> BUILT_IN_MODELS = new HashMap<>();
 
     @Override
     public void onInitializeClient() {

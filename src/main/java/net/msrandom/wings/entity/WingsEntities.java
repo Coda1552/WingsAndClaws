@@ -9,7 +9,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.registry.Registry;
-import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.WingsRegisterer;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
@@ -20,7 +19,7 @@ import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 
 public class WingsEntities {
-    public static final WingsRegisterer<EntityType<?>> REGISTRY = new WingsRegisterer<>(Registry.ENTITIES, WingsAndClaws.MOD_ID);
+    public static final WingsRegisterer<EntityType<?>> REGISTRY = new WingsRegisterer<>(Registry.ENTITY_TYPE);
     //public static final EntityType<DragonEggEntity> DRAGON_EGG = createEgg("dragon_egg", DragonEggEntity::new, () -> WingsEntities.DRAGON_EGG, 0.2f, 0.2f);
     public static final EntityType<DumpyEggDrakeEntity> DUMPY_EGG_DRAKE = create("dumpy_egg_drake", DumpyEggDrakeEntity::new, SpawnGroup.CREATURE, 1.2f, 1.3f, 0xddbc8b, 0xbc9161);
     public static final EntityType<HatchetBeakEntity> HATCHET_BEAK = create("hatchet_beak", HatchetBeakEntity::new, SpawnGroup.CREATURE, 2.3f, 2.5f/*, 0x785028, 0x167a6d*/);
@@ -32,13 +31,11 @@ public class WingsEntities {
     private static <T extends AnimalEntity> EntityType<T> create(String name, EntityType.EntityFactory<T> factory, SpawnGroup classification, float width, float height, int pri, int sec) {
         final Item.Settings properties = new Item.Settings().group(WingsItems.GROUP);
         EntityType<T> type = create(name, factory, classification, width, height);
-        WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new SpawnEggItem(type, pri, sec, properties));
+        WingsItems.REGISTRY.register(name + "_spawn_egg", new SpawnEggItem(type, pri, sec, properties));
         return type;
     }
 
     private static <T extends Entity> EntityType<T> create(String name, EntityType.EntityFactory<T> factory, SpawnGroup classification, float width, float height) {
-        EntityType<T> type = FabricEntityTypeBuilder.create(classification, factory).dimensions(EntityDimensions.changing(width, height)).trackable(128, 3).build(name);
-        REGISTRY.register(name, () -> type);
-        return type;
+        return REGISTRY.register(name, FabricEntityTypeBuilder.create(classification, factory).dimensions(EntityDimensions.changing(width, height)).trackable(128, 3).build());
     }
 }

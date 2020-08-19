@@ -2,18 +2,23 @@ package net.msrandom.wings.entity.passive;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.stream.JsonReader;
+import com.sun.istack.internal.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.ai.TargetFinder;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -79,9 +84,11 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
                     }
                 }
                 reader.endObject();
+                reader.close();
             } catch (IOException e) {
                 WingsAndClaws.LOGGER.error("Failed to read Hatchet Peak item tame points", e);
             }
+
             points = builder.build();
         }
     }
@@ -90,14 +97,14 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
     protected void initGoals() {
         super.initGoals();
         //this.goalSelector.add(1, new RandomSwimmingGoal(this, 1, 40));
-        //this.goalSelector.add(6, new RandomWalkingGoal(this, 1.0D));
+        //this.goalSelector.add(6, new WanderAroundGoal(this, 1.0D));
         this.goalSelector.add(9, new LookAroundGoal(this));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 15, 1));
-        this.goalSelector.add(2, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
+        this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0D) {
             @Nullable
             @Override
-            protected Vec3d getBlockPos() {
-                return RandomPositionGenerator.findAirTarget(HatchetBeakEntity.this, 32, 32, getLookVec(), ((float) Math.PI / 2F), 2, 1);
+            protected Vec3d getWanderTarget() {
+                return TargetFinder.findAirTarget(HatchetBeakEntity.this, 32, 32, getRotationVector(), ((float) Math.PI / 2F), 2, 1);
             }
         });
     }
@@ -113,19 +120,14 @@ public class HatchetBeakEntity extends TameableDragonEntity implements Flutterer
         return new BirdNavigation(this, world);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
-        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_FLYING_SPEED).setBaseValue(10);
-        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
+    public static DefaultAttributeContainer.Builder registerHBAttributes() {
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3).add(EntityAttributes.GENERIC_MAX_HEALTH, 60).add(EntityAttributes.GENERIC_FLYING_SPEED, 10).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4);
     }
 
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 90 : 60);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(tamed ? 90 : 60);
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(8);
     }
 

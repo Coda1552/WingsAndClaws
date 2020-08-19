@@ -95,7 +95,7 @@ public class MimangoEggEntity extends LivingEntity {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
                     mimangoEntity.setBreedingAge(-24000);
-                    mimangoEntity.setLocationAndAngles(this.getX(), this.getY(), this.getZ(), this.rotationYaw, 0.0F);
+                    mimangoEntity.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), this.yaw, 0.0F);
                     this.world.spawnEntity(mimangoEntity);
                 }
 

@@ -13,6 +13,7 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.block.entity.DEDNestBlockEntity;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
 
@@ -25,7 +26,7 @@ public class DEDNestStructure extends Feature<DefaultFeatureConfig> {
     }
 
     private static Vec3d get(BlockPos pos, Random random) {
-        return new Vec3d(pos).add(random.nextInt(6) + 1.5, 0, random.nextInt(6) + 1.5);
+        return new Vec3d(pos.getX() + random.nextInt(6) + 1.5, pos.getY(), pos.getZ() + random.nextInt(6) + 1.5);
     }
 
     private static DumpyEggDrakeEntity spawn(BlockPos pos, Random random, World world) {

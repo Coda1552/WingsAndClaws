@@ -14,8 +14,9 @@ public class WingsRegisterer<T> {
         this.registry = registry;
     }
 
-    public void register(String name, T value) {
+    public <V extends T> V register(String name, V value) {
         map.put(name, value);
+        return value;
     }
 
     public void register() {

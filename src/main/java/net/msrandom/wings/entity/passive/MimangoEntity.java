@@ -12,10 +12,12 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -30,8 +32,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
+import net.msrandom.wings.entity.goal.MimangoFlyGoal;
 import net.msrandom.wings.entity.goal.MimangoHangGoal;
-import net.msrandom.wings.entity.goal.MinmangoFlyGoal;
 
 public class MimangoEntity extends TameableDragonEntity implements Flutterer {
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MimangoEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -47,18 +49,14 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, -1.0F);
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_FLYING_SPEED);
-        this.getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).setBaseValue(0.8);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.5);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(14);
+    public static DefaultAttributeContainer.Builder registerMimangoAttributes() {
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_FLYING_SPEED, 0.8).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5).add(EntityAttributes.GENERIC_MAX_HEALTH, 14);
     }
 
     @Override
     protected EntityNavigation createNavigation(World world) {
         BirdNavigation flyingpathnavigator = new BirdNavigation(this, world);
-        flyingpathnavigator.setCanOpenDoors(false);
+        flyingpathnavigator.setCanPathThroughDoors(false);
         flyingpathnavigator.setCanSwim(true);
         flyingpathnavigator.setCanEnterOpenDoors(true);
         return flyingpathnavigator;
@@ -77,7 +75,7 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
             }
         });
         this.goalSelector.add(3, hangGoal);
-        this.goalSelector.add(4, new MinmangoFlyGoal(this, 0.8D));
+        this.goalSelector.add(4, new MimangoFlyGoal(this));
     }
 
     @Override
@@ -124,17 +122,17 @@ public class MimangoEntity extends TameableDragonEntity implements Flutterer {
         return super.interactMob(player, hand);
     }
 
-    public boolean isHanging() {
+    public boolean isHiding() {
         return this.dataTracker.get(HANGING);
     }
 
-    public void setHanging(boolean isHanging) {
-        this.dataTracker.set(HANGING, isHanging);
+    public void setHiding(boolean hiding) {
+        this.dataTracker.set(HANGING, hiding);
     }
 
     public void tick() {
         super.tick();
-        if (this.isHanging()) {
+        if (this.isHiding()) {
             this.setVelocity(Vec3d.ZERO);
             this.setPos(this.getX(), (double) MathHelper.floor(this.getY()) + 1.0D - (double) this.getHeight(), this.getZ());
         }

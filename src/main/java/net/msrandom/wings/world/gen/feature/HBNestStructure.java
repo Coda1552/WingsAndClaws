@@ -9,6 +9,7 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.block.entity.HBNestBlockEntity;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.passive.HatchetBeakEntity;
 

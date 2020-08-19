@@ -1,3 +1,4 @@
+/*
 package net.msrandom.wings.entity.item;
 
 import net.fabricmc.api.EnvType;
@@ -23,10 +24,12 @@ public class DragonEggEntity extends ThrownItemEntity {
         super(type, world);
     }
 
-    /*public DragonEggEntity(EntityType<?> type, World world, LivingEntity throwerIn) {
+    */
+/*public DragonEggEntity(EntityType<?> type, World world, LivingEntity throwerIn) {
         super(WingsEntities.DRAGON_EGG, throwerIn, world);
         this.eggType = type;
-    }*/
+    }*//*
+
 
     @Environment(EnvType.CLIENT)
     public void handleStatus(byte id) {
@@ -54,7 +57,7 @@ public class DragonEggEntity extends ThrownItemEntity {
                     if (entity instanceof AnimalEntity) {
                         AnimalEntity animal = (AnimalEntity) entity;
                         animal.setBreedingAge(-24000);
-                        animal.setLocationAndAngles(getX(), getY(), getZ(), this.rotationYaw, 0.0F);
+                        animal.refreshPositionAndAngles(getX(), getY(), getZ(), this.yaw, 0.0F);
                         this.world.spawnEntity(animal);
                     }
                 }
@@ -80,3 +83,4 @@ public class DragonEggEntity extends ThrownItemEntity {
         return null;
     }
 }
+*/

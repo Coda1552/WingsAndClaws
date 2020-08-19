@@ -94,7 +94,7 @@ public class HornHornItem extends ToolItem {
                     if (last != null) {
                         if (last.getState() == TameableDragonEntity.WanderState.STAY)
                             last.setState(TameableDragonEntity.WanderState.WANDER);
-                        last.setTarget(mop);
+                        last.setHitTarget(mop);
                         last.setHorn(stack);
                         player.getItemCooldownManager().set(this, 48);
                         return stack;

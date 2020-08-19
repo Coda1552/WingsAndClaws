@@ -2,17 +2,20 @@ package net.msrandom.wings.entity.passive;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
@@ -59,14 +62,14 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 return super.canStart() && getState() == WanderState.FOLLOW;
             }
         });
-        this.goalSelector.add(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
+        this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.0D) {
             @Override
             public boolean canStart() {
                 return super.canStart() && getState() == WanderState.WANDER;
             }
         });
         this.goalSelector.add(9, new LookAroundGoal(this));
-        this.goalSelector.add(2, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
+        this.goalSelector.add(2, new TemptGoal(this, 0.8, false, Ingredient.ofItems(Items.EGG, Items.DRAGON_EGG)) {
             @Override
             public boolean canStart() {
                 return super.canStart() && target.get() == null && getState() == WanderState.WANDER;
@@ -87,21 +90,17 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 closestPlayer = (PlayerEntity) target;
                 if (squaredDistanceTo(target) < 9) {
                     getNavigation().stop();
-                    getLookControl().lookAt(this.target, (float) (20 - getHorizontalFaceSpeed()), (float) getVerticalFaceSpeed());
+                    getLookControl().lookAt(this.target, (float) (20 - getBodyYawSpeed()), (float) getLookPitchSpeed());
                 } else {
                     getNavigation().startMovingTo(target, 0.6);
                 }
             }
         });
-        this.goalSelector.add(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getTarget()));
+        this.targetSelector.add(0, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getTarget()));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.3);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
-        this.getAttributes().registerAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(2);
+    public static DefaultAttributeContainer.Builder registerDEDAttributes() {
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3).add(EntityAttributes.GENERIC_MAX_HEALTH, 20).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(tamed ? 40 : 20);
         this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(4);
     }
 
@@ -172,7 +171,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.create(world);
                 if (drake != null) {
                     drake.setBreedingAge(-24000);
-                    drake.setLocationAndAngles(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
+                    drake.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
                     drake.initialize(world, world.getLocalDifficulty(drake.getBlockPos()), SpawnReason.SPAWN_EGG, null, null);
                     this.world.spawnEntity(drake);
                     if (stack.hasCustomName()) {
@@ -198,7 +197,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public void mobTick() {
         if (oldPos != null) {
-            setPositionAndRotation(oldPos.x, oldPos.y, oldPos.z, 0, 0);
+            updatePositionAndAngles(oldPos.x, oldPos.y, oldPos.z, 0, 0);
             oldPos = null;
         }
         if (!isSleeping()) {
@@ -206,8 +205,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 double x = closestPlayer.getX() - getX();
                 double z = closestPlayer.getZ() - getZ();
 
-                rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
-                renderYawOffset = rotationYaw;
+                yaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+                bodyYaw = yaw;
             }
             LivingEntity attackTarget = getTarget();
             if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.creativeMode) {
@@ -239,7 +238,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                     target.set(null);
                     getNavigation().stop();
                     if (this.isTamed()) {
-                        if (this.getBreedingAge() == 0 && this.canBreed()) this.setInLove((PlayerEntity) getOwner());
+                        if (this.getBreedingAge() == 0 && this.canEat()) this.lovePlayer((PlayerEntity) getOwner());
                         else if (this.isBaby()) this.growUp((int) ((float) (-this.getBreedingAge() / 20) * 0.1F), true);
                     } else if (isBaby()) {
                         if (!this.world.isClient) {
@@ -266,12 +265,12 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
             if (alarmedTimer-- <= 0) alarmedTimer = 0;
             super.mobTick();
-        } else this.travel(new Vec3d(this.moveStrafing, this.moveVertical, this.moveForward));
+        } else this.travel(new Vec3d(this.sidewaysSpeed, this.upwardSpeed, this.forwardSpeed));
     }
 
     @Override
     public boolean isSleeping() {
-        return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 23000;
+        return alarmedTimer == 0 && world.getTimeOfDay() > 13000 && world.getTimeOfDay() < 23000;
     }
 
     @Override
@@ -287,14 +286,14 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
-    protected void onLeashDistance(float distance) {
-        super.onLeashDistance(distance);
-        if (!world.isClient && distance >= 5) {
+    protected void updateForLeashLength(float leashLength) {
+        super.updateForLeashLength(leashLength);
+        if (!world.isClient && leashLength >= 5) {
             if (isSleeping()) {
-                oldPos = getPositionVec();
+                oldPos = getPos();
                 alarmedTimer = 200;
             }
-            clearLeashed(true, true);
+            detachLeash(true, true);
         }
     }
 

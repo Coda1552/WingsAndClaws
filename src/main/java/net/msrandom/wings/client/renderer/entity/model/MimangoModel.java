@@ -26,7 +26,7 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
 
     @Override
     public void setAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entityIn.isHanging()) {
+        if (entityIn.isHiding()) {
             this.wingLeft.yaw = -2.0F;
             this.wingLeft.roll = 1.58F;
             this.wingLeft.pivotY = 0.05F;
@@ -116,7 +116,7 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
         @Override
         public void setAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
             super.setAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            if (!entityIn.isHanging()) {
+            if (!entityIn.isHiding()) {
                 if (entityIn.isFlying()) {
                     this.wingLeft.pivotY = -1.5F;
                     this.wingRight.pivotY = -1.5F;
@@ -180,7 +180,7 @@ public abstract class MimangoModel extends CompositeEntityModel<MimangoEntity> {
         @Override
         public void setAngles(MimangoEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
             super.setAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            if (!entityIn.isHanging()) {
+            if (!entityIn.isHiding()) {
                 if (entityIn.isFlying()) {
                     this.wingLeft.pivotY = -1;
                     this.wingRight.pivotY = -1;

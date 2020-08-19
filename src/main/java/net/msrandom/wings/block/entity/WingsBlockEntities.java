@@ -14,9 +14,6 @@ public class WingsBlockEntities {
     public static final BlockEntityType<HBNestBlockEntity> HB_NEST = create("hb_nest", HBNestBlockEntity::new, WingsBlocks.HB_NEST);
 
     private static <T extends NestBlockEntity> BlockEntityType<T> create(String name, Supplier<T> factory, NestBlock<T> block) {
-        BlockEntityType<T> type = BlockEntityType.Builder.create(factory, block).build(null);
-        block.setItem(type);
-        REGISTRY.register(name, type);
-        return type;
+        return REGISTRY.register(name, block.setItem(BlockEntityType.Builder.create(factory, block).build(null)));
     }
 }
