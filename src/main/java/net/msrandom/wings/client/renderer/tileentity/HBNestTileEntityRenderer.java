@@ -10,7 +10,7 @@ import net.msrandom.wings.client.renderer.tileentity.model.HBNestModel;
 import net.msrandom.wings.tileentity.HBNestTileEntity;
 
 public class HBNestTileEntityRenderer extends NestTileEntityRenderer<HBNestTileEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/hatchet_beak.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/nest/adult_male.png");
     private final HBNestModel model = new HBNestModel();
 
     public HBNestTileEntityRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
