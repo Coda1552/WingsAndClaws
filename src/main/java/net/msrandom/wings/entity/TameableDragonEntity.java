@@ -79,6 +79,10 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         dataManager.set(STATE, (byte) state.ordinal());
     }
 
+    public boolean shouldSleep() {
+        return world.getDayTime() > 13000 && world.getDayTime() < 23000;
+    }
+
     @Nullable
     @Override
     public AgeableEntity createChild(AgeableEntity ageable) {

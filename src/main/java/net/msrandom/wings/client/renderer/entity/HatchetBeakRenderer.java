@@ -27,6 +27,12 @@ public class HatchetBeakRenderer extends MobRenderer<HatchetBeakEntity, HatchetB
     }
 
     @Override
+    protected void preRenderCallback(HatchetBeakEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
+        super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
+        matrixStackIn.translate(0, -0.28, 0);
+    }
+
+    @Override
     public ResourceLocation getEntityTexture(HatchetBeakEntity entity) {
         byte texture = 0;
         if (entity.isChild()) texture |= 1;
