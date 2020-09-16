@@ -6,11 +6,11 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -31,30 +31,28 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.goal.HatchetBeakFlyGoal;
-import net.msrandom.wings.entity.goal.HatchetBeakLandGoal;
 import net.msrandom.wings.item.WingsItems;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final DataParameter<Boolean> SADDLE = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
     private static Object2IntMap<Item> points;
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
+    private Vec3d target;
 
     public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);
@@ -94,8 +92,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1, 40));
-        this.goalSelector.addGoal(2, new HatchetBeakFlyGoal(this));
-        this.goalSelector.addGoal(2, new HatchetBeakLandGoal(this));
         this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1));
     }
@@ -185,6 +181,58 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             }
         }
         return super.processInteract(player, hand);
+    }
+
+    @Nullable
+    private Vec3d getTargetPosition(boolean land) {
+        if (this.isInWaterOrBubbleColumn()) {
+            Vec3d vec3d = RandomPositionGenerator.getLandPos(this, 15, 7);
+            return vec3d == null ? RandomPositionGenerator.findRandomTarget(this, 10, 7) : vec3d;
+        }
+
+        if (!shouldSleep() && !land) {
+            return getAirPosition();
+        }
+
+        return RandomPositionGenerator.getLandPos(this, 10, 7);
+    }
+
+    private Vec3d getAirPosition() {
+        BlockPos pos = getPosition().up(rand.nextInt(12) + 32);
+        int original = pos.getY();
+        while (pos.getY() <= original - 8 && !world.isAirBlock(pos)) {
+            pos = pos.down();
+        }
+
+        if (pos.getY() == original - 8) {
+            pos = pos.up(8);
+
+            while (pos.getY() <= original + 8 && !world.isAirBlock(pos)) {
+                pos = pos.up();
+            }
+
+            if (pos.getY() == original + 8) return null;
+        }
+
+        int xDistance = rand.nextInt(32) + 64;
+        int zDistance = rand.nextInt(32) + 64;
+        double rotation = Math.toRadians(rand.nextInt(361));
+        return new Vec3d(pos.getX() + Math.sin(rotation) * xDistance, pos.getY(), pos.getZ() + Math.cos(-rotation) * zDistance);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (target == null) {
+            target = getTargetPosition(isFlying() && rand.nextFloat() <= 0.1f);
+        }
+
+        if (target != null) {
+            moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), 2);
+            if (getDistanceSq(target) <= 9) {
+                target = null;
+            }
+        }
     }
 
     @Override
