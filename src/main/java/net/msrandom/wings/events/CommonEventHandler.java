@@ -103,12 +103,19 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void lootLoad(LootTableLoadEvent event) {
-        if (!event.getName().toString().equals("minecraft:chests/desert_pyramid")) {
-            return;
-        }
+        String lootLocation = event.getName().toString().replace("minecraft:chests/", "");
 
-        event.getTable().addPool(LootPool.builder().addEntry(
-                TableLootEntry.builder(new ResourceLocation(WingsAndClaws.MOD_ID, "inject/desert_pyramid"))
-                        .weight(1)).bonusRolls(0, 0).name("wings_inject").build());
+        switch (lootLocation) {
+            case "desert_pyramid":
+            case "nether_bridge":
+            case "buried_treasure":
+            case "shipwreck_treasure":
+                event.getTable().addPool(LootPool.builder().addEntry(
+                        TableLootEntry.builder(new ResourceLocation(WingsAndClaws.MOD_ID, "inject/" + lootLocation))
+                                .weight(1)).bonusRolls(0, 0).name("wings_inject").build());
+                break;
+            default:
+                break;
+        }
     }
 }

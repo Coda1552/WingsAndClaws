@@ -4,7 +4,10 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -17,7 +20,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
@@ -163,28 +165,9 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         if (!world.isRemote && isTamed() && stack.getItem() instanceof DyeItem) {
             setBandanaColor(((DyeItem) stack.getItem()).getDyeColor());
             if (!player.abilities.isCreativeMode) stack.shrink(1);
-        }
-        if (stack.getItem() instanceof SpawnEggItem && ((SpawnEggItem) stack.getItem()).hasType(stack.getTag(), this.getType())) {
-            if (!this.world.isRemote) {
-                DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.create(world);
-                if (drake != null) {
-                    drake.setGrowingAge(-24000);
-                    drake.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
-                    drake.onInitialSpawn(world, world.getDifficultyForLocation(drake.getPosition()), SpawnReason.SPAWN_EGG, null, null);
-                    this.world.addEntity(drake);
-                    if (stack.hasDisplayName()) {
-                        drake.setCustomName(stack.getDisplayName());
-                    }
-
-                    if (!player.abilities.isCreativeMode) {
-                        stack.shrink(1);
-                    }
-                }
-            }
-
             return true;
         }
-        return false;
+        return handleSpawnEgg(player, stack);
     }
 
     @Override

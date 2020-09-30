@@ -136,45 +136,45 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
         public Baby() {
             this.textureWidth = 64;
             this.textureHeight = 32;
-            this.body = new ModelRenderer(this, 0, 0);
-            this.body.setRotationPoint(0.0F, 23.0F, 0.0F);
-            this.body.addBox(-1.0F, -1.0F, -1.5F, 2, 2, 3, 0.0F);
             this.wingRight = new ModelRenderer(this, 9, 0);
             this.wingRight.mirror = true;
             this.wingRight.setRotationPoint(-1.0F, -1.0F, -0.5F);
             this.wingRight.addBox(-4.0F, 0.0F, -1.0F, 4, 0, 2, 0.0F);
-            this.snout = new ModelRenderer(this, 0, 14);
-            this.snout.setRotationPoint(0.0F, -0.5F, -2.0F);
-            this.snout.addBox(-0.5F, -0.5F, -1.0F, 1, 1, 1, 0.0F);
-            this.head = new ModelRenderer(this, 0, 8);
-            this.head.setRotationPoint(0.0F, 0.0F, -0.5F);
-            this.head.addBox(-1F, -2.0F, -2.0F, 2, 2, 2, 0.0F);
-            this.hair3 = new ModelRenderer(this, 0, 0);
-            this.hair3.setRotationPoint(0.4F, -2.0F, -0.4F);
-            this.hair3.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
-            this.setRotateAngle(hair3, 0.3490658503988659F, 0.08726646259971647F, 0.0F);
-            this.hair1 = new ModelRenderer(this, 0, 0);
-            this.hair1.setRotationPoint(0.0F, -2.0F, -0.4F);
-            this.hair1.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
-            this.setRotateAngle(hair1, 0.3490658503988659F, 0.0F, 0.0F);
             this.tail = new ModelRenderer(this, 0, 12);
             this.tail.setRotationPoint(0.0F, 0.0F, 1.5F);
             this.tail.addBox(0.0F, -1.0F, 0.0F, 0, 2, 5, 0.0F);
-            this.wingLeft = new ModelRenderer(this, 9, 0);
-            this.wingLeft.setRotationPoint(1.0F, -1.0F, -0.5F);
-            this.wingLeft.addBox(0.0F, 0.0F, -1.0F, 4, 0, 2, 0.0F);
             this.hair2 = new ModelRenderer(this, 0, 0);
             this.hair2.setRotationPoint(-0.4F, -2.0F, -0.4F);
             this.hair2.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
             this.setRotateAngle(hair2, 0.3490658503988659F, -0.08726646259971647F, 0.0F);
+            this.head = new ModelRenderer(this, 0, 8);
+            this.head.setRotationPoint(0.0F, 0.0F, -0.5F);
+            this.head.addBox(-1.0F, -2.0F, -2.0F, 2, 2, 2, 0.0F);
+            this.snout = new ModelRenderer(this, 0, 14);
+            this.snout.setRotationPoint(0.0F, -0.5F, -2.0F);
+            this.snout.addBox(-0.5F, -0.5F, -1.0F, 1, 1, 1, 0.0F);
+            this.hair1 = new ModelRenderer(this, 0, 0);
+            this.hair1.setRotationPoint(0.0F, -2.0F, -0.4F);
+            this.hair1.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
+            this.setRotateAngle(hair1, 0.3490658503988659F, 0.0F, 0.0F);
+            this.wingLeft = new ModelRenderer(this, 9, 0);
+            this.wingLeft.setRotationPoint(1.0F, -1.0F, -0.5F);
+            this.wingLeft.addBox(0.0F, 0.0F, -1.0F, 4, 0, 2, 0.0F);
+            this.body = new ModelRenderer(this, 0, 0);
+            this.body.setRotationPoint(0.0F, 23.0F, 0.0F);
+            this.body.addBox(-1.0F, -1.0F, -1.5F, 2, 2, 3, 0.0F);
+            this.hair3 = new ModelRenderer(this, 0, 0);
+            this.hair3.setRotationPoint(0.4F, -2.0F, -0.4F);
+            this.hair3.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
+            this.setRotateAngle(hair3, 0.3490658503988659F, 0.08726646259971647F, 0.0F);
             this.body.addChild(this.wingRight);
-            this.head.addChild(this.snout);
-            this.body.addChild(this.head);
-            this.head.addChild(this.hair3);
-            this.head.addChild(this.hair1);
             this.body.addChild(this.tail);
-            this.body.addChild(this.wingLeft);
             this.head.addChild(this.hair2);
+            this.body.addChild(this.head);
+            this.head.addChild(this.snout);
+            this.head.addChild(this.hair1);
+            this.body.addChild(this.wingLeft);
+            this.head.addChild(this.hair3);
         }
 
         @Override
@@ -184,15 +184,11 @@ public abstract class MimangoModel extends SegmentedModel<MimangoEntity> {
                 if (entityIn.isFlying()) {
                     this.wingLeft.rotationPointY = -1;
                     this.wingRight.rotationPointY = -1;
-                    this.wingLeft.rotationPointX = -0.5f;
-                    this.wingRight.rotationPointZ = -0.5f;
                     this.body.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.05F + 23F;
                     this.head.rotationPointY = MathHelper.cos(limbSwing * 0.4F + (float) Math.PI) * limbSwingAmount * 0.25F - 0.5F;
                 } else {
                     this.wingLeft.rotationPointY = -0.95F;
                     this.wingRight.rotationPointY = -0.95F;
-                    this.wingLeft.rotationPointX = -0.3f;
-                    this.wingRight.rotationPointZ = -0.3f;
                     this.body.rotationPointY = 22.5F;
                     this.head.rotationPointY = 0;
                 }

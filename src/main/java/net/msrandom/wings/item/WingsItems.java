@@ -1,6 +1,7 @@
 package net.msrandom.wings.item;
 
 import net.minecraft.item.*;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,27 +39,34 @@ public class WingsItems {
     public static final Item ICY_PLOWHEAD_EGG = register("icy_plowhead_egg", new PlowheadEggItem());
     public static final Item DUMPY_EGG_DRAKE_EGG = register("dumpy_egg_drake_egg", new NestEggItem(WingsBlocks.DED_NEST));
     public static final Item MIMANGO_EGG = register("mimango_egg", new MimangoEggItem());
-    //public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
-    //public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
-    //public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
+    public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
+    public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
+    public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
     public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
     public static final Item ST_HORN = register("st_horn", new STTHornItem());
 
-    public static final Item MUSIC_DISC_BLISSFUL_DUNES = register("music_disc_blissful_dunes", new MusicDiscItem(1, () -> WingsSounds.MUSIC_BLISSFUL_DUNES, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
+    public static final Item MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes", () -> WingsSounds.MUSIC_BLISSFUL_DUNES);
+    public static final Item MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands", () -> WingsSounds.MUSIC_ASHEN_LANDS);
+    public static final Item MUSIC_DISC_ISLAND_HOPPERS = registerMusicDisc("music_disc_island_hoppers", () -> WingsSounds.MUSIC_ISLAND_HOPPERS);
+    public static final Item MUSIC_DISC_MANTAS_MELODY = registerMusicDisc("music_disc_mantas_melody", () -> WingsSounds.MUSIC_MANTAS_MELODY);
 
     //Custom block items
     static {
-        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST))));
-        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST))));
+        register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST)).group(GROUP)));
+        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
         register("mango_bunch", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
     }
 
     private static Item register(String name, Item item) {
         REGISTRY.register(name, () -> item);
         return item;
+    }
+
+    private static Item registerMusicDisc(String name, Supplier<SoundEvent> soundEventSupplier) {
+        return register(name, new MusicDiscItem(1, soundEventSupplier, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
     }
 
     private static Item.Properties getWithISTER(Item.Properties properties, Supplier<Callable<Object>> ister) {
