@@ -14,11 +14,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.client.renderer.tileentity.PlowheadHornRenderer;
+import net.msrandom.wings.client.renderer.tileentity.SpearProjectileTileRenderer;
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 public class STSpearItem extends TridentItem {
@@ -26,7 +30,8 @@ public class STSpearItem extends TridentItem {
 
 
     public STSpearItem() {
-        super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100));
+        super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100).setISTER(() -> SpearProjectileTileRenderer::new));
+        this.addPropertyOverride(new ResourceLocation(WingsAndClaws.MOD_ID, "st_spear_throwing"), (stack, world, entity) -> entity !=null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
     }
 
     @Override
@@ -85,7 +90,7 @@ public class STSpearItem extends TridentItem {
         Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 5, AttributeModifier.Operation.ADDITION));
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
         }
 
         return multimap;

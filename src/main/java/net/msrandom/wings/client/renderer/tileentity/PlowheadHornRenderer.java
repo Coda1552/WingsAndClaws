@@ -22,4 +22,6 @@ public class PlowheadHornRenderer extends ItemStackTileEntityRenderer {
         model.render(matrixStackIn, ItemRenderer.getBuffer(bufferIn, model.getRenderType(TEXTURE), false, itemStackIn.hasEffect()), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
         matrixStackIn.pop();
     }
+
+
 }

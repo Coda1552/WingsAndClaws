@@ -1,22 +1,26 @@
-package net.msrandom.wings.client.renderer.entity.model;
+package net.msrandom.wings.client.renderer.tileentity.model;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 
-@OnlyIn(Dist.CLIENT)
-public class SpearProjectileModel extends SegmentedModel<SpearProjectileEntity> {
+public class SpearProjectileTileModel extends Model {
     public ModelRenderer tip;
     public ModelRenderer tip2;
     public ModelRenderer fabric;
     public ModelRenderer handle;
-    private Iterable<ModelRenderer> parts;
 
-    public SpearProjectileModel() {
+
+    public SpearProjectileTileModel() {
+        super(RenderType::getEntityCutoutNoCull);
         this.textureWidth = 14;
         this.textureHeight = 27;
         this.tip = new ModelRenderer(this, 4, 0);
@@ -36,12 +40,10 @@ public class SpearProjectileModel extends SegmentedModel<SpearProjectileEntity> 
         this.tip.addChild(this.tip2);
     }
 
-    @Override
-    public void setRotationAngles(SpearProjectileEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-    }
+
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
-        return parts == null ? parts = ImmutableList.of(handle) : parts;
+    public void render(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        this.handle.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }

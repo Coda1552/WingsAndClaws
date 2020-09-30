@@ -11,6 +11,7 @@ import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadShieldRenderer;
+import net.msrandom.wings.client.renderer.tileentity.SpearProjectileTileRenderer;
 import net.msrandom.wings.tileentity.WingsTileEntities;
 
 import java.util.concurrent.Callable;
@@ -44,7 +45,7 @@ public class WingsItems {
     public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
-    public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
+    // public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
     public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
     public static final Item ST_HORN = register("st_horn", new STTHornItem());
 
