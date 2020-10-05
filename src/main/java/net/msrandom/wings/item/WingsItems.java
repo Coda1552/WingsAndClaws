@@ -47,7 +47,7 @@ public class WingsItems {
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
-    public static final Item SUGARSCALE_BUCKET = register("sugarscale_bucket", new FishBucketItem(WingsEntities.SUGARSCALE, Fluids.WATER, new Item.Properties().group(GROUP)));
+    public static final Item SUGARSCALE_BUCKET = register("sugarscale_bucket", new FishBucketItem(WingsEntities.SUGARSCALE, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     public static final Item SUGARSCALE = register("sugarscale", new Item(new Item.Properties().group(GROUP)));
 
     //public static final Item ST_SPEAR = register("st_spear", new STSpearItem());

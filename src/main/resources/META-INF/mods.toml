@@ -4,7 +4,7 @@ loaderVersion="[28,)"
 modId="wings"
 version="${file.jarVersion}"
 displayName="Wings and Claws"
-credits="Mr. Esuoh & Redkoopa"
+credits="Mr. Esuoh, Redkoopa, Ninni, Mnesikos, RonitrocketYT, SDOAJ, sarx, Proddy"
 authors="Coda, Tazz, Ms. Random"
 description=""
 [[dependencies.wings]]

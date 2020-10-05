@@ -13,9 +13,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +34,15 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         super.registerData();
         this.dataManager.register(STATE, (byte) 0);
         this.dataManager.register(GENDER, false);
+    }
+
+    @Override
+    public boolean processInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (isTamed() && stack.getItem() == WingsItems.SUGARSCALE && getHealth() < getMaxHealth()) {
+            heal(4);
+        }
+        return super.processInteract(player, hand);
     }
 
     @Nullable

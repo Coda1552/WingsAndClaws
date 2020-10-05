@@ -6,11 +6,13 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.msrandom.wings.entity.passive.SugarscaleEntity;
 
 @OnlyIn(Dist.CLIENT)
-public class SugarscaleModel<T extends Entity> extends EntityModel<T> {
+public class SugarscaleModel<T extends Entity> extends EntityModel<SugarscaleEntity> {
     public ModelRenderer body;
     public ModelRenderer tail;
     public ModelRenderer finLeft;
@@ -50,7 +52,13 @@ public class SugarscaleModel<T extends Entity> extends EntityModel<T> {
     }
 
     @Override
-    public void setRotationAngles(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {}
+    public void setRotationAngles(SugarscaleEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
+        float speed = 1.0f;
+        float degree = 1.0f;
+        this.body.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.5F * f1;
+        this.tail.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * -0.5F * f1;
+        this.tailFin.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.5F * f1;
+    }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
