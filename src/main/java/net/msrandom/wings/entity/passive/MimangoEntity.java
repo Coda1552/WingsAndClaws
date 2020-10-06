@@ -155,6 +155,9 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
         if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                if (!player.isCreative()) {
+                    stack.shrink(1);
+                }
                 this.setTamedBy(player);
                 this.navigator.clearPath();
                 this.goalSelector.removeGoal(hangGoal);

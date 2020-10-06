@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
@@ -39,8 +40,18 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (isTamed() && stack.getItem() == WingsItems.SUGARSCALE && getHealth() < getMaxHealth()) {
+        float maxHealth = this.getMaxHealth();
+        float health = this.getHealth();
+        if (isTamed() && stack.getItem() == WingsItems.SUGARSCALE && health < maxHealth) {
+            if (!player.isCreative()) {
+                stack.shrink(1);
+            }
             heal(4);
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+            return true;
         }
         return super.processInteract(player, hand);
     }
