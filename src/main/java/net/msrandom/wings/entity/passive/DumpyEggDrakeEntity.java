@@ -167,7 +167,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             if (!player.abilities.isCreativeMode) stack.shrink(1);
             return true;
         }
-        return handleSpawnEgg(player, stack);
+        return super.processInteract(player, hand);
     }
 
     @Override
