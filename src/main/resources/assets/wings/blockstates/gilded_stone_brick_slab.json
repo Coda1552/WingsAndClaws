@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=bottom": { "model": "wings:block/gilded_stone_brick_slab" },
+        "type=top": { "model": "wings:block/gilded_stone_brick_slab_top" },
+        "type=double": { "model": "wings:block/gilded_stone_bricks" }
+    }
+}

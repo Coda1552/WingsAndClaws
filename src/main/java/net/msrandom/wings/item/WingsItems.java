@@ -49,6 +49,7 @@ public class WingsItems {
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
     public static final Item SUGARSCALE_BUCKET = register("sugarscale_bucket", new FishBucketItem(WingsEntities.SUGARSCALE, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     public static final Item SUGARSCALE = register("sugarscale", new Item(new Item.Properties().group(GROUP)));
+    public static final Item MANGO_SEEDS = register("mango_seeds", new Item(new Item.Properties().group(GROUP)));
 
     //public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
     //public static final Item ST_HORN = register("st_horn", new STTHornItem());
@@ -63,6 +64,12 @@ public class WingsItems {
         register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST)).group(GROUP)));
         register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
         register("mango_bunch", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
+        register("golden_mimango_statue", new BlockItem(WingsBlocks.GOLDEN_MIMANGO_STATUE, new Item.Properties().group(GROUP)));
+        register("gilded_stone_bricks", new BlockItem(WingsBlocks.GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
+        register("gilded_stone_brick_slab", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_SLAB, new Item.Properties().group(GROUP)));
+        register("gilded_stone_brick_stairs", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_STAIRS, new Item.Properties().group(GROUP)));
+        register("gilded_stone_brick_wall", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_WALL, new Item.Properties().group(GROUP)));
+        register("cracked_gilded_stone_bricks", new BlockItem(WingsBlocks.CRACKED_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
     }
 
     private static Item register(String name, Item item) {
