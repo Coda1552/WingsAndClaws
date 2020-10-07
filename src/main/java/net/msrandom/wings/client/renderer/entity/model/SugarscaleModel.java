@@ -53,7 +53,7 @@ public class SugarscaleModel<T extends Entity> extends EntityModel<SugarscaleEnt
 
     @Override
     public void setRotationAngles(SugarscaleEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
-        float speed = 1.0f;
+        float speed = 5.0f;
         float degree = 1.0f;
         this.body.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.5F * f1;
         this.tail.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * -0.5F * f1;

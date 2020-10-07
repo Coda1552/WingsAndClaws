@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "wings:block/gilded_stone_bricks",
+    "top": "wings:block/gilded_stone_bricks",
+    "side": "wings:block/gilded_stone_bricks"
+  }
+}
