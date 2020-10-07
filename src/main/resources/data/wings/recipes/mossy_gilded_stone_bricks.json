@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#G#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "wings:gilded_stone_bricks"
+    },
+    "G": {
+      "item": "minecraft:vine"
+    }
+  },
+  "result": {
+    "item": "wings:mossy_gilded_stone_bricks",
+    "count": 8
+  }
+}

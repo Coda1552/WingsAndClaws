@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:egg",
     "wings:dumpy_egg_drake_egg"
   ]
 }

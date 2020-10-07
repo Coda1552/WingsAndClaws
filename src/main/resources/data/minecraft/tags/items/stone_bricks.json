@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "wings:gilded_stone_bricks",
-    "wings:cracked_gilded_stone_bricks"
+    "wings:cracked_gilded_stone_bricks",
+    "wings:mossy_gilded_stone_bricks",
+    "wings:chiseled_gilded_stone_bricks"
   ]
 }

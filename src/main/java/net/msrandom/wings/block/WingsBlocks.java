@@ -21,8 +21,11 @@ public class WingsBlocks {
     public static final Block GILDED_STONE_BRICK_STAIRS = register("gilded_stone_brick_stairs", new StairsBlock(GILDED_STONE_BRICKS::getDefaultState, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
     public static final Block GILDED_STONE_BRICK_WALL = register("gilded_stone_brick_wall", new WallBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
     public static final Block CRACKED_GILDED_STONE_BRICKS = register("cracked_gilded_stone_bricks", new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
-    public static final Block MOSSY_GILDED_STONE_BRICKS = register("mossy_gilded_stone_bricks", new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
     public static final Block CHISELED_GILDED_STONE_BRICKS = register("chiseled_gilded_stone_bricks", new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
+    public static final Block MOSSY_GILDED_STONE_BRICKS = register("mossy_gilded_stone_bricks", new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
+    public static final Block MOSSY_GILDED_STONE_BRICK_SLAB = register("mossy_gilded_stone_brick_slab", new SlabBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
+    public static final Block MOSSY_GILDED_STONE_BRICK_STAIRS = register("mossy_gilded_stone_brick_stairs", new StairsBlock(MOSSY_GILDED_STONE_BRICKS::getDefaultState, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
+    public static final Block MOSSY_GILDED_STONE_BRICK_WALL = register("mossy_gilded_stone_brick_wall", new WallBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
 
     private static <T extends Block> T register(String name, T block) {
         REGISTRY.register(name, () -> block);
