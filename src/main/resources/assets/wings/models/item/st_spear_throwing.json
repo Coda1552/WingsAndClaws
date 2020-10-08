@@ -26,8 +26,8 @@
       "scale": [ 1, 1, 1 ]
     },
     "gui": {
-      "rotation": [ 15, -25, -5 ],
-      "translation": [ 2, 3, 0 ],
+      "rotation": [ 180, 45, 30 ],
+      "translation": [ 10, -2, 0 ],
       "scale": [ 0.65, 0.65, 0.65 ]
     },
     "fixed": {
@@ -36,7 +36,7 @@
       "scale":[ 0.5, 0.5, 0.5]
     },
     "ground": {
-      "rotation": [ 0, 0, 0 ],
+      "rotation": [ 180, 45, 30 ],
       "translation": [ 4, 4, 2],
       "scale":[ 0.25, 0.25, 0.25]
     }

@@ -26,7 +26,6 @@ import net.msrandom.wings.client.renderer.tileentity.SpearProjectileTileRenderer
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 public class STSpearItem extends TridentItem {
-    // TODO Bind ISTER to the model
 
 
     public STSpearItem() {
@@ -79,7 +78,7 @@ public class STSpearItem extends TridentItem {
                     }
                 }
 
-                SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_RIPTIDE_1;
+                SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_RIPTIDE_2;
                 playerEntity.addStat(Stats.ITEM_USED.get(this));
                 worldIn.playMovingSound(null, playerEntity, soundEvent, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }

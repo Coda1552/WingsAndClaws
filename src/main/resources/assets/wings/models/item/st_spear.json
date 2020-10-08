@@ -1,6 +1,5 @@
 {
   "parent": "builtin/entity",
-  "gui_light": "front",
   "textures": {
     "particle": "wings:item/st_spear"
   },
@@ -75,13 +74,13 @@
     },
     "gui": {
       "rotation": [
-        15,
-        -25,
-        -5
+        180,
+        45,
+        30
       ],
       "translation": [
-        2,
-        3,
+        10,
+        -2,
         0
       ],
       "scale": [
@@ -109,9 +108,9 @@
     },
     "ground": {
       "rotation": [
-        0,
-        0,
-        0
+        180,
+        45,
+        30
       ],
       "translation": [
         4,
@@ -119,9 +118,9 @@
         2
       ],
       "scale": [
-        0.25,
-        0.25,
-        0.25
+        0.60,
+        0.60,
+        0.60
       ]
     }
   },
