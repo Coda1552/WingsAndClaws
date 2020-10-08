@@ -22,6 +22,9 @@ public class WingsSounds {
     public static final SoundEvent MIMANGO_UNHIDE = create("mimango.unhide");
     public static final SoundEvent MIMANGO_HAPPY = create("mimango.happy");
     public static final SoundEvent BATTLE_HORN = create("horn.use");
+    public static final SoundEvent SONGVERN_AMBIENT = create("songvern.ambient");
+    public static final SoundEvent SONGVERN_HURT = create("songvern.hurt");
+    public static final SoundEvent SONGVERN_DEATH = create("songvern.death");
 
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
     public static final SoundEvent MUSIC_ASHEN_LANDS = create("music.ashen_lands");

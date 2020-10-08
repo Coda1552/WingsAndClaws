@@ -158,19 +158,19 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return WingsSounds.MIMANGO_AMBIENT;
+        return WingsSounds.SONGVERN_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return WingsSounds.MIMANGO_HURT;
+        return WingsSounds.SONGVERN_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return WingsSounds.MIMANGO_DEATH;
+        return WingsSounds.SONGVERN_DEATH;
     }
 
     public void tick() {

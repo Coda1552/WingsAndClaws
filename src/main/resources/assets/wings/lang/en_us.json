@@ -62,6 +62,9 @@
   "wings.subtitle.mimango.unhide": "Mimango unhides",
   "wings.subtitle.mimango.happy": "Mimango squeaks",
   "wings.subtitle.horn.use": "Horn Horn use",
+  "wings.subtitle.songvern.ambient": "Songvern chirps",
+  "wings.subtitle.songvern.hurt": "Songvern hurts",
+  "wings.subtitle.songvern.death": "Songvern dies",
 
   "entity.wings.state.wander": "Wander",
   "entity.wings.state.stay": "Stay",

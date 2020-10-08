@@ -155,5 +155,32 @@
         "streaming": "true"
       }
     ]
+  },
+  "songvern.ambient": {
+    "subtitle": "wings.subtitle.songvern.ambient",
+    "sounds": [
+      {
+        "name": "wings:songvern.ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "songvern.hurt": {
+    "subtitle": "wings.subtitle.songvern.hurt",
+    "sounds": [
+      {
+        "name": "wings:songvern.hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "songvern.death": {
+    "subtitle": "wings.subtitle.songvern.death",
+    "sounds": [
+      {
+        "name": "wings:songvern.death",
+        "streaming": true
+      }
+    ]
   }
 }
