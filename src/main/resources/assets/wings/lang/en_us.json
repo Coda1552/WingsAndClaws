@@ -25,6 +25,7 @@
   "item.wings.sugarscale": "Sugarscale",
   "item.wings.sugarscale_bucket": "Sugarscale Bucket",
   "item.wings.sugarscale_spawn_egg": "Sugarscale Spawn Egg",
+  "item.wings.songvern_spawn_egg": "Songvern Spawn Egg",
 
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
   "block.wings.hb_nest": "Hatchet Beak Nest",
@@ -46,6 +47,7 @@
   "entity.wings.hatchet_beak": "Icy Plowhead",
   "entity.wings.mimango": "Mimango",
   "entity.wings.sugarscale": "Sugarscale",
+  "entity.wings.songvern": "Songvern",
 
   "wings.subtitle.ded.ambient": "Dumpy Egg Drake screeches",
   "wings.subtitle.ded.hurt": "Dumpy Egg Drake hurts",

@@ -26,6 +26,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
+import net.msrandom.wings.entity.goal.SongvernFlyGoal;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
@@ -95,7 +96,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
                 return super.shouldExecute() && getState() == WanderState.FOLLOW;
             }
         });
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomFlyingGoal(this, 0.5));
+        this.goalSelector.addGoal(4, new SongvernFlyGoal(this));
         this.goalSelector.addGoal(5, new FlockGoal(this));
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
