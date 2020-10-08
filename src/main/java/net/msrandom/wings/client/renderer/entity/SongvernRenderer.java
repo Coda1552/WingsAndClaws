@@ -14,8 +14,8 @@ public class SongvernRenderer extends MobRenderer<SongvernEntity, SongvernModel>
     private final SongvernModel adult;
     private final SongvernModel child;
 
-    public SongvernRenderer(EntityRendererManager p_i50961_1_) {
-        super(p_i50961_1_, new SongvernModel.Adult(), 0.15f);
+    public SongvernRenderer(EntityRendererManager manager) {
+        super(manager, new SongvernModel.Adult(), 0.15f);
         adult = entityModel;
         child = new SongvernModel.Child();
     }
