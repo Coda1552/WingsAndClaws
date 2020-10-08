@@ -31,9 +31,9 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
@@ -45,7 +45,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
@@ -82,6 +85,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                     }
                 }
                 reader.endObject();
+                reader.close();
             } catch (IOException e) {
                 WingsAndClaws.LOGGER.error("Failed to read Hatchet Peak item tame points", e);
             }
@@ -198,7 +202,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     private Vec3d getAirPosition() {
-        BlockPos pos = getPosition().up(rand.nextInt(12) + 32);
+        BlockPos pos = getPosition().up(getPosY() > world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) getPosX(), (int) getPosZ()) + 50 ? 0 : rand.nextInt(12) + 32);
         int original = pos.getY();
         while (pos.getY() <= original - 8 && !world.isAirBlock(pos)) {
             pos = pos.down();
@@ -228,7 +232,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         }
 
         if (target != null) {
-            moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), 2);
+            moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() > 0 ? 2 : 4);
             if (getDistanceSq(target) <= 9) {
                 target = null;
             }

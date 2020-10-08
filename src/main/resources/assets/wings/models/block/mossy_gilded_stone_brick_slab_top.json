@@ -1,0 +1,8 @@
+{
+    "parent": "block/slab_top",
+    "textures": {
+        "bottom": "wings:block/mossy_gilded_stone_bricks",
+        "top": "wings:block/mossy_gilded_stone_bricks",
+        "side": "wings:block/mossy_gilded_stone_bricks"
+    }
+}

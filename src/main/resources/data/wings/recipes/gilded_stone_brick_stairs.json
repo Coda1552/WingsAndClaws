@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "wings:gilded_stone_bricks"
+      }
+    ]
+  },
+  "result": {
+    "item": "wings:gilded_stone_brick_stairs",
+    "count": 4
+  }
+}

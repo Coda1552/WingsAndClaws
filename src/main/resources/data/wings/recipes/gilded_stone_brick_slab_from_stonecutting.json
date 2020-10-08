@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "wings:gilded_stone_bricks"
+  },
+  "result": "wings:gilded_stone_brick_slab",
+  "count": 2
+}

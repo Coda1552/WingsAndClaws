@@ -14,10 +14,7 @@ import net.msrandom.wings.entity.item.PlowheadEggEntity;
 //import net.msrandom.wings.entity.item.SpearProjectileEntity;
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
-import net.msrandom.wings.entity.passive.MimangoEntity;
-import net.msrandom.wings.entity.passive.SugarscaleEntity;
+import net.msrandom.wings.entity.passive.*;
 import net.msrandom.wings.item.WingsItems;
 
 public class WingsEntities {
@@ -31,6 +28,7 @@ public class WingsEntities {
     public static final EntityType<MimangoEntity> MIMANGO = create("mimango", MimangoEntity::new, EntityClassification.CREATURE, 0.35f, 0.35f, 0xab571e, 0xf2cd51);
     public static final EntityType<SpearProjectileEntity> ST_PROJECTILE_ENTITY = create("spear_projectile_entity", SpearProjectileEntity::new, EntityClassification.MISC, 8.0f, 8.0f);
     public static final EntityType<SugarscaleEntity> SUGARSCALE = create("sugarscale", SugarscaleEntity::new, EntityClassification.WATER_CREATURE, 0.4f, 0.2f, 0x4a4e80, 0x413852);
+    public static final EntityType<SongvernEntity> SONGVERN = create("songvern", SongvernEntity::new, EntityClassification.CREATURE, 0.4f, 0.2f, 0xc8602b, 0xc3b0b0);
 
     private static <T extends CreatureEntity> EntityType<T> create(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height, int pri, int sec) {
         final Item.Properties properties = new Item.Properties().group(WingsItems.GROUP);

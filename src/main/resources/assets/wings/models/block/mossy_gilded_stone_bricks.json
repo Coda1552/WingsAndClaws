@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "wings:block/mossy_gilded_stone_bricks"
+  }
+}

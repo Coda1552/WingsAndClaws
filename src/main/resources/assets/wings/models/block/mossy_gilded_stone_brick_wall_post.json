@@ -1,0 +1,6 @@
+{
+    "parent": "block/template_wall_post",
+    "textures": {
+        "wall": "wings:block/mossy_gilded_stone_bricks"
+    }
+}
