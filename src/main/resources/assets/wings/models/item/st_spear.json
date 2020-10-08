@@ -1,6 +1,135 @@
 {
-  "parent": "item/generated",
+  "parent": "builtin/entity",
   "textures": {
-    "layer0": "wings:item/st_spear"
-  }
+    "particle": "wings:item/st_spear"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        180,
+        60,
+        0
+      ],
+      "translation": [
+        11,
+        -4,
+        5
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        180,
+        -10,
+        0
+      ],
+      "translation": [
+        -9,
+        -4,
+        -3
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        120,
+        -60,
+        -20
+      ],
+      "translation": [
+        -4,
+        -6,
+        -5
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        120,
+        -60,
+        -25
+      ],
+      "translation": [
+        -12,
+        5,
+        5
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "gui": {
+      "rotation": [
+        180,
+        45,
+        30
+      ],
+      "translation": [
+        10,
+        -2,
+        0
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        -2,
+        4,
+        -5
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "ground": {
+      "rotation": [
+        180,
+        45,
+        30
+      ],
+      "translation": [
+        4,
+        4,
+        2
+      ],
+      "scale": [
+        0.60,
+        0.60,
+        0.60
+      ]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "throwing": 1
+      },
+      "model": "wings:item/st_spear_throwing"
+    }
+  ]
 }
