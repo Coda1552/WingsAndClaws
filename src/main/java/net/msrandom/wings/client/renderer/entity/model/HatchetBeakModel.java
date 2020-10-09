@@ -72,10 +72,15 @@ public abstract class HatchetBeakModel extends SegmentedModel<HatchetBeakEntity>
             this.wingLeftBone1.rotateAngleX = -0.1f;
             this.wingRightBone1.rotateAngleX = -0.1f;
         } else {
+            this.body.rotateAngleX = 0f;
             this.wingRightBone1.rotateAngleZ = -0.65F;
             this.wingRightBone2.rotateAngleZ = 1.7F;
             this.wingLeftBone1.rotateAngleZ = 0.65F;
             this.wingLeftBone2.rotateAngleZ = -1.7F;
+            this.wingLeftBone1.rotateAngleX = 0f;
+            this.wingRightBone1.rotateAngleX = 0f;
+            this.tailLeft.rotateAngleZ = 0F;
+            this.tailRight.rotateAngleZ = 0F;
             this.thighLeft.rotateAngleX = MathHelper.cos((limbSwing * 0.4F) + (float) Math.PI) * (1.2F) * limbSwingAmount * 0.5F;
             this.thighRight.rotateAngleX = MathHelper.cos((limbSwing * 0.4F) + (float) Math.PI) * (-1.2F) * limbSwingAmount * 0.5F;
             this.tail1.rotateAngleX = MathHelper.cos((limbSwing * 0.4F) + (float) Math.PI) * (0.15F) * limbSwingAmount * 0.5F + 0.2F;
