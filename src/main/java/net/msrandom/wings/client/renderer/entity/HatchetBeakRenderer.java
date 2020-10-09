@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.msrandom.wings.WingsAndClaws;
+import net.msrandom.wings.client.renderer.entity.layer.LayerHatchetBeakSaddle;
 import net.msrandom.wings.client.renderer.entity.model.HatchetBeakModel;
 import net.msrandom.wings.entity.passive.HatchetBeakEntity;
 
@@ -18,6 +19,7 @@ public class HatchetBeakRenderer extends MobRenderer<HatchetBeakEntity, HatchetB
         super(p_i50961_1_, new HatchetBeakModel.Adult(), 0.75f);
         adult = entityModel;
         child = new HatchetBeakModel.Child();
+        addLayer(new LayerHatchetBeakSaddle(this));
     }
 
     @Override

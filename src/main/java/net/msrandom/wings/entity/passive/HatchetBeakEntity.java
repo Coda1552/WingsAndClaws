@@ -138,6 +138,10 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         return !onGround;
     }
 
+    public boolean hasSaddle() {
+        return dataManager.get(SADDLE);
+    }
+
     @Override
     public boolean isSleeping() {
         return !isFlying() && shouldSleep();
@@ -164,9 +168,10 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         if (!isChild() && isTamed() && isOwner(player)) {
             if (stack.getItem() == Items.SADDLE && !this.dataManager.get(SADDLE))
                 this.dataManager.set(SADDLE, true);
-            else if (stack.getItem() == Items.SHEARS && this.dataManager.get(SADDLE))
-                this.dataManager.set(SADDLE, false);
-            else if (stack.isEmpty()) player.startRiding(this);
+            else if (this.dataManager.get(SADDLE)) {
+                if (stack.getItem() == Items.SHEARS) this.dataManager.set(SADDLE, false);
+                else player.startRiding(this);
+            }
         } else {
             if (points.containsKey(stack.getItem())) {
                 AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
