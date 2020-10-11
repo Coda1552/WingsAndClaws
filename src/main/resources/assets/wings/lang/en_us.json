@@ -26,6 +26,9 @@
   "item.wings.sugarscale_bucket": "Sugarscale Bucket",
   "item.wings.sugarscale_spawn_egg": "Sugarscale Spawn Egg",
   "item.wings.songvern_spawn_egg": "Songvern Spawn Egg",
+  "item.wings.leaping_grub_shrimp": "Leaping Grub Shrimp",
+  "item.wings.leaping_grub_shrimp_bucket": "Leaping Grub Shrimp Bucket",
+  "item.wings.leaping_grub_shrimp_spawn_egg": "Leaping Grub Shrimp Spawn Egg",
 
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
   "block.wings.hb_nest": "Hatchet Beak Nest",
@@ -48,6 +51,7 @@
   "entity.wings.mimango": "Mimango",
   "entity.wings.sugarscale": "Sugarscale",
   "entity.wings.songvern": "Songvern",
+  "entity.wings.leaping_grub_shrimp": "Leaping Grub Shrimp",
 
   "wings.subtitle.ded.ambient": "Dumpy Egg Drake screeches",
   "wings.subtitle.ded.hurt": "Dumpy Egg Drake hurts",

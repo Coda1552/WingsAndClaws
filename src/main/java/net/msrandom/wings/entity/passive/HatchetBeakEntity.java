@@ -87,7 +87,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 reader.endObject();
                 reader.close();
             } catch (IOException e) {
-                WingsAndClaws.LOGGER.error("Failed to read Hatchet Peak item tame points", e);
+                WingsAndClaws.LOGGER.error("Failed to read Hatchet Beak item tame points", e);
             }
         }
     }
