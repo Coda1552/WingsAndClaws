@@ -14,9 +14,14 @@ import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -25,6 +30,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -34,6 +41,7 @@ import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
+import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
@@ -46,6 +54,7 @@ import java.util.stream.Collectors;
 public class IcyPlowheadEntity extends TameableDragonEntity {
 	//private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
 	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
+	private static final DataParameter<Boolean> RARE = EntityDataManager.createKey(IcyPlowheadEntity.class, DataSerializers.BOOLEAN);
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack horn = ItemStack.EMPTY;
 	private BlockPos iceBlock;
@@ -76,6 +85,19 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 	}
+	
+	@Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(RARE, false);
+    }
+	
+	@Override
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    	spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setRarity(rand.nextInt(100) == 1);
+        return spawnDataIn;
+    }
 
 	@Override
 	public void tick() {
@@ -457,4 +479,12 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			}
 		}
 	}
+	
+	public boolean getRarity() {
+        return this.dataManager.get(RARE);
+    }
+
+    public void setRarity(boolean rarity) {
+        this.dataManager.set(RARE, rarity);
+    }
 }

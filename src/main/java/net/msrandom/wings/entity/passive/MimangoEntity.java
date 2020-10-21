@@ -37,7 +37,7 @@ import java.util.UUID;
 public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> HANGING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
-
+    private static final DataParameter<Boolean> RARE = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
     private MimangoHangGoal hangGoal;
@@ -85,6 +85,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     protected void registerData() {
         super.registerData();
         this.dataManager.register(VARIANT, 0);
+        this.dataManager.register(RARE, false);
         this.dataManager.register(HANGING, false);
     }
 
@@ -94,6 +95,14 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     private void setVariant(int variant) {
         this.dataManager.set(VARIANT, variant);
+    }
+    
+    public boolean getRarity() {
+        return this.dataManager.get(RARE);
+    }
+
+    public void setRarity(boolean rarity) {
+        this.dataManager.set(RARE, rarity);
     }
 
     @Override
@@ -105,6 +114,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setVariant(rand.nextInt(5));
+        this.setRarity(rand.nextInt(100) == 1);
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 

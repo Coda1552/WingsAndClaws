@@ -24,6 +24,30 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
     @Override
     public void render(IcyPlowheadEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         entityModel = entityIn.isChild() ? child : adult;
+        boolean isChild = entityIn.isChild();
+    	boolean isSleeping = entityIn.isSleeping();
+    	if (entityIn.getRarity() == true) {
+    		
+    		if (!isChild) {
+    			
+    			if (!isSleeping) { 
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead_rare/icy_plowhead_rare.png");
+    			} else {
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead_rare/icy_plowhead_rare_sleep.png");
+    			}
+    		} else {
+    			
+    			if (!isSleeping) { 
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead_rare/icy_plowhead_rare_baby.png");
+    			} else {
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/icy_plowhead_rare/icy_plowhead_rare_baby_sleep.png");
+    			}
+    		}
+    	}
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

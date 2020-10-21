@@ -23,6 +23,10 @@ public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
     @Override
     public void render(MimangoEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         entityModel = entityIn.isChild() ? child : adult;
+        if (entityIn.getRarity() == true) {
+    		
+        	TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/mimango_rare/mimango_rare.png");
+    	}
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 

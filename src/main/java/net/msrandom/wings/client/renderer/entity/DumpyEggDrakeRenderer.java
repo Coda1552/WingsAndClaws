@@ -32,14 +32,27 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
         
     	entityModel = entityIn.isChild() ? child : adult;
     	boolean isChild = entityIn.isChild();
+    	boolean isSleeping = entityIn.isSleeping();
     	if (entityIn.getRarity() == true) {
     		
     		if (!isChild) {
     			
-    			TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/adult.png");
+    			if (!isSleeping) { 
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/adult.png");
+    			} else {
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/adult_sleep.png");
+    			}
     		} else {
     			
-    			TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/child.png");
+    			if (!isSleeping) { 
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/child.png");
+    			} else {
+    				
+    				TEXTURES[0] =  new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake_rare/child_sleep.png");
+    			}
     		}
     	}
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);

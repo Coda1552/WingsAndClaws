@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Boolean> RARE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> RARE = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BOOLEAN);
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
@@ -116,7 +116,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
 	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
     	spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setRarity(rand.nextInt(5) == 1);
+        this.setRarity(rand.nextInt(100) == 1);
         return spawnDataIn;
     }
 
