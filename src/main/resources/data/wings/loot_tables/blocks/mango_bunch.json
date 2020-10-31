@@ -14,7 +14,7 @@
                   "condition": "minecraft:block_state_property",
                   "block": "wings:mango_bunch",
                   "properties": {
-                    "mangos": "2"
+                    "mango_bunch": "2"
                   }
                 }
               ],
@@ -27,7 +27,7 @@
                   "condition": "minecraft:block_state_property",
                   "block": "wings:mango_bunch",
                   "properties": {
-                    "mangos": "3"
+                    "mango_bunch": "3"
                   }
                 }
               ],
@@ -40,7 +40,7 @@
                   "condition": "minecraft:block_state_property",
                   "block": "wings:mango_bunch",
                   "properties": {
-                    "mangos": "4"
+                    "mango_bunch": "4"
                   }
                 }
               ],

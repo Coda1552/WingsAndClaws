@@ -1,15 +1,15 @@
 {
   "variants": {
-    "mangos=1": {
+    "mango_bunch=1": {
       "model": "wings:block/mango_bunch_1"
     },
-    "mangos=2": {
+    "mango_bunch=2": {
       "model": "wings:block/mango_bunch_2"
     },
-    "mangos=3": {
+    "mango_bunch=3": {
       "model": "wings:block/mango_bunch_3"
     },
-    "mangos=4": {
+    "mango_bunch=4": {
       "model": "wings:block/mango_bunch_4"
     }
   }

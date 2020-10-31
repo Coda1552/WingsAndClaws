@@ -1,9 +1,6 @@
 package net.msrandom.wings.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.IntegerProperty;
@@ -16,11 +13,14 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
-public class MangoBlock extends Block {
-    public static final IntegerProperty MANGOES = IntegerProperty.create("mangos", 1, 4);
+public class MangoBlock extends CropsBlock implements IGrowable{
+
+    public static final IntegerProperty MANGOES = IntegerProperty.create("mango_bunch", 1, 4);
 
     protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape TWO_SHAPE = Block.makeCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
@@ -28,8 +28,17 @@ public class MangoBlock extends Block {
     protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     protected MangoBlock() {
-        super(Block.Properties.create(Material.BAMBOO).sound(SoundType.BAMBOO).notSolid());
+        super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0F).sound(SoundType.CROP));
         this.setDefaultState(this.stateContainer.getBaseState().with(MANGOES, 1));
+    }
+
+    @Override
+    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+        int i = state.get(MANGOES);
+        if(i < 4 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn,pos,state,worldIn.rand.nextInt(5) == 0)) {
+            worldIn.setBlockState(pos, state.with(MANGOES, i + 1), 2);
+            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+        }
     }
 
     @Nullable
@@ -42,12 +51,22 @@ public class MangoBlock extends Block {
     }
 
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.getBlock().isIn(BlockTags.LOGS) || state.getBlock().isIn(BlockTags.LEAVES);
+        return state.getBlock() == Blocks.JUNGLE_LOG || state.getBlock() == Blocks.JUNGLE_LEAVES;
     }
 
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.up();
         return this.isValidGround(worldIn.getBlockState(blockpos), worldIn, blockpos);
+    }
+
+    @Override
+    public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+        worldIn.setBlockState(pos, state.with(MANGOES, state.get(MANGOES) + 1), 2);
+    }
+
+    @Override
+    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+        return state.get(MANGOES) < 4;
     }
 
     @Override
@@ -80,5 +99,6 @@ public class MangoBlock extends Block {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(MANGOES);
+        super.fillStateContainer(builder);
     }
 }

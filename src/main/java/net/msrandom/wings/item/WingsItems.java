@@ -51,7 +51,7 @@ public class WingsItems {
     public static final Item SUGARSCALE = register("sugarscale", new Item(new Item.Properties().group(GROUP)));
     public static final Item LEAPING_GRUB_SHRIMP_BUCKET = register("leaping_grub_shrimp_bucket", new FishBucketItem(WingsEntities.LEAPING_GRUB_SHRIMP, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     public static final Item LEAPING_GRUB_SHRIMP = register("leaping_grub_shrimp", new Item(new Item.Properties().group(GROUP)));
-    public static final Item MANGO_SEEDS = register("mango_seeds", new Item(new Item.Properties().group(GROUP)));
+//    public static final Item MANGO_SEEDS = register("mango_seeds", new BlockNamedItem(WingsBlocks.MANGO_BUNCH, (new Item.Properties().group(GROUP)))); Interchangeable with Mangoes
     public static final Item GOLDEN_MANGO = register("golden_mango", new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).group(GROUP)));
 
     public static final Item ST_SPEAR = register("st_spear", new STSpearItem());

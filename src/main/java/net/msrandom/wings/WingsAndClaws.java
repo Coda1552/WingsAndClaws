@@ -54,6 +54,7 @@ public class WingsAndClaws {
         WingsTileEntities.REGISTRY.register(bus);
         WingsFeatures.REGISTRY.register(bus);
         WingsKeys.init();
+
     }
 
     public void registerBiomes(RegistryEvent.Register<Biome> event) {
