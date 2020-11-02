@@ -10,6 +10,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.client.renderer.entity.HaroldsGreendrakeRenderer;
 import net.msrandom.wings.client.renderer.entity.*;
 import net.msrandom.wings.client.renderer.tileentity.DEDNestTileEntityRenderer;
 import net.msrandom.wings.client.renderer.tileentity.HBNestTileEntityRenderer;
@@ -34,8 +35,9 @@ public class ClientEventHandler {
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.PLOWHEAD_EGG, PlowheadEggRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.MIMANGO, MimangoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.MIMANGO_EGG, MimangoEggRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.ST_PROJECTILE_ENTITY, SpearProjectileRenderer::new);
+//        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.ST_PROJECTILE_ENTITY, SpearProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SUGARSCALE, SugarscaleRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.LEAPING_GRUB_SHRIMP, LeapingGrubShrimpRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SONGVERN, SongvernRenderer::new);
     }

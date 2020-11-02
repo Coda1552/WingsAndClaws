@@ -41,9 +41,9 @@ public class WingsItems {
     public static final Item ICY_PLOWHEAD_EGG = register("icy_plowhead_egg", new PlowheadEggItem());
     public static final Item DUMPY_EGG_DRAKE_EGG = register("dumpy_egg_drake_egg", new NestEggItem(WingsBlocks.DED_NEST));
     public static final Item MIMANGO_EGG = register("mimango_egg", new MimangoEggItem());
-    public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
-    public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
-    public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
+//    public static final Item HATCHET_BEAK_EGG = register("hatchet_beak_egg", new NestEggItem(WingsBlocks.HB_NEST));
+//    public static final Item HATCHET_BEAK_CREST = register("hatchet_beak_crest", new Item(new Item.Properties().group(GROUP)));
+//    public static final Item CREST_HATCHET = register("crest_hatchet", new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
@@ -53,9 +53,9 @@ public class WingsItems {
 //    public static final Item LEAPING_GRUB_SHRIMP = register("leaping_grub_shrimp", new Item(new Item.Properties().group(GROUP)));
 //    public static final Item MANGO_SEEDS = register("mango_seeds", new BlockNamedItem(WingsBlocks.MANGO_BUNCH, (new Item.Properties().group(GROUP)))); Interchangeable with Mangoes
     public static final Item GOLDEN_MANGO = register("golden_mango", new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).group(GROUP)));
-
-    public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
-    public static final Item ST_HORN = register("st_horn", new STTHornItem());
+    public static final Item HAROLDS_GREENDRAKE_HORN = register("harolds_greendrake_horn", new Item(new Item.Properties().group(GROUP)));
+//    public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
+//    public static final Item ST_HORN = register("st_horn", new STTHornItem());
 
     public static final Item MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes", () -> WingsSounds.MUSIC_BLISSFUL_DUNES);
     public static final Item MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands", () -> WingsSounds.MUSIC_ASHEN_LANDS);
@@ -65,9 +65,9 @@ public class WingsItems {
     //Custom block items
     static {
         register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST)).group(GROUP)));
-        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
+//        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
         register("mango_bunch", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
-        register("golden_mimango_statue", new BlockItem(WingsBlocks.GOLDEN_MIMANGO_STATUE, new Item.Properties().group(GROUP)));
+//        register("golden_mimango_statue", new BlockItem(WingsBlocks.GOLDEN_MIMANGO_STATUE, new Item.Properties().group(GROUP)));
         register("cracked_gilded_stone_bricks", new BlockItem(WingsBlocks.CRACKED_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
         register("chiseled_gilded_stone_bricks", new BlockItem(WingsBlocks.CHISELED_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
         register("gilded_stone_bricks", new BlockItem(WingsBlocks.GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));

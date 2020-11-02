@@ -182,5 +182,32 @@
         "streaming": true
       }
     ]
+  },
+  "harold.ambient": {
+    "subtitle": "wings.subtitle.harold.ambient",
+    "sounds": [
+      {
+        "name": "wings:harold.ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "harold.hurt": {
+    "subtitle": "wings.subtitle.harold.hurt",
+    "sounds": [
+      {
+        "name": "wings:harold.hurt",
+        "streaming": true
+      }
+    ]
+  },
+  "harold.death": {
+    "subtitle": "wings.subtitle.harold.death",
+    "sounds": [
+      {
+        "name": "wings:harold.death",
+        "streaming": true
+      }
+    ]
   }
 }

@@ -29,6 +29,8 @@
   "item.wings.leaping_grub_shrimp": "Leaping Grub Shrimp",
   "item.wings.leaping_grub_shrimp_bucket": "Leaping Grub Shrimp Bucket",
   "item.wings.leaping_grub_shrimp_spawn_egg": "Leaping Grub Shrimp Spawn Egg",
+  "item.wings.harolds_greendrake_spawn_egg": "Harold's Greendrake Spawn Egg",
+  "item.wings.harolds_greendrake_horn": "Harold's Greendrake Horn",
 
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
   "block.wings.hb_nest": "Hatchet Beak Nest",
@@ -52,6 +54,7 @@
   "entity.wings.sugarscale": "Sugarscale",
   "entity.wings.songvern": "Songvern",
   "entity.wings.leaping_grub_shrimp": "Leaping Grub Shrimp",
+  "entity.wings.harolds_greendrake": "Harold's Greendrake",
 
   "wings.subtitle.ded.ambient": "Dumpy Egg Drake screeches",
   "wings.subtitle.ded.hurt": "Dumpy Egg Drake hurts",
@@ -69,6 +72,9 @@
   "wings.subtitle.songvern.ambient": "Songvern chirps",
   "wings.subtitle.songvern.hurt": "Songvern hurts",
   "wings.subtitle.songvern.death": "Songvern dies",
+  "wings.subtitle.harold.ambient": "Harold's Greendrake grunts",
+  "wings.subtitle.harold.hurt": "Harold's Greendrake hurts",
+  "wings.subtitle.harold.death": "Harold's Greendrake dies",
 
   "entity.wings.state.wander": "Wander",
   "entity.wings.state.stay": "Stay",

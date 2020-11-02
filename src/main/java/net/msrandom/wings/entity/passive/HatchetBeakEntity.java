@@ -244,10 +244,10 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         }
     }
 
-    @Override
+/*    @Override
     public ItemStack getEgg() {
         return new ItemStack(WingsItems.HATCHET_BEAK_EGG);
-    }
+    }*/
 
     @Override
     public void writeAdditional(CompoundNBT compound) {

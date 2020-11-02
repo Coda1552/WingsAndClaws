@@ -25,6 +25,9 @@ public class WingsSounds {
     public static final SoundEvent SONGVERN_AMBIENT = create("songvern.ambient");
     public static final SoundEvent SONGVERN_HURT = create("songvern.hurt");
     public static final SoundEvent SONGVERN_DEATH = create("songvern.death");
+    public static final SoundEvent HAROLD_AMBIENT = create("harold.ambient");
+    public static final SoundEvent HAROLD_HURT = create("harold.hurt");
+    public static final SoundEvent HAROLD_DEATH = create("harold.death");
 
     public static final SoundEvent MUSIC_BLISSFUL_DUNES = create("music.blissful_dunes");
     public static final SoundEvent MUSIC_ASHEN_LANDS = create("music.ashen_lands");

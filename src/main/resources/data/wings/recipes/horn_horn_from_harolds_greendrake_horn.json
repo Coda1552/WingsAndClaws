@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  i",
+    " W ",
+    "W  "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "wings:harolds_greendrake_horn"
+    }
+  },
+  "result": {
+    "item": "wings:horn_horn",
+    "count": 1
+  }
+}
