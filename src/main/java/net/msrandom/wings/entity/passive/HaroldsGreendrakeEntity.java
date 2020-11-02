@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
@@ -19,6 +21,8 @@ import net.minecraft.world.World;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
+
+import javax.annotation.Nullable;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {
     public HaroldsGreendrakeEntity(EntityType<? extends HaroldsGreendrakeEntity> type, World worldIn) {
@@ -64,6 +68,15 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
 
     protected float getSoundVolume() {
         return 0.4F;
+    }
+
+    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
+        if (potioneffectIn.getPotion() == Effects.POISON) {
+            net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+            return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
+        }
+        return super.isPotionApplicable(potioneffectIn);
     }
 
     @Override
