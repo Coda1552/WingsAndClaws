@@ -55,7 +55,8 @@ public class WingsItems {
     public static final Item GOLDEN_MANGO = register("golden_mango", new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).group(GROUP)));
     public static final Item HAROLDS_GREENDRAKE_HORN = register("harolds_greendrake_horn", new Item(new Item.Properties().group(GROUP)));
 //    public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
-//    public static final Item ST_HORN = register("st_horn", new STTHornItem());
+    public static final Item STT_HORN = register("stt_horn", new STTHornItem());
+    public static final Item SADDLED_THUNDER_TAIL_EGG = register("saddled_thunder_tail_egg", new SaddledThunderTailEggItem());
 
     public static final Item MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes", () -> WingsSounds.MUSIC_BLISSFUL_DUNES);
     public static final Item MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands", () -> WingsSounds.MUSIC_ASHEN_LANDS);

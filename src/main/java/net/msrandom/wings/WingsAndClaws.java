@@ -76,6 +76,8 @@ public class WingsAndClaws {
 
             Biomes.WARM_OCEAN.getSpawns(EntityClassification.WATER_CREATURE).add(new Biome.SpawnListEntry(WingsEntities.SUGARSCALE, 30, 1, 2));
             EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE, EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
+
+            Biomes.PLAINS.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.SADDLED_THUNDER_TAIL, 1, 3, 10));
         }
     }
 

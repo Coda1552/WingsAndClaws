@@ -35,6 +35,8 @@ public class ClientEventHandler {
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.PLOWHEAD_EGG, PlowheadEggRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.MIMANGO, MimangoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.MIMANGO_EGG, MimangoEggRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SADDLED_THUNDER_TAIL_EGG, SaddledThunderTailEggRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.ST_PROJECTILE_ENTITY, SpearProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SUGARSCALE, SugarscaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeRenderer::new);

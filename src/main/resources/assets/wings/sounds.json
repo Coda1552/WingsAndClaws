@@ -115,6 +115,42 @@
       }
     ]
   },
+  "stt.ambient": {
+    "subtitle": "wings.subtitle.stt.ambient",
+    "sounds": [
+      {
+        "name": "wings:stt.ambient",
+        "streaming": true
+      }
+    ]
+  },
+  "stt.attack": {
+    "subtitle": "wings.subtitle.stt.attack",
+    "sounds": [
+      {
+        "name": "wings:stt.attack",
+        "streaming": true
+      }
+    ]
+  },
+  "stt.death": {
+    "subtitle": "wings.subtitle.stt.death",
+    "sounds": [
+      {
+        "name": "wings:stt.death",
+        "streaming": true
+      }
+    ]
+  },
+  "stt.hurt": {
+    "subtitle": "wings.subtitle.stt.hurt",
+    "sounds": [
+      {
+        "name": "wings:stt.hurt",
+        "streaming": true
+      }
+    ]
+  },
   "horn.use": {
     "subtitle": "wings.subtitle.horn.use",
     "sounds": [

@@ -19,6 +19,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.item.WingsItems;
+import net.msrandom.wings.entity.passive.SaddledThunderTailEntity;
 
 import javax.annotation.Nullable;
 
@@ -60,7 +61,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Override
     public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setGender(rand.nextBoolean());
+        if (!(spawnDataIn instanceof SaddledThunderTailEntity.STTData)) this.setGender(rand.nextBoolean());
         return spawnDataIn;
     }
 
