@@ -11,7 +11,7 @@ public class HaroldsGreendrakeRenderer extends MobRenderer<HaroldsGreendrakeEnti
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/harolds_greendrake.png");
 
     public HaroldsGreendrakeRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new HaroldsGreendrakeModel<>(), 0.6F);
+        super(renderManagerIn, new HaroldsGreendrakeModel<>(), 0.7F);
     }
 
     public ResourceLocation getEntityTexture(HaroldsGreendrakeEntity entity) {

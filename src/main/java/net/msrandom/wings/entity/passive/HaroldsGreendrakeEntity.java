@@ -103,6 +103,6 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
-        return this.isChild() ? sizeIn.height * 0.95F : 1.3F;
+        return this.isChild() ? sizeIn.height * 0.95F : 0.7F;
     }
 }
