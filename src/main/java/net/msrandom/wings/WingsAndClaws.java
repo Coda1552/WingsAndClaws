@@ -23,8 +23,10 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.block.WingsBlocks;
@@ -33,6 +35,7 @@ import net.msrandom.wings.client.WingsKeys;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.WingsTileEntities;
+import net.msrandom.wings.world.gen.StructureGen;
 import net.msrandom.wings.world.gen.feature.MangoBunchTreeDecorator;
 import net.msrandom.wings.world.gen.feature.WingsFeatures;
 import org.apache.logging.log4j.LogManager;
@@ -47,6 +50,8 @@ public class WingsAndClaws {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerClient);
         bus.addListener(this::registerBiomes);
+        bus.addListener(this::setup);
+
         WingsBlocks.REGISTRY.register(bus);
         WingsItems.REGISTRY.register(bus);
         WingsSounds.REGISTRY.register(bus);
@@ -54,6 +59,11 @@ public class WingsAndClaws {
         WingsTileEntities.REGISTRY.register(bus);
         WingsFeatures.REGISTRY.register(bus);
         WingsKeys.init();
+
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        DeferredWorkQueue.runLater(StructureGen::generateStructures);
 
     }
 

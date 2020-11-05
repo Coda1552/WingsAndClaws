@@ -18,7 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class MangoBlock extends CropsBlock implements IGrowable{
+public class MangoBlock extends CropsBlock implements IGrowable {
 
     public static final IntegerProperty MANGOES = IntegerProperty.create("mango_bunch", 1, 4);
 

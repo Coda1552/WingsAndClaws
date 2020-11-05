@@ -7,8 +7,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,8 +22,13 @@ import java.util.function.Function;
 
 public class WingsFeatures {
     public static final DeferredRegister<Feature<?>> REGISTRY = new DeferredRegister<>(ForgeRegistries.FEATURES, WingsAndClaws.MOD_ID);
+
     public static final Feature<NoFeatureConfig> DED_NEST = register("ded_nest", new DEDNestStructure());
     public static final Feature<NoFeatureConfig> HB_NEST = register("hb_nest", new HBNestStructure());
+
+    public static final RegistryObject<MimangoShrineStructure> MIMANGO_SHRINE = REGISTRY.register("mimango_shrine", () -> new MimangoShrineStructure(NoFeatureConfig::deserialize));
+
+    public static IStructurePieceType SHRINE_PIECE = MimangoShrinePieces.Piece::new;
 
     @SuppressWarnings("rawtypes")
     private static final Constructor<TreeDecoratorType> DECORATOR_CONSTRUCTOR = ObfuscationReflectionHelper.findConstructor(TreeDecoratorType.class, Function.class);
