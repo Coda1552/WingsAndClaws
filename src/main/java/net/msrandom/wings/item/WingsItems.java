@@ -56,6 +56,10 @@ public class WingsItems {
     public static final Item HAROLDS_GREENDRAKE_HORN = register("harolds_greendrake_horn", new Item(new Item.Properties().group(GROUP)));
 //    public static final Item ST_SPEAR = register("st_spear", new STSpearItem());
 //    public static final Item ST_HORN = register("st_horn", new STTHornItem());
+      public static final Item DUMPY_EGG_DRAKE_TAIL = register("dumpy_egg_drake_tail", new Item(new Item.Properties().group(GROUP)));
+      public static final Item DUMPY_EGG_DRAKE_MACE = register("dumpy_egg_drake_mace", new SwordItem(ItemTier.IRON, 3, -2.4F, new Item.Properties().group(GROUP)));
+
+
 
     public static final Item MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes", () -> WingsSounds.MUSIC_BLISSFUL_DUNES);
     public static final Item MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands", () -> WingsSounds.MUSIC_ASHEN_LANDS);
