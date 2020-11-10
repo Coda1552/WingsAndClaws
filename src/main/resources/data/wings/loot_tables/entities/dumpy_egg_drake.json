@@ -40,21 +40,6 @@
           "name": "wings:dragon_meat"
         }
       ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "wings:dumpy_egg_drake_tail"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:random_chance",
-          "chance": 0.01
-        }
-      ]
     }
   ]
 }

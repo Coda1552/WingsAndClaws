@@ -1,6 +1,7 @@
 package net.msrandom.wings.entity.passive;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -17,12 +18,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {
     public HaroldsGreendrakeEntity(EntityType<? extends HaroldsGreendrakeEntity> type, World worldIn) {
@@ -38,6 +41,10 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+    }
+
+    public static boolean canHaroldsSpawn(EntityType<? extends HaroldsGreendrakeEntity> animal, IWorld worldIn, SpawnReason reason, BlockPos pos, Random random) {
+        return worldIn.getBlockState(pos.down()).getBlock() == Blocks.GRASS_BLOCK && worldIn.getLightSubtracted(pos, 0) > 4;
     }
 
     protected void registerAttributes() {

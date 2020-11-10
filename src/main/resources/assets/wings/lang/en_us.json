@@ -33,6 +33,9 @@
   "item.wings.harolds_greendrake_horn": "Harold's Greendrake Horn",
   "item.wings.dumpy_egg_drake_tail": "Dumpy Egg Drake Tail",
   "item.wings.dumpy_egg_drake_mace": "Dumpy Egg Drake Mace",
+  "item.wings.mimango": "Raw Mimango",
+  "item.wings.fried_mimango": "Fried Mimango",
+  "item.wings.breaded_mimango": "Breaded Mimango",
 
   "block.wings.ded_nest": "Dumpy Egg Drake Nest",
   "block.wings.hb_nest": "Hatchet Beak Nest",
@@ -48,6 +51,7 @@
   "block.wings.mossy_gilded_stone_brick_slab": "Mossy Gilded Stone Brick Slab",
   "block.wings.mossy_gilded_stone_brick_stairs": "Mossy Gilded Stone Brick Stairs",
   "block.wings.mossy_gilded_stone_brick_wall": "Mossy Gilded Stone Brick Wall",
+  "block.wings.roasted_harolds_greendrake": "Roasted Harold's Greendrake",
 
   "entity.wings.dumpy_egg_drake": "Dumpy Egg Drake",
   "entity.wings.icy_plowhead": "Icy Plowhead",
@@ -74,7 +78,7 @@
   "wings.subtitle.songvern.ambient": "Songvern chirps",
   "wings.subtitle.songvern.hurt": "Songvern hurts",
   "wings.subtitle.songvern.death": "Songvern dies",
-  "wings.subtitle.harold.ambient": "Harold's Greendrake grunts",
+  "wings.subtitle.harold.ambient": "Harold's Greendrake groans",
   "wings.subtitle.harold.hurt": "Harold's Greendrake hurts",
   "wings.subtitle.harold.death": "Harold's Greendrake dies",
 

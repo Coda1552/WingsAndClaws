@@ -13,10 +13,10 @@ public class StructureGen {
     public static void generateStructures() {
         for (Biome biome : ForgeRegistries.BIOMES) {
             if (biome == Biomes.JUNGLE) {
-                biome.addStructure(WingsFeatures.MIMANGO_SHRINE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+//                biome.addStructure(WingsFeatures.MIMANGO_SHRINE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
             }
 
-            biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.MIMANGO_SHRINE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+//            biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.MIMANGO_SHRINE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
         }
     }
 }

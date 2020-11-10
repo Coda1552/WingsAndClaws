@@ -25,6 +25,8 @@ public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     public static void init() {
         RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE, RenderType.getTranslucent());
 
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST, DEDNestTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST, HBNestTileEntityRenderer::new);

@@ -26,7 +26,7 @@ public class WingsFeatures {
     public static final Feature<NoFeatureConfig> DED_NEST = register("ded_nest", new DEDNestStructure());
     public static final Feature<NoFeatureConfig> HB_NEST = register("hb_nest", new HBNestStructure());
 
-    public static final RegistryObject<MimangoShrineStructure> MIMANGO_SHRINE = REGISTRY.register("mimango_shrine", () -> new MimangoShrineStructure(NoFeatureConfig::deserialize));
+//    public static final RegistryObject<MimangoShrineStructure> MIMANGO_SHRINE = REGISTRY.register("mimango_shrine", () -> new MimangoShrineStructure(NoFeatureConfig::deserialize));
 
     public static IStructurePieceType SHRINE_PIECE = MimangoShrinePieces.Piece::new;
 

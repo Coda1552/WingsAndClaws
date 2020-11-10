@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -33,6 +34,7 @@ import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.WingsKeys;
 import net.msrandom.wings.entity.WingsEntities;
+import net.msrandom.wings.entity.passive.HaroldsGreendrakeEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.WingsTileEntities;
 import net.msrandom.wings.world.gen.StructureGen;
@@ -84,9 +86,11 @@ public class WingsAndClaws {
 
             ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.JUNGLE))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.MIMANGO, 30, 3, 5)));
 
-            ForgeRegistries.BIOMES.getValues().stream().filter(biome -> BiomeDictionary.getTypes(biome).containsAll(BiomeDictionary.getTypes(Biomes.DARK_FOREST))).forEach(biome -> biome.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HAROLDS_GREENDRAKE, 1, 3, 4)));
+            Biomes.DARK_FOREST.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HAROLDS_GREENDRAKE, 15, 3, 4));
+            Biomes.DARK_FOREST_HILLS.getSpawns(EntityClassification.CREATURE).add(new Biome.SpawnListEntry(WingsEntities.HAROLDS_GREENDRAKE, 15, 3, 4));
+            EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
 
-            Biomes.WARM_OCEAN.getSpawns(EntityClassification.WATER_CREATURE).add(new Biome.SpawnListEntry(WingsEntities.SUGARSCALE, 30, 1, 2));
+            Biomes.WARM_OCEAN.getSpawns(EntityClassification.WATER_CREATURE).add(new Biome.SpawnListEntry(WingsEntities.SUGARSCALE, 20, 1, 2));
             EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE, EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
         }
     }

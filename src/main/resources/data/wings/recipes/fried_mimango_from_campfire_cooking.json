@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "wings:breaded_mimango"
+  },
+  "result": "wings:fried_mimango",
+  "experience": 0.35,
+  "cookingtime": 600
+}

@@ -26,6 +26,7 @@ public class WingsBlocks {
     public static final Block MOSSY_GILDED_STONE_BRICK_SLAB = register("mossy_gilded_stone_brick_slab", new SlabBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
     public static final Block MOSSY_GILDED_STONE_BRICK_STAIRS = register("mossy_gilded_stone_brick_stairs", new StairsBlock(MOSSY_GILDED_STONE_BRICKS::getDefaultState, Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
     public static final Block MOSSY_GILDED_STONE_BRICK_WALL = register("mossy_gilded_stone_brick_wall", new WallBlock(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5f, 6.0f)));
+    public static final Block ROASTED_HAROLDS_GREENDRAKE = register("roasted_harolds_greendrake", new RoastedHaroldsGreendrakeBlock(Block.Properties.create(Material.ORGANIC).hardnessAndResistance(0.5f).sound(SoundType.CLOTH)));
 
     private static <T extends Block> T register(String name, T block) {
         REGISTRY.register(name, () -> block);

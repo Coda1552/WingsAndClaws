@@ -24,7 +24,7 @@ public class WingsEntities {
     public static final EntityType<PlowheadEggEntity> PLOWHEAD_EGG = create("icy_plowhead_egg", PlowheadEggEntity::new, EntityClassification.MISC, 0.43f, 0.43f);
     public static final EntityType<MimangoEggEntity> MIMANGO_EGG = create("mimango_egg", MimangoEggEntity::new, EntityClassification.MISC, 0.3f, 0.3f);
     public static final EntityType<MimangoEntity> MIMANGO = create("mimango", MimangoEntity::new, EntityClassification.CREATURE, 0.35f, 0.35f, 0xab571e, 0xf2cd51);
-//    public static final EntityType<SpearProjectileEntity> ST_PROJECTILE_ENTITY = create("spear_projectile_entity", SpearProjectileEntity::new, EntityClassification.MISC, 0.4f, 0.4f);
+    //public static final EntityType<SpearProjectileEntity> ST_PROJECTILE_ENTITY = create("spear_projectile_entity", SpearProjectileEntity::new, EntityClassification.MISC, 0.4f, 0.4f);
     public static final EntityType<SugarscaleEntity> SUGARSCALE = create("sugarscale", SugarscaleEntity::new, EntityClassification.WATER_CREATURE, 0.4f, 0.2f, 0x4a4e80, 0x413852);
     public static final EntityType<HaroldsGreendrakeEntity> HAROLDS_GREENDRAKE = create("harolds_greendrake", HaroldsGreendrakeEntity::new, EntityClassification.CREATURE, 0.9f, 1.1f, 0x4b5832, 0xb59a2f);
 
