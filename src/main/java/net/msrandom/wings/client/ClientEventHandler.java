@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.renderer.entity.HaroldsGreendrakeRenderer;

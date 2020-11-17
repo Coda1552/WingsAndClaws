@@ -1,5 +1,6 @@
 package net.msrandom.wings.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.network.play.IClientPlayNetHandler;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,6 +8,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
@@ -33,11 +35,11 @@ public class DEDNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         List<AtomicInteger> list = new ArrayList<>();
         for (int i : compound.getIntArray("Eggs")) list.add(new AtomicInteger(i));
         this.eggs = list;
-        super.read(compound);
+        super.read(state, compound);
     }
 
     public boolean addEgg() {
@@ -84,7 +86,7 @@ public class DEDNestTileEntity extends NestTileEntity {
                 if (drake != null) {
                     drake.setGrowingAge(-24000);
                     drake.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                    drake.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
+                    drake.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.getDistanceSq(p1) < drake.getDistanceSq(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
                     world.addEntity(drake);
                 }
@@ -95,8 +97,8 @@ public class DEDNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        read(tag);
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        read(state, tag);
     }
 
     @Override

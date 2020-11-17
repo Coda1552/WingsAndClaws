@@ -5,7 +5,7 @@
 //import net.minecraft.enchantment.EnchantmentHelper;
 //import net.minecraft.entity.LivingEntity;
 //import net.minecraft.entity.MoverType;
-//import net.minecraft.entity.SharedMonsterAttributes;
+//import net.minecraft.entity.Attributes;
 //import net.minecraft.entity.ai.attributes.AttributeModifier;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -18,7 +18,7 @@
 //import net.minecraft.util.SoundCategory;
 //import net.minecraft.util.SoundEvent;
 //import net.minecraft.util.SoundEvents;
-//import net.minecraft.util.math.Vec3d;
+//import net.minecraft.util.math.vector.Vector3d;
 //import net.minecraft.world.World;
 //import net.msrandom.wings.WingsAndClaws;
 //import net.msrandom.wings.client.renderer.tileentity.PlowheadHornRenderer;
@@ -74,7 +74,7 @@
 //                    playerEntity.addVelocity(f1, f2, f3);
 //                    playerEntity.startSpinAttack(20);
 //                    if (playerEntity.onGround) {
-//                        playerEntity.move(MoverType.SELF, new Vec3d(0.0D, 1.1999999, 0.0D));
+//                        playerEntity.move(MoverType.SELF, new Vector3d(0.0D, 1.1999999, 0.0D));
 //                    }
 //                }
 //
@@ -89,7 +89,7 @@
 //        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
 //
 //        if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-//            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
+//            multimap.put(Attributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
 //        }
 //
 //        return multimap;

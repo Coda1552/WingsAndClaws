@@ -10,11 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -106,7 +108,7 @@ public class MimangoEggEntity extends LivingEntity {
                 if (mimangoEntity != null) {
                     mimangoEntity.setGrowingAge(-24000);
                     mimangoEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                    mimangoEntity.onInitialSpawn(world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
+                    mimangoEntity.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, mimangoEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> mimangoEntity.getDistanceSq(p1) < mimangoEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(mimangoEntity::setTamedBy);
                     this.world.addEntity(mimangoEntity);
                 }
@@ -118,13 +120,13 @@ public class MimangoEggEntity extends LivingEntity {
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
             if (player.addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG))) {
                 remove();
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
         return super.processInitialInteract(player, hand);
     }

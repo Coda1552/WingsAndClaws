@@ -20,7 +20,7 @@
 //import net.minecraft.util.SoundEvents;
 //import net.minecraft.util.math.BlockPos;
 //import net.minecraft.util.math.EntityRayTraceResult;
-//import net.minecraft.util.math.Vec3d;
+//import net.minecraft.util.math.vector.Vector3d;
 //import net.minecraft.world.World;
 //import net.minecraft.world.server.ServerWorld;
 //import net.minecraftforge.api.distmarker.Dist;
@@ -76,7 +76,7 @@
 //                this.remove();
 //            } else if (i > 0) {
 //                this.setNoClip(true);
-//                Vec3d vec3d = new Vec3d(entity.getPosX() - this.getPosX(), entity.getPosYEye() - this.getPosY(), entity.getPosZ() - this.getPosZ());
+//                Vector3d vec3d = new Vector3d(entity.getPosX() - this.getPosX(), entity.getPosYEye() - this.getPosY(), entity.getPosZ() - this.getPosZ());
 //                this.setRawPosition(this.getPosX(), this.getPosY() + vec3d.y * 0.015D * (double) i, this.getPosZ());
 //                if (this.world.isRemote) {
 //                    this.lastTickPosY = this.getPosY();
@@ -111,7 +111,7 @@
 //
 //    @Nullable
 //    @Override
-//    protected EntityRayTraceResult rayTraceEntities(Vec3d startVec, Vec3d endVec) {
+//    protected EntityRayTraceResult rayTraceEntities(Vector3d startVec, Vector3d endVec) {
 //        return this.dealtDamage ? null : super.rayTraceEntities(startVec, endVec);
 //    }
 //

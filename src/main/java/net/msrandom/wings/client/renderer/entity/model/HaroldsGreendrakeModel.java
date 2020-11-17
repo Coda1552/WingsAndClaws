@@ -15,7 +15,7 @@ import net.msrandom.wings.entity.passive.HaroldsGreendrakeEntity;
 import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
-public class HaroldsGreendrakeModel<T extends Entity>  extends AgeableModel<HaroldsGreendrakeEntity> {
+public class HaroldsGreendrakeModel extends AgeableModel<HaroldsGreendrakeEntity> {
     public ModelRenderer body;
     public ModelRenderer head;
     public ModelRenderer armRight;

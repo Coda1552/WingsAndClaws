@@ -1,9 +1,11 @@
 package net.msrandom.wings.tileentity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.passive.HatchetBeakEntity;
@@ -24,9 +26,9 @@ public class HBNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         this.eggTimer = compound.getInt("EggTime");
-        super.read(compound);
+        super.read(state, compound);
     }
 
     @Override
@@ -62,7 +64,7 @@ public class HBNestTileEntity extends NestTileEntity {
                 if (hatchetBeak != null) {
                     hatchetBeak.setGrowingAge(-24000);
                     hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                    hatchetBeak.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
+                    hatchetBeak.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, hatchetBeak.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> hatchetBeak.getDistanceSq(p1) < hatchetBeak.getDistanceSq(p2) ? p1 : p2).ifPresent(hatchetBeak::setTamedBy);
                     world.addEntity(hatchetBeak);
                 }

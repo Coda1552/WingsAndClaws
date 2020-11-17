@@ -2,10 +2,10 @@ package net.msrandom.wings.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.model.IcyPlowheadModel;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;

@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -93,7 +95,7 @@ public class PlowheadEggEntity extends LivingEntity {
 				if (plowhead != null) {
 					plowhead.setGrowingAge(-24000);
 					plowhead.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-					plowhead.onInitialSpawn(world, world.getDifficultyForLocation(plowhead.getPosition()), SpawnReason.BREEDING, null, null);
+					plowhead.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(plowhead.getPosition()), SpawnReason.BREEDING, null, null);
 					this.world.addEntity(plowhead);
 				}
 
@@ -104,13 +106,13 @@ public class PlowheadEggEntity extends LivingEntity {
 	}
 
 	@Override
-	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (stack.isEmpty()) {
 			if (player.addItemStackToInventory(new ItemStack(WingsItems.ICY_PLOWHEAD_EGG))) {
 				remove();
 			}
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
 		return super.processInitialInteract(player, hand);

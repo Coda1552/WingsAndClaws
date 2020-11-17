@@ -14,10 +14,13 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
@@ -38,7 +41,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         float maxHealth = this.getMaxHealth();
         float health = this.getHealth();
@@ -51,14 +54,14 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setGender(rand.nextBoolean());
         return spawnDataIn;
@@ -107,7 +110,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
 
     @Nullable
     @Override
-    public AgeableEntity createChild(AgeableEntity ageable) {
+    public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
         if (getClass().isInstance(ageable)) {
             createEgg();
             resetInLove();
@@ -125,7 +128,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
                 if (child != null) {
                     child.setGrowingAge(-24000);
                     child.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), 0.0F, 0.0F);
-                    child.onInitialSpawn(world, world.getDifficultyForLocation(child.getPosition()), SpawnReason.SPAWN_EGG, null, null);
+                    child.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(child.getPosition()), SpawnReason.SPAWN_EGG, null, null);
                     this.world.addEntity(child);
                     if (stack.hasDisplayName()) {
                         child.setCustomName(stack.getDisplayName());

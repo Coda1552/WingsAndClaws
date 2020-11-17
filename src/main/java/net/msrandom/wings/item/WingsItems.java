@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 public class WingsItems {
-    public static final DeferredRegister<Item> REGISTRY = new DeferredRegister<>(ForgeRegistries.ITEMS, WingsAndClaws.MOD_ID);
+    public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, WingsAndClaws.MOD_ID);
     //Anonymous item classes
     public static final ItemGroup GROUP = new ItemGroup(WingsAndClaws.MOD_ID) {
         @Override
@@ -47,7 +47,7 @@ public class WingsItems {
     public static final Item ICY_PLOWHEAD_SHIELD = register("icy_plowhead_shield", new ShieldItem(getWithISTER(new Item.Properties().group(GROUP).maxDamage(678), () -> PlowheadShieldRenderer::new)));
     public static final Item HORN_HORN = register("horn_horn", new HornHornItem());
     public static final Item PLOWHEAD_HORN = register("plowhead_horn", new Item(new Item.Properties().group(GROUP)));
-    public static final Item SUGARSCALE_BUCKET = register("sugarscale_bucket", new FishBucketItem(WingsEntities.SUGARSCALE, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
+    public static final Item SUGARSCALE_BUCKET = register("sugarscale_bucket", new FishBucketItem(() -> WingsEntities.SUGARSCALE, () -> Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     public static final Item SUGARSCALE = register("sugarscale", new Item(new Item.Properties().group(GROUP)));
     //public static final Item LEAPING_GRUB_SHRIMP_BUCKET = register("leaping_grub_shrimp_bucket", new FishBucketItem(WingsEntities.LEAPING_GRUB_SHRIMP, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     //public static final Item LEAPING_GRUB_SHRIMP = register("leaping_grub_shrimp", new Item(new Item.Properties().group(GROUP)));
@@ -70,20 +70,8 @@ public class WingsItems {
     //Custom block items
     static {
         register("ded_nest", new BlockItem(WingsBlocks.DED_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.DED_NEST)).group(GROUP)));
-        //register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
-        register("mango_bunch", new BlockItem(WingsBlocks.MANGO_BUNCH, new Item.Properties().group(GROUP).food(WingsFoods.MANGO)));
+        register("hb_nest", new BlockItem(WingsBlocks.HB_NEST, getWithISTER(new Item.Properties(), () -> () -> new NestItemRenderer(WingsTileEntities.HB_NEST)).group(GROUP)));
         //register("golden_mimango_statue", new BlockItem(WingsBlocks.GOLDEN_MIMANGO_STATUE, new Item.Properties().group(GROUP)));
-        register("cracked_gilded_stone_bricks", new BlockItem(WingsBlocks.CRACKED_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
-        register("chiseled_gilded_stone_bricks", new BlockItem(WingsBlocks.CHISELED_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
-        register("gilded_stone_bricks", new BlockItem(WingsBlocks.GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
-        register("gilded_stone_brick_slab", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_SLAB, new Item.Properties().group(GROUP)));
-        register("gilded_stone_brick_stairs", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_STAIRS, new Item.Properties().group(GROUP)));
-        register("gilded_stone_brick_wall", new BlockItem(WingsBlocks.GILDED_STONE_BRICK_WALL, new Item.Properties().group(GROUP)));
-        register("mossy_gilded_stone_bricks", new BlockItem(WingsBlocks.MOSSY_GILDED_STONE_BRICKS, new Item.Properties().group(GROUP)));
-        register("mossy_gilded_stone_brick_slab", new BlockItem(WingsBlocks.MOSSY_GILDED_STONE_BRICK_SLAB, new Item.Properties().group(GROUP)));
-        register("mossy_gilded_stone_brick_stairs", new BlockItem(WingsBlocks.MOSSY_GILDED_STONE_BRICK_STAIRS, new Item.Properties().group(GROUP)));
-        register("mossy_gilded_stone_brick_wall", new BlockItem(WingsBlocks.MOSSY_GILDED_STONE_BRICK_WALL, new Item.Properties().group(GROUP)));
-        register("roasted_harolds_greendrake", new BlockItem(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE, new Item.Properties().group(GROUP)));
     }
 
     private static Item register(String name, Item item) {

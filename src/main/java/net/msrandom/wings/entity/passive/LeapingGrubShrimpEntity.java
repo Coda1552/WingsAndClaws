@@ -1,8 +1,10 @@
 package net.msrandom.wings.entity.passive;
 
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.goal.DolphinJumpGoal;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.item.ItemStack;
@@ -25,11 +27,8 @@ public class LeapingGrubShrimpEntity extends AbstractFishEntity {
         this.goalSelector.addGoal(0, new LeapingGrubShrimpJumpGoal(this, 2));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8);
+    public static AttributeModifierMap.MutableAttribute registerLGSAttributes() {
+        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 8);
     }
 
     @Override
