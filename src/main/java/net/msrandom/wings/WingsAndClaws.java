@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.world.biome.Biome;
@@ -115,5 +116,8 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.DUMPY_EGG_DRAKE, DumpyEggDrakeEntity.registerDEDAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.ICY_PLOWHEAD, IcyPlowheadEntity.registerPlowheadAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, LivingEntity.registerAttributes().create());
     }
 }
