@@ -70,6 +70,7 @@ public class WingsAndClaws {
     public static final SimpleChannel NETWORK = INetworkPacket.makeChannel("network", "1");
     private static int currentNetworkId;
 
+    @OnlyIn(Dist.CLIENT)
     public static KeyBinding callHatchetBeakKey;
 
     public WingsAndClaws() {
