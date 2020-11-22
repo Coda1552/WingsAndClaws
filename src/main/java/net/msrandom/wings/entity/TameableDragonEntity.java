@@ -97,7 +97,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     }
 
     public WanderState getState() {
-        return WanderState.values()[dataManager.get(STATE)];
+        return WanderState.VALUES[dataManager.get(STATE)];
     }
 
     public void setState(WanderState state) {
@@ -111,7 +111,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Nullable
     @Override
     public AgeableEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
-        if (getClass().isInstance(ageable)) {
+        if (ageable != this && getClass().isInstance(ageable)) {
             createEgg();
             resetInLove();
             setGrowingAge(600);
@@ -145,6 +145,8 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     }
 
     public enum WanderState {
-        WANDER, STAY, FOLLOW
+        WANDER, STAY, FOLLOW;
+
+        public static final WanderState[] VALUES = values();
     }
 }

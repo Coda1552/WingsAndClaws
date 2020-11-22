@@ -2,11 +2,15 @@ package net.msrandom.wings;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -23,16 +27,23 @@ import net.minecraft.world.gen.treedecorator.LeaveVineTreeDecorator;
 import net.minecraft.world.gen.treedecorator.TrunkVineTreeDecorator;
 import net.minecraft.world.gen.trunkplacer.MegaJungleTrunkPlacer;
 import net.minecraft.world.gen.trunkplacer.StraightTrunkPlacer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.ClientEventHandler;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
@@ -40,17 +51,26 @@ import net.msrandom.wings.entity.passive.HaroldsGreendrakeEntity;
 import net.msrandom.wings.entity.passive.HatchetBeakEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
+import net.msrandom.wings.network.CallHatchetBeaksPacket;
+import net.msrandom.wings.network.INetworkPacket;
 import net.msrandom.wings.tileentity.WingsTileEntities;
 import net.msrandom.wings.world.gen.feature.MangoBunchTreeDecorator;
 import net.msrandom.wings.world.gen.feature.WingsFeatures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 @Mod(WingsAndClaws.MOD_ID)
 @Mod.EventBusSubscriber
 public class WingsAndClaws {
     public static final String MOD_ID = "wings";
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final SimpleChannel NETWORK = INetworkPacket.makeChannel("network", "1");
+    private static int currentNetworkId;
+
+    public static KeyBinding callHatchetBeakKey;
 
     public WingsAndClaws() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -67,6 +87,8 @@ public class WingsAndClaws {
 
         EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
         EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE, EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
+
+        registerMessage(CallHatchetBeaksPacket.class, CallHatchetBeaksPacket::new, LogicalSide.SERVER);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -105,7 +127,6 @@ public class WingsAndClaws {
     private void registerClient(FMLClientSetupEvent event) {
         ClientEventHandler.init();
     }
-
     private void registerCommon(FMLCommonSetupEvent event) {
         registerEntityAttributes();
     }
@@ -118,6 +139,23 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, LivingEntity.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).create());
+    }
+
+    private <T extends INetworkPacket> void registerMessage(Class<T> message, Supplier<T> supplier, LogicalSide side) {
+        NETWORK.registerMessage(currentNetworkId++, message, INetworkPacket::write, buffer -> {
+            T msg = supplier.get();
+            msg.read(buffer);
+            return msg;
+        }, (msg, contextSupplier) -> {
+            NetworkEvent.Context context = contextSupplier.get();
+            context.enqueueWork(() -> msg.handle(context.getDirection().getOriginationSide().isServer() ? getClientPlayer() : context.getSender()));
+            context.setPacketHandled(true);
+        }, Optional.of(side.isClient() ? NetworkDirection.PLAY_TO_CLIENT : NetworkDirection.PLAY_TO_SERVER));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static PlayerEntity getClientPlayer() {
+        return Minecraft.getInstance().player;
     }
 }

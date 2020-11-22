@@ -31,7 +31,7 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
@@ -72,7 +72,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40) {
 			@Override
 			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WanderState.WANDER && getAttackTarget() == null;
+				return super.shouldExecute() && getState() == WanderState.WANDER;
 			}
 		});
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));

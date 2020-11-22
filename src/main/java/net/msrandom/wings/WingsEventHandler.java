@@ -1,6 +1,7 @@
-package net.msrandom.wings.events;
+package net.msrandom.wings;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -19,20 +20,27 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
+import net.msrandom.wings.entity.passive.HatchetBeakEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
+import net.msrandom.wings.network.CallHatchetBeaksPacket;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CommonEventHandler {
+public class WingsEventHandler {
+    private static int hatchetBeakCallTimer;
+
     @SubscribeEvent
     public static void breakBlock(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
@@ -117,6 +125,24 @@ public class CommonEventHandler {
                 break;
             default:
                 break;
+        }
+    }
+
+    @SubscribeEvent
+    public static void addDataPackRegistries(AddReloadListenerEvent event) {
+        event.addListener(HatchetBeakEntity.TAME_ITEMS_MANAGER);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
+        if (hatchetBeakCallTimer == 0) {
+            if (WingsAndClaws.callHatchetBeakKey.isKeyDown()) {
+                WingsAndClaws.NETWORK.sendToServer(new CallHatchetBeaksPacket());
+                hatchetBeakCallTimer = 200;
+            }
+        } else {
+            --hatchetBeakCallTimer;
         }
     }
 }

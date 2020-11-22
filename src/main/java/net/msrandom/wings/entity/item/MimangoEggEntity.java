@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -28,16 +29,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class MimangoEggEntity extends LivingEntity {
+    private final boolean startedInLeaves;
     private int hatchTime;
 
     public MimangoEggEntity(EntityType<? extends MimangoEggEntity> type, World world) {
         super(type, world);
         setSilent(true);
+        startedInLeaves = false;
     }
 
     public MimangoEggEntity(World worldIn, BlockPos pos) {
-        this(WingsEntities.MIMANGO_EGG, worldIn);
+        super(WingsEntities.MIMANGO_EGG, worldIn);
+        setSilent(true);
         setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        startedInLeaves = world.getBlockState(pos).getBlock().isIn(BlockTags.LEAVES);
     }
 
     @Override
@@ -103,7 +108,7 @@ public class MimangoEggEntity extends LivingEntity {
     @Override
     public void tick() {
         if (!this.world.isRemote) {
-            if (hatchTime++ >= 1200) {
+            if (startedInLeaves && !world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES) || hatchTime++ >= 1200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
                     mimangoEntity.setGrowingAge(-24000);

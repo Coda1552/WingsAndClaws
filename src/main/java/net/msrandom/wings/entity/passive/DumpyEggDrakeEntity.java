@@ -21,7 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.item.WingsItems;
 

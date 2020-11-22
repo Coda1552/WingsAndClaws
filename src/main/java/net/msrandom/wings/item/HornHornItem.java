@@ -15,7 +15,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.msrandom.wings.WingsAndClaws;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadHornRenderer;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
@@ -52,8 +52,8 @@ public class HornHornItem extends ToolItem {
             PlayerEntity player = (PlayerEntity) entityLiving;
             Vector3d vec = player.getPositionVec().add(player.getLookVec());
             EntityRayTraceResult entityTrace = worldIn.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
-            RayTraceResult mop = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE) : entityTrace;
-            if (mop.getType() == RayTraceResult.Type.MISS) {
+            RayTraceResult hit = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE) : entityTrace;
+            if (hit.getType() == RayTraceResult.Type.MISS) {
                 MimangoEntity last = null;
                 for (MimangoEntity entity : worldIn.getEntitiesWithinAABB(MimangoEntity.class, player.getBoundingBox().grow(4))) {
                     if (entity.isOwner(player) && (last == null || last.getDistanceSq(player) > entity.getDistanceSq(player))) {
@@ -66,16 +66,16 @@ public class HornHornItem extends ToolItem {
                 }
             } else {
                 boolean flag = false;
-                if (mop.getType() == RayTraceResult.Type.ENTITY) {
-                    EntityRayTraceResult result = ((EntityRayTraceResult) mop);
+                if (hit.getType() == RayTraceResult.Type.ENTITY && hit instanceof EntityRayTraceResult) {
+                    EntityRayTraceResult result = ((EntityRayTraceResult) hit);
                     if (!(result.getEntity() instanceof TameableDragonEntity) || !((TameableDragonEntity) result.getEntity()).isOwner(player)) {
                         flag = worldIn.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
                     } else {
                         changeEntityState((TameableDragonEntity) result.getEntity(), player);
                         return stack;
                     }
-                } else {
-                    BlockPos pos = ((BlockRayTraceResult) mop).getPos();
+                } else if (hit instanceof BlockRayTraceResult) {
+                    BlockPos pos = ((BlockRayTraceResult) hit).getPos();
                     for (Direction value : Direction.values()) {
                         flag = worldIn.getFluidState(pos.offset(value)).getFluid() == Fluids.WATER;
                         if (flag) break;
@@ -91,7 +91,7 @@ public class HornHornItem extends ToolItem {
                     if (last != null) {
                         if (last.getState() == TameableDragonEntity.WanderState.STAY)
                             last.setState(TameableDragonEntity.WanderState.WANDER);
-                        last.setTarget(mop);
+                        last.setTarget(hit);
                         last.setHorn(stack);
                         player.getCooldownTracker().setCooldown(this, 48);
                         return stack;
@@ -104,7 +104,7 @@ public class HornHornItem extends ToolItem {
 
     private void changeEntityState(TameableDragonEntity entity, PlayerEntity player) {
         TameableDragonEntity.WanderState state = entity.getState();
-        TameableDragonEntity.WanderState newState = state == TameableDragonEntity.WanderState.FOLLOW ? TameableDragonEntity.WanderState.WANDER : TameableDragonEntity.WanderState.values()[state.ordinal() + 1];
+        TameableDragonEntity.WanderState newState = state == TameableDragonEntity.WanderState.FOLLOW ? TameableDragonEntity.WanderState.WANDER : TameableDragonEntity.WanderState.VALUES[state.ordinal() + 1];
         entity.setState(newState);
         player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
         player.getCooldownTracker().setCooldown(this, 48);

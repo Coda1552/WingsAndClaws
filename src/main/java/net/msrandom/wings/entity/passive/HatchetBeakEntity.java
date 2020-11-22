@@ -1,14 +1,10 @@
 package net.msrandom.wings.entity.passive;
 
-import com.google.gson.stream.JsonReader;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -18,7 +14,6 @@ import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,13 +24,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.resources.IResource;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -44,26 +34,21 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.TameableDragonEntity;
+import net.msrandom.wings.resources.HBTameItemsManager;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
+    public static final HBTameItemsManager TAME_ITEMS_MANAGER = new HBTameItemsManager();
     private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
-    private static Object2IntMap<Item> points;
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
-    private Vector3d target;
+    public Supplier<Vector3d> targetSupplier;
     private int ticksAfloat;
     private int flyTime;
 
@@ -71,35 +56,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         super(type, worldIn);
         moveController = new FlyingMovementController(this, 30, false);
         setNoGravity(true);
-        if (!worldIn.isRemote && points == null) {
-            try {
-                points = new Object2IntOpenHashMap<>();
-                MinecraftServer server = Objects.requireNonNull(worldIn.getServer());
-                IResource resource = server.getDataPackRegistries().getResourceManager().getResource(new ResourceLocation(WingsAndClaws.MOD_ID, "tame_items/hatchet_beak.json"));
-                InputStream stream = resource.getInputStream();
-                JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-                reader.beginObject();
-                while (reader.hasNext()) {
-                    String name = reader.nextName();
-                    int value = reader.nextInt();
-                    if (name.startsWith("#")) {
-                        ITag<Item> items = ItemTags.getCollection().get(new ResourceLocation(name.replace("#", "")));
-                        for (Item element : items.getAllElements()) {
-                            points.put(element, value);
-                        }
-                    } else {
-                        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
-                        if (item != null && item != Items.AIR) {
-                            points.put(item, value);
-                        }
-                    }
-                }
-                reader.endObject();
-                reader.close();
-            } catch (IOException e) {
-                WingsAndClaws.LOGGER.error("Failed to read Hatchet Beak item tame points", e);
-            }
-        }
     }
 
     @Override
@@ -175,7 +131,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 float rotationDifference = MathHelper.wrapDegrees(passenger.rotationYaw) - MathHelper.wrapDegrees(rotationYaw);
                 float sign = Math.signum(rotationDifference);
                 if (MathHelper.abs(rotationDifference) > 3) rotationYaw += sign * 3f;
-
                 this.prevRotationYaw = this.rotationYaw;
                 this.rotationPitch = passenger.rotationPitch * 0.5F;
                 this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -268,9 +223,10 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 return ActionResultType.SUCCESS;
             }
         } else {
-            if (points.containsKey(stack.getItem())) {
+            int points = TAME_ITEMS_MANAGER.getPoints(stack.getItem());
+            if (points > 0) {
                 AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
-                playerPoints.set(playerPoints.get() + points.getInt(stack.getItem()));
+                playerPoints.set(playerPoints.get() + points);
                 if (!player.abilities.isCreativeMode) stack.shrink(1);
                 if (playerPoints.get() >= 100 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.setTamedBy(player);
@@ -336,18 +292,23 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             boolean grounded = !flying || ticksExisted <= 25;
 
             if (!grounded && ticksAfloat >= flyTime) {
-                target = null;
+                targetSupplier = null;
             }
 
-            if (target == null && (!flying || rand.nextInt(10) == 0)) {
+            if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
                 if (!grounded) ++ticksAfloat;
-                target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
+                Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
+                targetSupplier = () -> target;
             }
 
-            if (target != null) {
+            if (targetSupplier != null) {
+                Vector3d target = targetSupplier.get();
                 moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
-                if (getDistanceSq(target) <= 9) {
-                    target = null;
+                if (target.getY() - getPosY() < 0) {
+                    setMotion(getMotion().add(0, Math.max(target.getY() - getPosY(), -0.1), 0));
+                }
+                if (getDistanceSq(target) <= 4) {
+                    targetSupplier = null;
                 }
             }
         }

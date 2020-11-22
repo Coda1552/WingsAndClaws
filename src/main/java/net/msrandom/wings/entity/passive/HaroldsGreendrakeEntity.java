@@ -7,7 +7,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,11 +22,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.Event;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.item.WingsItems;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {

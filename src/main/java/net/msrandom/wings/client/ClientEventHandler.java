@@ -2,6 +2,7 @@ package net.msrandom.wings.client;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,6 +44,9 @@ public class ClientEventHandler {
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.LEAPING_GRUB_SHRIMP, LeapingGrubShrimpRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SONGVERN, SongvernRenderer::new);
+
+
+        WingsAndClaws.callHatchetBeakKey = new KeyBinding("key.callHatchetBeak", 75, "key.categories.gameplay");
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

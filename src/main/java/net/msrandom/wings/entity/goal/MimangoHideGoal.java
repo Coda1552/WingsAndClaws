@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.BlockPos;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
 public class MimangoHideGoal extends Goal {

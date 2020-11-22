@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.renderer.tileentity.NestItemRenderer;

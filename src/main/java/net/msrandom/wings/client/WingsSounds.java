@@ -1,9 +1,10 @@
-package net.msrandom.wings;
+package net.msrandom.wings.client;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.msrandom.wings.WingsAndClaws;
 
 public class WingsSounds {
 
