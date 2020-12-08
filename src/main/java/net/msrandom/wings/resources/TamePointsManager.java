@@ -1,0 +1,75 @@
+package net.msrandom.wings.resources;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.stream.JsonReader;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.client.resources.JsonReloadListener;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.profiler.IProfiler;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.msrandom.wings.WingsAndClaws;
+
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TamePointsManager extends JsonReloadListener {
+    public static final TamePointsManager INSTANCE = new TamePointsManager();
+
+    private final Map<EntityType<?>, Object2IntMap<Item>> points = new HashMap<>();
+
+    public TamePointsManager() {
+        super(new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(), "tame_items");
+    }
+
+    @Override
+    protected void apply(Map<ResourceLocation, JsonElement> objectIn, IResourceManager manager, IProfiler profilerIn) {
+        points.clear();
+        for (Map.Entry<ResourceLocation, JsonElement> entry : objectIn.entrySet()) {
+            ResourceLocation id = entry.getKey();
+            try (IResource resource = manager.getResource(getPreparedPath(id)); JsonReader reader = new JsonReader(new InputStreamReader(resource.getInputStream()))) {
+                reader.beginObject();
+
+                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(id);
+                points.put(entityType, new Object2IntOpenHashMap<>());
+
+                while (reader.hasNext()) {
+                    String name = reader.nextName();
+                    int value = reader.nextInt();
+                    if (name.startsWith("#")) {
+                        ITag<Item> items = ItemTags.getCollection().get(new ResourceLocation(name.replace("#", "")));
+                        if (items != null) {
+                            for (Item element : items.getAllElements()) {
+                                put(entityType, element, value);
+                            }
+                        }
+                    } else {
+                        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
+                        if (item != null && item != Items.AIR) {
+                            put(entityType, item, value);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                WingsAndClaws.LOGGER.error("Unable to parse tame points for {}", id, e);
+            }
+        }
+    }
+
+    private void put(EntityType<?> entityType, Item item, int value) {
+        points.get(entityType).put(item, value);
+    }
+
+    public int getPoints(EntityType<?> type, Item item) {
+        return points.containsKey(type) ? points.get(type).getOrDefault(item, 0) : 0;
+    }
+}

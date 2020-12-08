@@ -35,7 +35,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.resources.HBTameItemsManager;
+import net.msrandom.wings.resources.TamePointsManager;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -45,7 +45,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
-    public static final HBTameItemsManager TAME_ITEMS_MANAGER = new HBTameItemsManager();
     private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
     public Supplier<Vector3d> targetSupplier;
@@ -223,7 +222,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 return ActionResultType.SUCCESS;
             }
         } else {
-            int points = TAME_ITEMS_MANAGER.getPoints(stack.getItem());
+            int points = TamePointsManager.INSTANCE.getPoints(getType(), stack.getItem());
             if (points > 0) {
                 AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
                 playerPoints.set(playerPoints.get() + points);
@@ -298,7 +297,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
                 if (!grounded) ++ticksAfloat;
                 Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
-                targetSupplier = () -> target;
+                if (target != null) {
+                    targetSupplier = () -> target;
+                }
             }
 
             if (targetSupplier != null) {
