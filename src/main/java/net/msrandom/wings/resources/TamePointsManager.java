@@ -38,9 +38,7 @@ public class TamePointsManager extends JsonReloadListener {
             ResourceLocation id = entry.getKey();
             try (IResource resource = manager.getResource(getPreparedPath(id)); JsonReader reader = new JsonReader(new InputStreamReader(resource.getInputStream()))) {
                 reader.beginObject();
-
-                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(id);
-                points.put(entityType, new Object2IntOpenHashMap<>());
+                Object2IntMap<Item> pointsFromItem = new Object2IntOpenHashMap<>();
 
                 while (reader.hasNext()) {
                     String name = reader.nextName();
@@ -49,24 +47,21 @@ public class TamePointsManager extends JsonReloadListener {
                         ITag<Item> items = ItemTags.getCollection().get(new ResourceLocation(name.replace("#", "")));
                         if (items != null) {
                             for (Item element : items.getAllElements()) {
-                                put(entityType, element, value);
+                                pointsFromItem.put(element, value);
                             }
                         }
                     } else {
                         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
                         if (item != null && item != Items.AIR) {
-                            put(entityType, item, value);
+                            pointsFromItem.put(item, value);
                         }
                     }
                 }
+                points.put(ForgeRegistries.ENTITIES.getValue(id), pointsFromItem);
             } catch (Exception e) {
                 WingsAndClaws.LOGGER.error("Unable to parse tame points for {}", id, e);
             }
         }
-    }
-
-    private void put(EntityType<?> entityType, Item item, int value) {
-        points.get(entityType).put(item, value);
     }
 
     public int getPoints(EntityType<?> type, Item item) {
