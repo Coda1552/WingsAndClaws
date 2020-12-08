@@ -56,20 +56,18 @@ public class HBNestTileEntity extends NestTileEntity {
 
     @Override
     public void tick() {
-        if (hasWorld() && eggTimer != -1) {
-            if (--eggTimer <= 0) {
-                World world = Objects.requireNonNull(getWorld());
-                BlockPos pos = getPos();
-                HatchetBeakEntity hatchetBeak = WingsEntities.HATCHET_BEAK.create(world);
-                if (hatchetBeak != null) {
-                    hatchetBeak.setGrowingAge(-24000);
-                    hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                    hatchetBeak.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, hatchetBeak.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> hatchetBeak.getDistanceSq(p1) < hatchetBeak.getDistanceSq(p2) ? p1 : p2).ifPresent(hatchetBeak::setTamedBy);
-                    world.addEntity(hatchetBeak);
-                }
-                eggTimer = -1;
+        World world = getWorld();
+        if (world != null && !world.isRemote && eggTimer != -1 && --eggTimer <= 0) {
+            BlockPos pos = getPos();
+            HatchetBeakEntity hatchetBeak = WingsEntities.HATCHET_BEAK.create(world);
+            if (hatchetBeak != null) {
+                hatchetBeak.setGrowingAge(-24000);
+                hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
+                hatchetBeak.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
+                world.getEntitiesWithinAABB(PlayerEntity.class, hatchetBeak.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> hatchetBeak.getDistanceSq(p1) < hatchetBeak.getDistanceSq(p2) ? p1 : p2).ifPresent(hatchetBeak::setTamedBy);
+                world.addEntity(hatchetBeak);
             }
+            eggTimer = -1;
         }
     }
 }
