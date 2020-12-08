@@ -14,6 +14,8 @@ import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.client.renderer.tileentity.PlowheadHornRenderer;
@@ -26,7 +28,7 @@ import java.util.Collections;
 public class HornHornItem extends ToolItem {
     public HornHornItem() {
         super(-2, -3, ItemTier.IRON, Collections.emptySet(), new Item.Properties().group(WingsItems.GROUP).maxStackSize(1).setISTER(() -> PlowheadHornRenderer::new));
-        ItemModelsProperties.registerProperty(this, new ResourceLocation(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemModelsProperties.registerProperty(this, new ResourceLocation(WingsAndClaws.MOD_ID, "using"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F));
     }
 
     @Override
