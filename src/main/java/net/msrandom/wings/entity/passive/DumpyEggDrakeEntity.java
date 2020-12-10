@@ -99,7 +99,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerDEDAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2);
+        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
     }
 
     @Override
