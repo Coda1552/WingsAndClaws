@@ -1,7 +1,6 @@
 package net.msrandom.wings;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -32,10 +31,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.network.CallHatchetBeaksPacket;
+import net.msrandom.wings.resources.TamePointsManager;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WingsEventHandler {
@@ -130,7 +129,7 @@ public class WingsEventHandler {
 
     @SubscribeEvent
     public static void addDataPackRegistries(AddReloadListenerEvent event) {
-        event.addListener(HatchetBeakEntity.TAME_ITEMS_MANAGER);
+        event.addListener(TamePointsManager.INSTANCE);
     }
 
     @OnlyIn(Dist.CLIENT)

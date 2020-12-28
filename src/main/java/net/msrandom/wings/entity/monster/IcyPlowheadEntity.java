@@ -89,7 +89,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
     public static AttributeModifierMap.MutableAttribute registerPlowheadAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2).createMutableAttribute(Attributes.MAX_HEALTH, 30).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3);
+        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2).createMutableAttribute(Attributes.MAX_HEALTH, 30).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
     }
 
 	@Override

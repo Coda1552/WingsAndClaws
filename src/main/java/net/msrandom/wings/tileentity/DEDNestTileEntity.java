@@ -78,9 +78,9 @@ public class DEDNestTileEntity extends NestTileEntity {
     @Override
     public void tick() {
         if (current == null && getEggCount() > 0) current = eggs.get(0);
-        if (hasWorld() && current != null) {
+        World world = getWorld();
+        if (world != null && !world.isRemote && current != null) {
             if (current.decrementAndGet() <= 0) {
-                World world = Objects.requireNonNull(getWorld());
                 BlockPos pos = getPos();
                 DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.create(world);
                 if (drake != null) {
