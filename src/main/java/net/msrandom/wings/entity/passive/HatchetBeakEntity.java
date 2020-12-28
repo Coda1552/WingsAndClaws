@@ -128,7 +128,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         if (this.isAlive()) {
             if (this.isBeingRidden() && this.canBeSteered() && hasSaddle()) {
                 LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
-                float rotationDifference = MathHelper.wrapDegrees(passenger.rotationYaw) - MathHelper.wrapDegrees(rotationYaw);
+                float rotationDifference = MathHelper.wrapSubtractDegrees(rotationYaw, passenger.rotationYaw);
                 float sign = Math.signum(rotationDifference);
                 if (MathHelper.abs(rotationDifference) > 3) rotationYaw += sign * 3f;
                 this.prevRotationYaw = this.rotationYaw;
@@ -142,7 +142,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 if (isFlying()) {
                     f1 = Math.max(0.6f, moveForward + passenger.moveForward * 5 + 3);
                 } else {
-                    f1 = passenger.moveForward * 0.25F;
+                    f1 = passenger.moveForward * 0.5F;
                     if (f1 <= 0.0F) {
                         f1 *= 0.25F;
                     }
@@ -298,7 +298,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
                 if (!grounded) ++ticksAfloat;
                 Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
-                targetSupplier = () -> target;
+                if (target != null) {
+                    targetSupplier = () -> target;
+                }
             }
 
             if (targetSupplier != null) {
