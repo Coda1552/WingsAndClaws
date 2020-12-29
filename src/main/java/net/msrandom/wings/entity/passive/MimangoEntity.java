@@ -34,7 +34,7 @@ import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.goal.MimangoFlyGoal;
-import net.msrandom.wings.entity.goal.MimangoHideGoal;
+import net.msrandom.wings.entity.goal.MimangoHangGoal;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,8 +44,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     //private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
-
-    private MimangoHideGoal hangGoal;
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
@@ -69,7 +67,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.hangGoal = new MimangoHideGoal(this, 5.0D);
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new BreedGoal(this, 1) {
@@ -100,7 +97,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 return super.shouldExecute() && getState() == WanderState.FOLLOW;
             }
         });
-        this.goalSelector.addGoal(3, hangGoal);
+        this.goalSelector.addGoal(3, new MimangoHangGoal(this, 5.0D));
         this.goalSelector.addGoal(4, new MimangoFlyGoal(this));
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
@@ -159,7 +156,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 }
                 this.setTamedBy(player);
                 this.navigator.clearPath();
-                this.goalSelector.removeGoal(hangGoal);
                 this.setAttackTarget(null);
                 this.setHealth(20.0F);
                 this.world.setEntityState(this, (byte) 7);

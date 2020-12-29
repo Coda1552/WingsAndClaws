@@ -43,6 +43,6 @@ public class ClientEventHandler {
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.LEAPING_GRUB_SHRIMP, LeapingGrubShrimpRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SONGVERN, SongvernRenderer::new);
 
-        ClientRegistry.registerKeyBinding(WingsAndClaws.callHatchetBeakKey = new KeyBinding("key.callHatchetBeak", 75, "key.categories.gameplay"));
+        ClientRegistry.registerKeyBinding(WingsAndClaws.callHatchetBeakKey = new KeyBinding("key.callHatchetBeak", 75, "key.categories.wings"));
     }
 }

@@ -93,5 +93,8 @@
   "item.wings.music_disc_island_hoppers": "Music Disc",
   "item.wings.music_disc_island_hoppers.desc": "Mr. Esuoh - Island Hoppers",
   "item.wings.music_disc_mantas_melody": "Music Disc",
-  "item.wings.music_disc_mantas_melody.desc": "Mr. Esuoh - Manta's Melody"
+  "item.wings.music_disc_mantas_melody.desc": "Mr. Esuoh - Manta's Melody",
+
+  "keys.category.wings": "Wings And Claws",
+  "key.callHatchetBeak": "Call Hatchet Beak"
 }

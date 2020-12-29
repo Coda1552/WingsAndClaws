@@ -90,7 +90,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 if (getDistanceSq(closestEntity) < 9) {
                     getNavigator().clearPath();
                     getLookController().setLookPositionWithEntity(this.closestEntity, (float) (20 - getHorizontalFaceSpeed()), (float) getVerticalFaceSpeed());
-                } else {
+                } else if (getNavigator().noPath()) {
                     getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
                 }
             }

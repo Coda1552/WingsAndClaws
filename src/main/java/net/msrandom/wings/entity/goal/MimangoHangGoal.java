@@ -9,14 +9,14 @@ import net.minecraft.util.math.BlockPos;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
-public class MimangoHideGoal extends Goal {
+public class MimangoHangGoal extends Goal {
     private final MimangoEntity entity;
     private final double playerDistance;
     private final EntityPredicate builtPredicate;
     private BlockPos target;
     private boolean searched;
 
-    public MimangoHideGoal(MimangoEntity entity, double playerDistance) {
+    public MimangoHangGoal(MimangoEntity entity, double playerDistance) {
         this.entity = entity;
         this.playerDistance = playerDistance;
         this.builtPredicate = new EntityPredicate().setDistance(playerDistance).setCustomPredicate(EntityPredicates.CAN_AI_TARGET::test);
@@ -81,8 +81,10 @@ public class MimangoHideGoal extends Goal {
 
     @Override
     public void resetTask() {
-        this.entity.setHiding(false);
-        this.entity.playSound(WingsSounds.MIMANGO_UNHIDE, 1, 1);
+        if (this.entity.isHiding()) {
+            this.entity.setHiding(false);
+            this.entity.playSound(WingsSounds.MIMANGO_UNHIDE, 1, 1);
+        }
         target = null;
     }
 

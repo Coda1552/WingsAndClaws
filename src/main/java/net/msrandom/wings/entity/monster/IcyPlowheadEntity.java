@@ -325,7 +325,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					sleepTarget = p;
 				}
 				getNavigator().tryMoveToXYZ(sleepTarget.getX(), sleepTarget.getY(), sleepTarget.getZ(), 0.2);
-
 				return false;
 			}
 			return alarmedTimer == 0;

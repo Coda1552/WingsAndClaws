@@ -36,8 +36,7 @@ public class WingsISTER extends ItemStackTileEntityRenderer {
         CHILDREN.get(stack.getItem()).func_239207_a_(stack, transforms, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
-    public void addDelegate(Item item, ItemStackTileEntityRenderer child)
-    {
+    public void addDelegate(Item item, ItemStackTileEntityRenderer child) {
         if (item.getItemStackTileEntityRenderer() != this) {
             throw new IllegalArgumentException("This item's ISTER does not belong here!");
         }
