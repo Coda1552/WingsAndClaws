@@ -10,7 +10,8 @@ public class CallHatchetBeaksPacket implements INetworkPacket {
                 WingsEntities.HATCHET_BEAK,
                 player.getBoundingBox().grow(256).offset(0, 128, 0),
                 entity -> entity.isOwner(player)
-        ).stream()
+        )
+                .stream()
                 .reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b)
                 .ifPresent(entity -> entity.targetSupplier = player::getPositionVec);
     }

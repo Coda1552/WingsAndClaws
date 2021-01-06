@@ -7,15 +7,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 import net.msrandom.wings.item.WingsFoods;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.DEDNestTileEntity;
 import net.msrandom.wings.tileentity.HBNestTileEntity;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class WingsBlocks {
     public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, WingsAndClaws.MOD_ID);

@@ -28,7 +28,7 @@ public class LeapingGrubShrimpEntity extends AbstractFishEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerLGSAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 8);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 8);
     }
 
     @Override

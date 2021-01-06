@@ -49,7 +49,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     public static AttributeModifierMap.MutableAttribute registerSongvernAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 10);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 10);
     }
 
     @Override

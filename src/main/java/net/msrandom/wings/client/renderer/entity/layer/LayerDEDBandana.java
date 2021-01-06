@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.DumpyEggDrakeRenderer;
 import net.msrandom.wings.client.renderer.entity.model.DumpyEggDrakeModel;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
 public class LayerDEDBandana extends LayerRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[32];

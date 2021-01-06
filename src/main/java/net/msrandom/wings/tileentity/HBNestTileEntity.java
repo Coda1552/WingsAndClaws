@@ -8,9 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
-
-import java.util.Objects;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 
 public class HBNestTileEntity extends NestTileEntity {
     private int eggTimer = -1;

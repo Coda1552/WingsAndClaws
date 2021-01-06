@@ -7,10 +7,10 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -47,12 +47,13 @@ import net.msrandom.wings.client.ClientEventHandler;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 import net.msrandom.wings.entity.passive.HaroldsGreendrakeEntity;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.network.CallHatchetBeaksPacket;
+import net.msrandom.wings.network.HatchetBeakAttackPacket;
 import net.msrandom.wings.network.INetworkPacket;
 import net.msrandom.wings.tileentity.WingsTileEntities;
 import net.msrandom.wings.world.gen.feature.MangoBunchTreeDecorator;
@@ -74,6 +75,9 @@ public class WingsAndClaws {
     @OnlyIn(Dist.CLIENT)
     public static KeyBinding callHatchetBeakKey;
 
+    @OnlyIn(Dist.CLIENT)
+    public static KeyBinding hatchetBeakAttackKey;
+
     public WingsAndClaws() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerCommon);
@@ -91,6 +95,7 @@ public class WingsAndClaws {
         EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE, EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
 
         registerMessage(CallHatchetBeaksPacket.class, CallHatchetBeaksPacket::new, LogicalSide.SERVER);
+        registerMessage(HatchetBeakAttackPacket.class, HatchetBeakAttackPacket::new, LogicalSide.SERVER);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -123,7 +128,6 @@ public class WingsAndClaws {
 
         //biome1.addStructure(WingsFeatures.MIMANGO_SHRINE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         //biome1.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.MIMANGO_SHRINE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(15, 0.1f, 0))));
-
     }
 
     private void registerClient(FMLClientSetupEvent event) {
@@ -141,7 +145,7 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, MobEntity.func_233666_p_().create());
     }
 
     private <T extends INetworkPacket> void registerMessage(Class<T> message, Supplier<T> supplier, LogicalSide side) {
@@ -160,4 +164,3 @@ public class WingsAndClaws {
         }, Optional.of(side.isClient() ? NetworkDirection.PLAY_TO_CLIENT : NetworkDirection.PLAY_TO_SERVER));
     }
 }
-

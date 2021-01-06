@@ -1,10 +1,11 @@
-package net.msrandom.wings.entity.passive;
+package net.msrandom.wings.entity.monster;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -99,7 +100,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerDEDAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
     }
 
     @Override

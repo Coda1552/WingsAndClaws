@@ -48,7 +48,7 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerGreendrakeAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1883).createMutableAttribute(Attributes.MAX_HEALTH, 16);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1883).createMutableAttribute(Attributes.MAX_HEALTH, 16);
     }
 
     public boolean isBreedingItem(ItemStack stack) {
@@ -104,7 +104,7 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     public HaroldsGreendrakeEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
-        return WingsEntities.HAROLDS_GREENDRAKE.create(this.world);
+        return WingsEntities.HAROLDS_GREENDRAKE.create(serverWorld);
     }
 
     protected float getStandingEyeHeight(Pose pose, EntitySize size) {

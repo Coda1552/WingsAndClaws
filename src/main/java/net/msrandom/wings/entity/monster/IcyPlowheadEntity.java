@@ -14,6 +14,8 @@ import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.BreedGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -50,7 +52,6 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack horn = ItemStack.EMPTY;
 	private BlockPos iceBlock;
-	public float pitch;
 	private int alarmedTimer;
 	private boolean attacking;
 	private Vector3d oldPos;
@@ -89,7 +90,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
     public static AttributeModifierMap.MutableAttribute registerPlowheadAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2).createMutableAttribute(Attributes.MAX_HEALTH, 30).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2).createMutableAttribute(Attributes.MAX_HEALTH, 30).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
     }
 
 	@Override
@@ -129,10 +130,12 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-			if (!isChild() && !isOwner((LivingEntity) source.getTrueSource()))
-				setAttackTarget((LivingEntity) source.getTrueSource());
-		}
+        if (!isChild() && source.getTrueSource() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) source.getTrueSource();
+            if (!isOwner(entity) && (!(entity instanceof TameableEntity) || getOwnerId() == null || !getOwnerId().equals(((TameableEntity) entity).getOwnerId()))) {
+                setAttackTarget((LivingEntity) source.getTrueSource());
+            }
+        }
 
 		if (isSleeping()) {
 			oldPos = getPositionVec();
@@ -190,9 +193,9 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 		if (!isSleeping()) {
 			if (this.inWater) {
-				this.pitch = (float) MathHelper.clampedLerp(this.pitch, -(this.getMotion().getY() * 180), MathHelper.sin(ticksExisted) * 2);
+				this.rotationPitch = MathHelper.wrapDegrees((float) this.getMotion().getY() * 345);
 			} else {
-				this.pitch = 0;
+				this.rotationPitch = 0;
 			}
 
 			if (!world.isRemote) {
@@ -448,7 +451,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				this.plowhead.renderYawOffset = this.plowhead.rotationYaw;
 				float f1 = (float) (this.speed * this.plowhead.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 				this.plowhead.setAIMoveSpeed(MathHelper.lerp(0.125F, this.plowhead.getAIMoveSpeed(), f1));
-				this.plowhead.setMotion(this.plowhead.getMotion().add(MathHelper.clamp(d0, speed / -10, speed / 10), (double) this.plowhead.getAIMoveSpeed() * d1 * 0.1D, MathHelper.clamp(d2, speed / -10, speed / 10)));
+				this.plowhead.setMotion(this.plowhead.getMotion().add(MathHelper.clamp(d0, speed / -10, speed / 10), (double) this.plowhead.getAIMoveSpeed() * d1 * 0.5, MathHelper.clamp(d2, speed / -10, speed / 10)));
 			} else {
 				this.plowhead.setAIMoveSpeed(0.0F);
 			}

@@ -34,11 +34,13 @@ import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.network.CallHatchetBeaksPacket;
+import net.msrandom.wings.network.HatchetBeakAttackPacket;
 import net.msrandom.wings.resources.TamePointsManager;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WingsEventHandler {
     private static int hatchetBeakCallTimer;
+    private static int hatchetBeakAttackTimer;
 
     @SubscribeEvent
     public static void breakBlock(BlockEvent.BreakEvent event) {
@@ -142,6 +144,15 @@ public class WingsEventHandler {
             }
         } else {
             --hatchetBeakCallTimer;
+        }
+
+        if (hatchetBeakAttackTimer == 0) {
+            if (WingsAndClaws.hatchetBeakAttackKey.isKeyDown()) {
+                WingsAndClaws.NETWORK.sendToServer(new HatchetBeakAttackPacket());
+                hatchetBeakAttackTimer = 10;
+            }
+        } else {
+            --hatchetBeakAttackTimer;
         }
     }
 }

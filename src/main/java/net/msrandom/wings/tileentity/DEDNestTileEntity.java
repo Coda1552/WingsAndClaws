@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

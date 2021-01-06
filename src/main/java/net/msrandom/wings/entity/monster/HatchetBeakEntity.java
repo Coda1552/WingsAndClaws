@@ -1,10 +1,11 @@
-package net.msrandom.wings.entity.passive;
+package net.msrandom.wings.entity.monster;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -12,6 +13,7 @@ import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,10 +27,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,6 +54,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     public Supplier<Vector3d> targetSupplier;
     private int ticksAfloat;
     private int flyTime;
+    private int attackTimer;
 
     public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);
@@ -77,7 +82,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     public static AttributeModifierMap.MutableAttribute registerHBAttributes() {
-        return LivingEntity.registerAttributes().createMutableAttribute(Attributes.FOLLOW_RANGE, 16).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 60).createMutableAttribute(Attributes.FLYING_SPEED, 10).createMutableAttribute(Attributes.ATTACK_DAMAGE, 4);
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 60).createMutableAttribute(Attributes.FLYING_SPEED, 10).createMutableAttribute(Attributes.ATTACK_DAMAGE, 4);
     }
 
     @Override
@@ -135,11 +140,11 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 this.setRotation(this.rotationYaw, this.rotationPitch);
                 this.renderYawOffset = this.rotationYaw;
                 this.rotationYawHead = this.renderYawOffset;
-                float f = passenger.moveStrafing * 0.25F;
+                float f = passenger.moveStrafing * 0.5F;
 
                 float f1;
                 if (isFlying()) {
-                    f1 = Math.max(0.6f, moveForward + passenger.moveForward * 5 + 3);
+                    f1 = Math.max(0.75f, moveForward + passenger.moveForward * 6 + 3);
                 } else {
                     f1 = passenger.moveForward * 0.5F;
                     if (f1 <= 0.0F) {
@@ -290,26 +295,47 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             boolean flying = isFlying();
             boolean grounded = !flying || ticksExisted <= 25;
 
-            if (!grounded && ticksAfloat >= flyTime) {
-                targetSupplier = null;
-            }
-
-            if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
-                if (!grounded) ++ticksAfloat;
-                Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
-                if (target != null) {
-                    targetSupplier = () -> target;
-                }
-            }
-
-            if (targetSupplier != null) {
-                Vector3d target = targetSupplier.get();
-                moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
-                if (target.getY() - getPosY() < 0) {
-                    setMotion(getMotion().add(0, Math.max(target.getY() - getPosY(), -0.1), 0));
-                }
-                if (getDistanceSq(target) <= 4) {
+            LivingEntity attackTarget = getAttackTarget();
+            if (attackTarget == null) {
+                attackTimer = 0;
+                if (!grounded && ticksAfloat >= flyTime) {
                     targetSupplier = null;
+                }
+
+                if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
+                    if (!grounded) ++ticksAfloat;
+                    Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
+                    if (target != null) {
+                        targetSupplier = () -> target;
+                    }
+                }
+
+                if (targetSupplier != null) {
+                    Vector3d target = targetSupplier.get();
+                    moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
+                    if (target.getY() - getPosY() < 0) {
+                        setMotion(getMotion().add(0, Math.max(target.getY() - getPosY(), -0.1), 0));
+                    }
+                    if (getDistanceSq(target) <= 4) {
+                        targetSupplier = null;
+                    }
+                }
+            } else {
+                moveController.setMoveTo(attackTarget.getPosX(), attackTarget.getPosY(), attackTarget.getPosZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
+                if (attackTarget.getPosY() - getPosY() < 0) {
+                    setMotion(getMotion().add(0, Math.max(attackTarget.getPosY() - getPosY(), -0.1), 0));
+                }
+
+                if (getDistanceSq(attackTarget) <= 4) {
+                    if (attackTimer == 0) {
+                        super.attackEntityAsMob(attackTarget);
+                    } else {
+                        --attackTimer;
+                    }
+                }
+
+                if (!attackTarget.isAlive() || attackTarget instanceof PlayerEntity && ((PlayerEntity) attackTarget).isCreative()) {
+                    setAttackTarget(null);
                 }
             }
         }
@@ -323,6 +349,27 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @Override
     public boolean canBeSteered() {
         return this.getControllingPassenger() instanceof LivingEntity;
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (world.getDifficulty() != Difficulty.PEACEFUL && source.getTrueSource() instanceof LivingEntity) {
+            setAttackTarget((LivingEntity) source.getTrueSource());
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entity) {
+        return performAttack(entity);
+    }
+
+    public boolean performAttack(Entity entity) {
+        if (!isFlying()) {
+            attackTimer = 15;
+            return false;
+        }
+        return super.attackEntityAsMob(entity);
     }
 
     /*    @Override

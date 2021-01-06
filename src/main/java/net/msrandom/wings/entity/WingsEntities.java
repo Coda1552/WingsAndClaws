@@ -11,6 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.item.PlowheadEggEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 import net.msrandom.wings.entity.passive.*;
 import net.msrandom.wings.item.WingsItems;

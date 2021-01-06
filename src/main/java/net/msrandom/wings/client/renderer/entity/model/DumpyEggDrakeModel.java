@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
 public abstract class DumpyEggDrakeModel extends SegmentedModel<DumpyEggDrakeEntity> {
     public ModelRenderer body;
