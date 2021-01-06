@@ -328,7 +328,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
                 if (getDistanceSq(attackTarget) <= 4) {
                     if (attackTimer == 0) {
-                        super.attackEntityAsMob(attackTarget);
+                        attackEntityAsMob(attackTarget);
                     } else {
                         --attackTimer;
                     }
