@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.layer.LayerDEDBandana;
 import net.msrandom.wings.client.renderer.entity.model.DumpyEggDrakeModel;
-import net.msrandom.wings.entity.passive.DumpyEggDrakeEntity;
+import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
 public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[8];

@@ -1,10 +1,12 @@
 package net.msrandom.wings.entity.passive;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -12,17 +14,18 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.msrandom.wings.WingsSounds;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.WingsEntities;
-import net.msrandom.wings.item.WingsItems;
 
-import javax.annotation.Nullable;
+import java.util.Random;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {
     public HaroldsGreendrakeEntity(EntityType<? extends HaroldsGreendrakeEntity> type, World worldIn) {
@@ -40,10 +43,12 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16.0D);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue((double)0.1883F);
+    public static boolean canHaroldsSpawn(EntityType<? extends HaroldsGreendrakeEntity> animal, IWorld worldIn, SpawnReason reason, BlockPos pos, Random random) {
+        return worldIn.getBlockState(pos.down()).getBlock() == Blocks.GRASS_BLOCK && worldIn.getLightSubtracted(pos, 0) > 4;
+    }
+
+    public static AttributeModifierMap.MutableAttribute registerGreendrakeAttributes() {
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1883).createMutableAttribute(Attributes.MAX_HEALTH, 16);
     }
 
     public boolean isBreedingItem(ItemStack stack) {
@@ -54,7 +59,7 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         return WingsSounds.HAROLD_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
         return WingsSounds.HAROLD_HURT;
     }
 
@@ -62,7 +67,7 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         return WingsSounds.HAROLD_DEATH;
     }
 
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    protected void playStepSound(BlockPos pos, BlockState state) {
         this.playSound(SoundEvents.ENTITY_COW_STEP, 0.15F, 1.0F);
     }
 
@@ -70,17 +75,17 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         return 0.4F;
     }
 
-    public boolean isPotionApplicable(EffectInstance potioneffectIn) {
-        if (potioneffectIn.getPotion() == Effects.POISON) {
-            net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-            return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
+    public boolean isPotionApplicable(EffectInstance effect) {
+        if (effect.getPotion() == Effects.POISON) {
+            PotionEvent.PotionApplicableEvent event = new PotionEvent.PotionApplicableEvent(this, effect);
+            MinecraftForge.EVENT_BUS.post(event);
+            return event.getResult() == Event.Result.ALLOW;
         }
-        return super.isPotionApplicable(potioneffectIn);
+        return super.isPotionApplicable(effect);
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         float maxHealth = this.getMaxHealth();
         float health = this.getHealth();
@@ -89,20 +94,20 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
                 stack.shrink(1);
             }
             heal(4);
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
-            return true;
+            double x = this.rand.nextGaussian() * 0.02D;
+            double y = this.rand.nextGaussian() * 0.02D;
+            double z = this.rand.nextGaussian() * 0.02D;
+            this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), x, y, z);
+            return ActionResultType.SUCCESS;
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
-    public HaroldsGreendrakeEntity createChild(AgeableEntity ageable) {
-        return WingsEntities.HAROLDS_GREENDRAKE.create(this.world);
+    public HaroldsGreendrakeEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+        return WingsEntities.HAROLDS_GREENDRAKE.create(serverWorld);
     }
 
-    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
-        return this.isChild() ? sizeIn.height * 0.95F : 1.3F;
+    protected float getStandingEyeHeight(Pose pose, EntitySize size) {
+        return this.isChild() ? size.height * 0.95F : 0.7F;
     }
 }

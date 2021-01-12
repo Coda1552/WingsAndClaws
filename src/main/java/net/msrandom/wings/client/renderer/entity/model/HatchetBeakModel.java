@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 
 public abstract class HatchetBeakModel extends SegmentedModel<HatchetBeakEntity> {
     public ModelRenderer body;

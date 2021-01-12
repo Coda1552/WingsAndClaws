@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -92,7 +94,7 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
                 if (thunderTailEntity != null) {
                     thunderTailEntity.setGrowingAge(-24000);
                     thunderTailEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                    thunderTailEntity.onInitialSpawn(world, world.getDifficultyForLocation(thunderTailEntity.getPosition()), SpawnReason.NATURAL, null, null);
+                    thunderTailEntity.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(thunderTailEntity.getPosition()), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, thunderTailEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> thunderTailEntity.getDistanceSq(p1) < thunderTailEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(thunderTailEntity::setTamedBy);
                     this.world.addEntity(thunderTailEntity);
                 }
@@ -104,13 +106,13 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
             if (player.addItemStackToInventory(new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG))) {
                 remove();
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
 
         return super.processInitialInteract(player, hand);

@@ -1,4 +1,4 @@
-package net.msrandom.wings.events;
+package net.msrandom.wings;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -9,40 +9,50 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.OcelotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.TableLootEntry;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.TableLootEntry;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
+import net.msrandom.wings.network.CallHatchetBeaksPacket;
+import net.msrandom.wings.network.HatchetBeakAttackPacket;
+import net.msrandom.wings.resources.TamePointsManager;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CommonEventHandler {
+public class WingsEventHandler {
+    private static int hatchetBeakCallTimer;
+    private static int hatchetBeakAttackTimer;
+
     @SubscribeEvent
     public static void breakBlock(BlockEvent.BreakEvent event) {
         PlayerEntity player = event.getPlayer();
         if (player.isCreative())
             return;
-        World world = event.getWorld().getWorld();
+        IWorld world = event.getWorld();
         Material material = event.getState().getMaterial();
-        if (!world.isRemote && (material == Material.ICE || material == Material.PACKED_ICE)) {
-            if (world.rand.nextInt(48) == 0) {
+        if (world instanceof World && !world.isRemote() && (material == Material.ICE || material == Material.PACKED_ICE)) {
+            if (world.getRandom().nextInt(48) == 0) {
                 BlockPos pos = event.getPos();
-                world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, new ItemStack(WingsItems.GLACIAL_SHRIMP)));
+                world.addEntity(new ItemEntity((World) world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, new ItemStack(WingsItems.GLACIAL_SHRIMP)));
             }
         }
     }
@@ -60,19 +70,19 @@ public class CommonEventHandler {
                 DamageSource source = event.getSource();
                 Entity entity = source.getImmediateSource();
                 if (entity != null && !source.isUnblockable()) {
-                    Vec3d vec3d = source.getDamageLocation();
+                    Vector3d vec3d = source.getDamageLocation();
                     if (vec3d != null) {
-                        Vec3d vec3d1 = player.getLook(1.0F);
-                        Vec3d vec3d2 = vec3d.subtractReverse(player.getPositionVec()).normalize();
-                        vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
+                        Vector3d vec3d1 = player.getLook(1.0F);
+                        Vector3d vec3d2 = vec3d.subtractReverse(player.getPositionVec()).normalize();
+                        vec3d2 = new Vector3d(vec3d2.x, 0.0D, vec3d2.z);
                         if (vec3d2.dotProduct(vec3d1) < 0.0D) {
                             if (entity instanceof LivingEntity) {
-                                ((LivingEntity) entity).knockBack(player, (float) speed * 3.325f, MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), MathHelper.cos((float) Math.toRadians(entity.rotationYaw)));
+                                ((LivingEntity) entity).applyKnockback((float) speed * 3.325f, MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), MathHelper.cos((float) Math.toRadians(entity.rotationYaw)));
                             } else {
                                 double strength = speed * 3.325;
-                                Vec3d vec3d3 = entity.getMotion();
-                                Vec3d vec3d4 = new Vec3d(MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), 0.0D, MathHelper.cos((float) Math.toRadians(entity.rotationYaw))).normalize().scale(strength);
-                                entity.setMotion(vec3d3.x / 2.0D - vec3d4.x, entity.onGround ? Math.min(0.4D, vec3d3.y / 2.0D + strength) : vec3d3.y, vec3d3.z / 2.0D - vec3d4.z);
+                                Vector3d vec3d3 = entity.getMotion();
+                                Vector3d vec3d4 = new Vector3d(MathHelper.sin((float) Math.toRadians(-entity.rotationYaw)), 0.0D, MathHelper.cos((float) Math.toRadians(entity.rotationYaw))).normalize().scale(strength);
+                                entity.setMotion(vec3d3.x / 2.0D - vec3d4.x, entity.isOnGround() ? Math.min(0.4D, vec3d3.y / 2.0D + strength) : vec3d3.y, vec3d3.z / 2.0D - vec3d4.z);
                             }
                             event.setCanceled(true);
                         }
@@ -116,6 +126,33 @@ public class CommonEventHandler {
                 break;
             default:
                 break;
+        }
+    }
+
+    @SubscribeEvent
+    public static void addDataPackRegistries(AddReloadListenerEvent event) {
+        event.addListener(TamePointsManager.INSTANCE);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
+        if (hatchetBeakCallTimer == 0) {
+            if (WingsAndClaws.callHatchetBeakKey.isKeyDown()) {
+                WingsAndClaws.NETWORK.sendToServer(new CallHatchetBeaksPacket());
+                hatchetBeakCallTimer = 200;
+            }
+        } else {
+            --hatchetBeakCallTimer;
+        }
+
+        if (hatchetBeakAttackTimer == 0) {
+            if (WingsAndClaws.hatchetBeakAttackKey.isKeyDown()) {
+                WingsAndClaws.NETWORK.sendToServer(new HatchetBeakAttackPacket());
+                hatchetBeakAttackTimer = 10;
+            }
+        } else {
+            --hatchetBeakAttackTimer;
         }
     }
 }

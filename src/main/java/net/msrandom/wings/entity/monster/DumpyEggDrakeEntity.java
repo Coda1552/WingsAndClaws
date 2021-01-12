@@ -1,8 +1,11 @@
-package net.msrandom.wings.entity.passive;
+package net.msrandom.wings.entity.monster;
 
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -13,12 +16,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.item.WingsItems;
 
@@ -33,7 +37,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
     private int attackCooldown;
-    private Vec3d oldPos;
+    private Vector3d oldPos;
     private PlayerEntity closestPlayer;
 
     public DumpyEggDrakeEntity(EntityType<? extends DumpyEggDrakeEntity> type, World worldIn) {
@@ -87,7 +91,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 if (getDistanceSq(closestEntity) < 9) {
                     getNavigator().clearPath();
                     getLookController().setLookPositionWithEntity(this.closestEntity, (float) (20 - getHorizontalFaceSpeed()), (float) getVerticalFaceSpeed());
-                } else {
+                } else if (getNavigator().noPath()) {
                     getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
                 }
             }
@@ -95,12 +99,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2);
+    public static AttributeModifierMap.MutableAttribute registerDEDAttributes() {
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
     }
 
     @Override
@@ -140,8 +140,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
-        this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4);
     }
 
     @Override
@@ -160,14 +160,14 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote && isTamed() && stack.getItem() instanceof DyeItem) {
             setBandanaColor(((DyeItem) stack.getItem()).getDyeColor());
             if (!player.abilities.isCreativeMode) stack.shrink(1);
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     @Override
@@ -246,7 +246,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
             if (alarmedTimer-- <= 0) alarmedTimer = 0;
             super.livingTick();
-        } else this.travel(new Vec3d(this.moveStrafing, this.moveVertical, this.moveForward));
+        } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
     }
 
     @Override

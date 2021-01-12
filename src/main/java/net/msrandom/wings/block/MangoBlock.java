@@ -14,12 +14,12 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class MangoBlock extends CropsBlock implements IGrowable{
-
+public class MangoBlock extends CropsBlock implements IGrowable {
     public static final IntegerProperty MANGOES = IntegerProperty.create("mango_bunch", 1, 4);
 
     protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
@@ -35,9 +35,9 @@ public class MangoBlock extends CropsBlock implements IGrowable{
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
         int i = state.get(MANGOES);
-        if(i < 4 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn,pos,state,worldIn.rand.nextInt(5) == 0)) {
+        if (i < 4 && ForgeHooks.onCropsGrowPre(worldIn, pos, state, worldIn.rand.nextInt(5) == 0)) {
             worldIn.setBlockState(pos, state.with(MANGOES, i + 1), 2);
-            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+            ForgeHooks.onCropsGrowPost(worldIn, pos, state);
         }
     }
 

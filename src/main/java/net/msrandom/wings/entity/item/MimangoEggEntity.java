@@ -10,11 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,16 +29,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class MimangoEggEntity extends LivingEntity {
+    private final boolean startedInLeaves;
     private int hatchTime;
 
     public MimangoEggEntity(EntityType<? extends MimangoEggEntity> type, World world) {
         super(type, world);
         setSilent(true);
+        startedInLeaves = false;
     }
 
     public MimangoEggEntity(World worldIn, BlockPos pos) {
-        this(WingsEntities.MIMANGO_EGG, worldIn);
+        super(WingsEntities.MIMANGO_EGG, worldIn);
+        setSilent(true);
         setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        startedInLeaves = world.getBlockState(pos).getBlock().isIn(BlockTags.LEAVES);
     }
 
     @Override
@@ -101,12 +108,12 @@ public class MimangoEggEntity extends LivingEntity {
     @Override
     public void tick() {
         if (!this.world.isRemote) {
-            if (hatchTime++ >= 1200) {
+            if (startedInLeaves && !world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES) || hatchTime++ >= 1200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
                     mimangoEntity.setGrowingAge(-24000);
                     mimangoEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                    mimangoEntity.onInitialSpawn(world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
+                    mimangoEntity.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, mimangoEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> mimangoEntity.getDistanceSq(p1) < mimangoEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(mimangoEntity::setTamedBy);
                     this.world.addEntity(mimangoEntity);
                 }
@@ -118,13 +125,13 @@ public class MimangoEggEntity extends LivingEntity {
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
             if (player.addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG))) {
                 remove();
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
         return super.processInitialInteract(player, hand);
     }

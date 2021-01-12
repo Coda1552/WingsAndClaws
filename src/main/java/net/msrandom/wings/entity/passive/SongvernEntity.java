@@ -2,6 +2,8 @@ package net.msrandom.wings.entity.passive;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -17,17 +19,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.goal.SongvernFlyGoal;
-import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,12 +48,8 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.8);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
+    public static AttributeModifierMap.MutableAttribute registerSongvernAttributes() {
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 10);
     }
 
     @Override
@@ -121,7 +119,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         if (spawnDataIn == null) {
             spawnDataIn = new GroupData(this, rand.nextInt(15));
@@ -202,7 +200,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             if (isTamed()) {
@@ -213,20 +211,20 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
                     if (player.getLeftShoulderEntity().isEmpty() && player.addShoulderEntity(compoundnbt)) {
                         this.remove();
                     }
-                    return true;
                 } else {
                     this.navigator.clearPath();
-                    this.setSitting(true);
+                    this.setSleeping(true);
                 }
+                return ActionResultType.SUCCESS;
             } else if (stack.getItem() == Items.HONEYCOMB) {
                 if (!player.abilities.isCreativeMode) stack.shrink(1);
                 this.setTamedBy(player);
                 this.setAttackTarget(null);
                 this.world.setEntityState(this, (byte) 7);
-                return true;
+                return ActionResultType.SUCCESS;
             }
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     public void setGroup(Stream<SongvernEntity> stream) {

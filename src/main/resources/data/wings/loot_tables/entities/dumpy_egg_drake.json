@@ -40,15 +40,6 @@
           "name": "wings:dragon_meat"
         }
       ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:egg"
-        }
-      ]
     }
   ]
 }

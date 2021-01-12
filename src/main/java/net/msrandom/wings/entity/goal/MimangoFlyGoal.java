@@ -3,7 +3,7 @@ package net.msrandom.wings.entity.goal;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.gen.Heightmap;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
@@ -32,7 +32,7 @@ public class MimangoFlyGoal extends Goal {
                     return true;
                 }
 
-                Vec3d vec3d = RandomPositionGenerator.findAirTarget(this.creature, 48, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 12, 6);
+                Vector3d vec3d = RandomPositionGenerator.findAirTarget(this.creature, 48, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 12, 6);
                 if (vec3d == null) {
                     goToGround();
                 } else {

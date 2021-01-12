@@ -1,21 +1,24 @@
 package net.msrandom.wings.entity.passive;
 
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.item.WingsItems;
 
@@ -24,7 +27,7 @@ import javax.annotation.Nullable;
 public class SaddledThunderTailEntity extends TameableDragonEntity {
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private int alarmedTimer;
-    private Vec3d oldPos;
+    private Vector3d oldPos;
 
     public SaddledThunderTailEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);
@@ -35,32 +38,30 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
         return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.isTamed() ? 150 : 100);
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
-    }
-
-    @Override
-    protected void registerGoals() {
-//        super.registerGoals();
+    public static AttributeModifierMap.MutableAttribute registerSTTAttributes() {
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23).createMutableAttribute(Attributes.MAX_HEALTH, 100).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         boolean bullSpawn;
-        if (spawnDataIn instanceof STTData) bullSpawn = ((STTData)spawnDataIn).canMaleSpawn();
-        else {
+        if (spawnDataIn instanceof STTData) {
+            bullSpawn = ((STTData) spawnDataIn).canMaleSpawn();
+        } else {
             bullSpawn = rand.nextBoolean();
             spawnDataIn = new STTData();
         }
 
-        AgeableData ageableData = (AgeableData)spawnDataIn;
-        if (ageableData.getIndexInGroup() > 2) ageableData.setCanBabySpawn(true);
-        if (bullSpawn) ((STTData) spawnDataIn).setCanMaleSpawn(false);
+        AgeableData ageableData = (AgeableData) spawnDataIn;
+
+        if (ageableData.getIndexInGroup() > 2) {
+            this.setGrowingAge(-24000);
+        }
+
+        if (bullSpawn) {
+            ((STTData) spawnDataIn).setCanMaleSpawn(false);
+        }
 
         this.setGender(bullSpawn);
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -98,10 +99,10 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
         if (tamed) {
-            this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(150);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(150);
             this.setHealth(150);
         } else {
-            this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100);
         }
     }
 
@@ -120,9 +121,9 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (handleSpawnEgg(player, stack)) return true;
+        if (handleSpawnEgg(player, stack)) return ActionResultType.SUCCESS;
 
         if (isChild() && !isTamed() && isBreedingItem(stack)) {
             this.consumeItemFromStack(player, stack);
@@ -135,9 +136,9 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
             } else {
                 this.world.setEntityState(this, (byte) 6);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     @Override
@@ -172,7 +173,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
                 if (alarmedTimer-- <= 0) alarmedTimer = 0;
             }
             super.livingTick();
-        } else this.travel(new Vec3d(this.moveStrafing, this.moveVertical, this.moveForward));
+        } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
     }
 
     @Override
@@ -194,8 +195,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
         public boolean canMaleSpawn = true;
 
         public STTData() {
-            this.setCanBabySpawn(false);
-            this.setBabySpawnProbability(0.5F);
+            super(false);
         }
 
         public boolean canMaleSpawn() {
@@ -204,6 +204,11 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
 
         public void setCanMaleSpawn(boolean canMaleSpawn) {
             this.canMaleSpawn = canMaleSpawn;
+        }
+
+        @Override
+        public float getBabySpawnProbability() {
+            return 0.5f;
         }
     }
 }

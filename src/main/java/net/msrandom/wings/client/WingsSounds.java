@@ -1,13 +1,14 @@
-package net.msrandom.wings;
+package net.msrandom.wings.client;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.msrandom.wings.WingsAndClaws;
 
 public class WingsSounds {
 
-    public static final DeferredRegister<SoundEvent> REGISTRY = new DeferredRegister<>(ForgeRegistries.SOUND_EVENTS, WingsAndClaws.MOD_ID);
+    public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, WingsAndClaws.MOD_ID);
     public static final SoundEvent DED_AMBIENT = create("ded.ambient");
     public static final SoundEvent DED_HURT = create("ded.hurt");
     public static final SoundEvent DED_DEATH = create("ded.death");

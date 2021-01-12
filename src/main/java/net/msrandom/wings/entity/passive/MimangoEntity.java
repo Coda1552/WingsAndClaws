@@ -2,6 +2,8 @@ package net.msrandom.wings.entity.passive;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -17,21 +19,22 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.msrandom.wings.WingsSounds;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.goal.MimangoFlyGoal;
-import net.msrandom.wings.entity.goal.MimangoHideGoal;
+import net.msrandom.wings.entity.goal.MimangoHangGoal;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,20 +45,14 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
     //private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
-    private MimangoHideGoal hangGoal;
-
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 10, true);
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
     }
 
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttributes().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        this.getAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.8);
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
-        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8);
+    public static AttributeModifierMap.MutableAttribute registerMimangoAttributes() {
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 14);
     }
 
     @Override
@@ -70,7 +67,6 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.hangGoal = new MimangoHideGoal(this, 5.0D);
         this.goalSelector.addGoal(0, new PanicGoal(this, 1.25D));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new BreedGoal(this, 1) {
@@ -101,7 +97,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 return super.shouldExecute() && getState() == WanderState.FOLLOW;
             }
         });
-        this.goalSelector.addGoal(3, hangGoal);
+        this.goalSelector.addGoal(3, new MimangoHangGoal(this, 5.0D));
         this.goalSelector.addGoal(4, new MimangoFlyGoal(this));
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
@@ -128,7 +124,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         setVariant(rand.nextInt(5));
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
@@ -144,14 +140,14 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
             playSound(WingsSounds.MIMANGO_HAPPY, getSoundVolume(), getSoundPitch());
-            return true;
+            return ActionResultType.SUCCESS;
         }
 
-        if (handleSpawnEgg(player, stack)) return true;
+        if (handleSpawnEgg(player, stack)) return ActionResultType.SUCCESS;
 
         if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
             if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
@@ -160,16 +156,15 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 }
                 this.setTamedBy(player);
                 this.navigator.clearPath();
-                this.goalSelector.removeGoal(hangGoal);
                 this.setAttackTarget(null);
                 this.setHealth(20.0F);
                 this.world.setEntityState(this, (byte) 7);
             } else {
                 this.world.setEntityState(this, (byte) 6);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return super.processInteract(player, hand);
+        return super.func_230254_b_(player, hand);
     }
 
     @Override
@@ -216,7 +211,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         super.tick();
         if (getState() == WanderState.STAY) setMotion(getMotion().add(0, -0.05, 0));
         if (this.isHiding()) {
-            this.setMotion(Vec3d.ZERO);
+            this.setMotion(Vector3d.ZERO);
             this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), this.getPosZ());
         }
     }

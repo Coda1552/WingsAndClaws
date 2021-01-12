@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.model.HatchetBeakModel;
-import net.msrandom.wings.entity.passive.HatchetBeakEntity;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 
 public class LayerHatchetBeakSaddle extends LayerRenderer<HatchetBeakEntity, HatchetBeakModel> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/hatchet_beak/saddle.png");
