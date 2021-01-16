@@ -15,7 +15,7 @@ import net.msrandom.wings.client.renderer.entity.model.SpearProjectileModel;
 import net.msrandom.wings.entity.item.SpearProjectileEntity;
 
 public class SpearProjectileRenderer extends EntityRenderer<SpearProjectileEntity> implements IEntityRenderer<SpearProjectileEntity, SpearProjectileModel> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/st_spear/st_projectile_entity.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/stt_spear/stt_projectile_entity.png");
     private final SpearProjectileModel model = new SpearProjectileModel();
 
     public SpearProjectileRenderer(EntityRendererManager renderManager) {

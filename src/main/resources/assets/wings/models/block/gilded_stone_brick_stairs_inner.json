@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/inner_stairs",
+  "parent": "block/inner_stairs",
   "textures": {
     "bottom": "wings:block/gilded_stone_bricks",
     "top": "wings:block/gilded_stone_bricks",

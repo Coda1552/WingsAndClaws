@@ -63,8 +63,14 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
             ((STTData) spawnDataIn).setCanMaleSpawn(false);
         }
 
-        this.setGender(bullSpawn);
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    @Override
+    protected void setRandomGender(ILivingEntityData spawnDataIn) {
+        if (spawnDataIn instanceof STTData) {
+            this.setGender(!((STTData) spawnDataIn).canMaleSpawn());
+        }
     }
 
     @Override

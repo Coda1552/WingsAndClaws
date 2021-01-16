@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -29,6 +28,7 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -38,6 +38,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.resources.TamePointsManager;
 
@@ -50,6 +51,7 @@ import java.util.function.Supplier;
 
 public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAnimal {
     private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> FLY_TIMER = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.VARINT);
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
     public Supplier<Vector3d> targetSupplier;
     private int ticksAfloat;
@@ -74,6 +76,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     protected void registerData() {
         super.registerData();
         this.dataManager.register(SADDLED, false);
+        this.dataManager.register(FLY_TIMER, 0);
     }
 
     @Override
@@ -105,6 +108,15 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
     public boolean hasSaddle() {
         return dataManager.get(SADDLED);
+    }
+
+    public void setFlyTimer(int timer) {
+        dataManager.set(FLY_TIMER, timer);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public int getFlyTimer() {
+        return dataManager.get(FLY_TIMER);
     }
 
     @Override
@@ -152,6 +164,10 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                     }
                 }
 
+                if (getFlyTimer() > 0) {
+                    setFlyTimer(getFlyTimer() - 1);
+                }
+
                 this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
                 if (this.canPassengerSteer()) {
                     this.setAIMoveSpeed((float) this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
@@ -168,18 +184,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 } else if (passenger instanceof PlayerEntity) {
                     this.setMotion(Vector3d.ZERO);
                 }
-
-                this.prevLimbSwingAmount = this.limbSwingAmount;
-                double d2 = this.getPosX() - this.prevPosX;
-                double d3 = this.getPosX() - this.prevPosX;
-                double d4 = this.getPosZ() - this.prevPosZ;
-                float f4 = MathHelper.sqrt(d2 * d2 + d3 * d3 + d4 * d4) * 4.0F;
-                if (f4 > 1.0F) {
-                    f4 = 1.0F;
-                }
-
-                this.limbSwingAmount += (f4 - this.limbSwingAmount) * 0.4F;
-                this.limbSwing += this.limbSwingAmount;
             } else {
                 this.jumpMovementFactor = 0.02F;
                 super.travel(positionIn);
@@ -202,6 +206,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @OnlyIn(Dist.CLIENT)
     private void checkFlight() {
         if (Minecraft.getInstance().gameSettings.keyBindJump.isKeyDown()) {
+            setFlyTimer(25);
             setMotion(getMotion().add(0, 0.2, 0));
         }
     }
@@ -304,20 +309,28 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
                 if (targetSupplier == null && (!flying || rand.nextInt(10) == 0)) {
                     if (!grounded) ++ticksAfloat;
-                    Vector3d target = getTargetPosition((grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f);
+                    boolean land = (grounded && rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && rand.nextFloat() <= 0.7f;
+                    Vector3d target = getTargetPosition(land);
                     if (target != null) {
+                        if (!isFlying() && !shouldSleep() && !land) {
+                            setFlyTimer(25);
+                        }
                         targetSupplier = () -> target;
                     }
                 }
 
                 if (targetSupplier != null) {
-                    Vector3d target = targetSupplier.get();
-                    moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
-                    if (target.getY() - getPosY() < 0) {
-                        setMotion(getMotion().add(0, Math.max(target.getY() - getPosY(), -0.1), 0));
-                    }
-                    if (getDistanceSq(target) <= 4) {
-                        targetSupplier = null;
+                    if (getFlyTimer() > 0) {
+                        setFlyTimer(getFlyTimer() - 1);
+                    } else {
+                        Vector3d target = targetSupplier.get();
+                        moveController.setMoveTo(target.getX(), target.getY(), target.getZ(), getMotion().getY() <= 0 || !flying ? 0.6 : 0.2);
+                        if (target.getY() - getPosY() < 0) {
+                            setMotion(getMotion().add(0, Math.max(target.getY() - getPosY(), -0.1), 0));
+                        }
+                        if (getDistanceSq(target) <= 4) {
+                            targetSupplier = null;
+                        }
                     }
                 }
             } else {
@@ -404,5 +417,20 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 players.put(nbt.getUniqueId("UUID"), new AtomicInteger(nbt.getInt("Values")));
             }
         }
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return WingsSounds.HB_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return WingsSounds.HB_DEATH;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return WingsSounds.HB_HURT;
     }
 }

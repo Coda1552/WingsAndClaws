@@ -1,8 +1,5 @@
 {
   "parent": "builtin/entity",
-  "textures": {
-    "particle": "wings:item/st_spear"
-  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [
@@ -127,9 +124,9 @@
   "overrides": [
     {
       "predicate": {
-        "throwing": 1
+        "wings:throwing": 1
       },
-      "model": "wings:item/st_spear_throwing"
+      "model": "wings:item/stt_spear_throwing"
     }
   ]
 }

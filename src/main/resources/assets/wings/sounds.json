@@ -1,170 +1,117 @@
 {
-  "ded.ambient": {
-    "subtitle": "wings.subtitle.ded.ambient",
+  "entity.dumpy_egg_drake.ambient": {
+    "subtitle": "subtitles.wings.entity.dumpy_egg_drake.ambient",
     "sounds": [
-      {
-        "name": "wings:ded.ambient",
-        "streaming": true
-      }
+      "wings:entity/dumpy_egg_drake/ambient"
     ]
   },
-  "ded.hurt": {
-    "subtitle": "wings.subtitle.ded.hurt",
+  "entity.dumpy_egg_drake.hurt": {
+    "subtitle": "subtitles.wings.entity.dumpy_egg_drake.hurt",
     "sounds": [
-      {
-        "name": "wings:ded.hurt",
-        "streaming": true
-      }
+      "wings:entity/dumpy_egg_drake/hurt"
     ]
   },
-  "ded.death": {
-    "subtitle": "wings.subtitle.ded.death",
+  "entity.dumpy_egg_drake.death": {
+    "subtitle": "subtitles.wings.entity.dumpy_egg_drake.death",
     "sounds": [
-      {
-        "name": "wings:ded.death",
-        "streaming": true
-      }
+      "wings:entity/dumpy_egg_drake/death"
     ]
   },
-  "plowhead.ambient": {
-    "subtitle": "wings.subtitle.plowhead.ambient",
+  "entity.icy_plowhead.ambient": {
+    "subtitle": "subtitles.wings.entity.icy_plowhead.ambient",
     "sounds": [
-      {
-        "name": "wings:plowhead.ambient",
-        "streaming": true
-      }
+      "wings:entity/icy_plowhead/ambient"
     ]
   },
-  "plowhead.hurt": {
-    "subtitle": "wings.subtitle.plowhead.hurt",
+  "entity.icy_plowhead.hurt": {
+    "subtitle": "subtitles.wings.entity.icy_plowhead.hurt",
     "sounds": [
-      {
-        "name": "wings:plowhead.hurt",
-        "streaming": true
-      }
+      "wings:entity/icy_plowhead/hurt"
     ]
   },
-  "plowhead.death": {
-    "subtitle": "wings.subtitle.plowhead.death",
+  "entity.icy_plowhead.death": {
+    "subtitle": "subtitles.wings.entity.icy_plowhead.death",
     "sounds": [
-      {
-        "name": "wings:plowhead.death",
-        "streaming": true
-      }
+      "wings:entity/icy_plowhead/death"
     ]
   },
-  "plowhead.angry": {
+  "entity.icy_plowhead.angry": {
+    "subtitle": "subtitles.wings.entity.icy_plowhead.angry",
     "sounds": [
-      {
-        "name": "wings:plowhead.angry",
-        "streaming": true
-      }
+      "wings:entity/icy_plowhead/angry"
     ]
   },
-  "mimango.ambient": {
-    "subtitle": "wings.subtitle.mimango.ambient",
+  "entity.mimango.ambient": {
+    "subtitle": "subtitles.wings.entity.mimango.ambient",
     "sounds": [
-      {
-        "name": "wings:mimango.ambient",
-        "streaming": true
-      }
+      "wings:entity/mimango/ambient"
     ]
   },
-  "mimango.hurt": {
-    "subtitle": "wings.subtitle.mimango.hurt",
+  "entity.mimango.hurt": {
+    "subtitle": "subtitles.wings.entity.mimango.hurt",
     "sounds": [
-      {
-        "name": "wings:mimango.hurt",
-        "streaming": true
-      }
+      "wings:entity/mimango/hurt"
     ]
   },
-  "mimango.death": {
-    "subtitle": "wings.subtitle.mimango.death",
+  "entity.mimango.death": {
+    "subtitle": "subtitles.wings.entity.mimango.death",
     "sounds": [
-      {
-        "name": "wings:mimango.death",
-        "streaming": true
-      }
+      "wings:entity/mimango/death"
     ]
   },
-  "mimango.hide": {
-    "subtitle": "wings.subtitle.mimango.hide",
+  "entity.mimango.hide": {
+    "subtitle": "subtitles.wings.entity.mimango.hide",
     "sounds": [
-      {
-        "name": "wings:mimango.hide",
-        "streaming": true
-      }
+      "wings:entity/mimango/hide"
     ]
   },
-  "mimango.unhide": {
-    "subtitle": "wings.subtitle.mimango.unhide",
+  "entity.mimango.unhide": {
+    "subtitle": "subtitles.wings.entity.mimango.unhide",
     "sounds": [
-      {
-        "name": "wings:mimango.unhide",
-        "streaming": true
-      }
+      "wings:entity/mimango/unhide"
     ]
   },
-  "mimango.happy": {
-    "subtitle": "wings.subtitle.mimango.happy",
+  "entity.mimango.happy": {
+    "subtitle": "subtitles.wings.entity.mimango.happy",
     "sounds": [
-      {
-        "name": "wings:mimango.happy",
-        "streaming": true
-      }
+      "wings:entity/mimango/happy"
     ]
   },
-  "stt.ambient": {
-    "subtitle": "wings.subtitle.stt.ambient",
+  "entity.saddled_thunder_tail.ambient": {
+    "subtitle": "subtitles.wings.entity.saddled_thunder_tail.ambient",
     "sounds": [
-      {
-        "name": "wings:stt.ambient",
-        "streaming": true
-      }
+      "wings:entity/saddled_thunder_tail/ambient"
     ]
   },
-  "stt.attack": {
-    "subtitle": "wings.subtitle.stt.attack",
+  "entity.saddled_thunder_tail.attack": {
+    "subtitle": "subtitles.wings.entity.saddled_thunder_tail.attack",
     "sounds": [
-      {
-        "name": "wings:stt.attack",
-        "streaming": true
-      }
+      "wings:entity/saddled_thunder_tail/attack"
     ]
   },
-  "stt.death": {
-    "subtitle": "wings.subtitle.stt.death",
+  "entity.saddled_thunder_tail.death": {
+    "subtitle": "subtitles.wings.entity.saddled_thunder_tail.death",
     "sounds": [
-      {
-        "name": "wings:stt.death",
-        "streaming": true
-      }
+      "wings:entity/saddled_thunder_tail/death"
     ]
   },
-  "stt.hurt": {
-    "subtitle": "wings.subtitle.stt.hurt",
+  "entity.saddled_thunder_tail.hurt": {
+    "subtitle": "subtitles.wings.entity.saddled_thunder_tail.hurt",
     "sounds": [
-      {
-        "name": "wings:stt.hurt",
-        "streaming": true
-      }
+      "wings:entity/saddled_thunder_tail/hurt"
     ]
   },
-  "horn.use": {
-    "subtitle": "wings.subtitle.horn.use",
+  "item.horn_horn.use": {
+    "subtitle": "subtitles.wings.item.horn_horn.use",
     "sounds": [
-      {
-        "name": "wings:battle.horn",
-        "streaming": true
-      }
+      "wings:item/horn_horn/use"
     ]
   },
   "music.blissful_dunes": {
     "sounds": [
       {
         "name": "wings:music/blissful_dunes",
-        "streaming": "true"
+        "stream": true
       }
     ]
   },
@@ -172,7 +119,7 @@
     "sounds": [
       {
         "name": "wings:music/ashen_lands",
-        "streaming": "true"
+        "stream": true
       }
     ]
   },
@@ -180,7 +127,7 @@
     "sounds": [
       {
         "name": "wings:music/island_hoppers",
-        "streaming": "true"
+        "stream": true
       }
     ]
   },
@@ -188,62 +135,69 @@
     "sounds": [
       {
         "name": "wings:music/mantas_melody",
-        "streaming": "true"
+        "stream": true
       }
     ]
   },
-  "songvern.ambient": {
-    "subtitle": "wings.subtitle.songvern.ambient",
+  "entity.songvern.ambient": {
+    "subtitle": "subtitles.wings.entity.songvern.ambient",
     "sounds": [
-      {
-        "name": "wings:songvern.ambient",
-        "streaming": true
-      }
+      "wings:entity/songvern/ambient"
     ]
   },
-  "songvern.hurt": {
-    "subtitle": "wings.subtitle.songvern.hurt",
+  "entity.songvern.hurt": {
+    "subtitle": "subtitles.wings.entity.songvern.hurt",
     "sounds": [
-      {
-        "name": "wings:songvern.hurt",
-        "streaming": true
-      }
+      "wings:entity/songvern/hurt"
     ]
   },
-  "songvern.death": {
-    "subtitle": "wings.subtitle.songvern.death",
+  "entity.songvern.death": {
+    "subtitle": "subtitles.wings.entity.songvern.death",
     "sounds": [
-      {
-        "name": "wings:songvern.death",
-        "streaming": true
-      }
+      "wings:entity/songvern/death"
     ]
   },
-  "harold.ambient": {
-    "subtitle": "wings.subtitle.harold.ambient",
+  "entity.harolds_greendrake.ambient": {
+    "subtitle": "subtitles.wings.entity.harolds_greendrake.ambient",
     "sounds": [
-      {
-        "name": "wings:harold.ambient",
-        "streaming": true
-      }
+      "wings:entity/harolds_greendrake/ambient"
     ]
   },
-  "harold.hurt": {
-    "subtitle": "wings.subtitle.harold.hurt",
+  "entity.harolds_greendrake.hurt": {
+    "subtitle": "subtitles.wings.entity.harolds_greendrake.hurt",
     "sounds": [
-      {
-        "name": "wings:harold.hurt",
-        "streaming": true
-      }
+      "wings:entity/harolds_greendrake/hurt"
     ]
   },
-  "harold.death": {
-    "subtitle": "wings.subtitle.harold.death",
+  "entity.harolds_greendrake.death": {
+    "subtitle": "subtitles.wings.entity.harolds_greendrake.death",
     "sounds": [
-      {
-        "name": "wings:harold.death",
-        "streaming": true
-      }
+      "wings:entity/harolds_greendrake/death"
+    ]
+  },
+  "entity.hatchet_beak.ambient": {
+    "subtitle": "subtitles.wings.entity.hatchet_beak.ambient",
+    "sounds": [
+      "wings:entity/hatchet_beak/ambient_1",
+      "wings:entity/hatchet_beak/ambient_2"
+    ]
+  },
+  "entity.hatchet_beak.hurt": {
+    "subtitle": "subtitles.wings.entity.hatchet_beak.hurt",
+    "sounds": [
+      "wings:entity/hatchet_beak/hurt"
+    ]
+  },
+  "entity.hatchet_beak.death": {
+    "subtitle": "subtitles.wings.entity.hatchet_beak.death",
+    "sounds": [
+      "wings:entity/hatchet_beak/death"
+    ]
+  },
+  "entity.player.whistle": {
+    "subtitle": "subtitles.wings.entity.player.whistle",
+    "sounds": [
+      "wings:entity/player/whistle"
     ]
   }
 }

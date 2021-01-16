@@ -14,7 +14,7 @@ import net.msrandom.wings.client.renderer.tileentity.model.SpearProjectileTileMo
 
 @OnlyIn(Dist.CLIENT)
 public class SpearProjectileTileRenderer extends ItemStackTileEntityRenderer {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/st_spear/st_projectile_entity.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/stt_spear/stt_projectile_entity.png");
     private final SpearProjectileTileModel model = new SpearProjectileTileModel();
 
     @Override

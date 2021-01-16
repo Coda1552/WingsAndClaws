@@ -64,8 +64,12 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Override
     public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        if (!(spawnDataIn instanceof SaddledThunderTailEntity.STTData)) this.setGender(rand.nextBoolean());
+        setRandomGender(spawnDataIn);
         return spawnDataIn;
+    }
+
+    protected void setRandomGender(ILivingEntityData spawnDataIn) {
+        this.setGender(rand.nextBoolean());
     }
 
     @Override

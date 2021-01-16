@@ -1,5 +1,6 @@
 package net.msrandom.wings.item;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +31,7 @@ import net.msrandom.wings.entity.item.SpearProjectileEntity;
 public class STSpearItem extends TridentItem {
     public STSpearItem() {
         super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100).setISTER(() -> SpearProjectileTileRenderer::new));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemModelsProperties.registerProperty(this, new ResourceLocation(WingsAndClaws.MOD_ID, "st_spear_throwing"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemModelsProperties.registerProperty(this, new ResourceLocation(WingsAndClaws.MOD_ID, "throwing"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F));
     }
 
     @Override
@@ -86,13 +87,13 @@ public class STSpearItem extends TridentItem {
     }
 
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
+            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
         }
 
-        return multimap;
+        return builder.build();
     }
 
     @Override

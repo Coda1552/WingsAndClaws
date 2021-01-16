@@ -1,9 +1,6 @@
 {
   "parent": "builtin/entity",
   "gui_light": "side",
-  "textures": {
-    "particle": "wings:item/st_spear"
-  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [ -180, 90, 180 ],
