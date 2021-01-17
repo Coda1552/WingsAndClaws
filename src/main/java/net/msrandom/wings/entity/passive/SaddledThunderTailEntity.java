@@ -24,6 +24,7 @@ import net.msrandom.wings.item.WingsItems;
 
 import javax.annotation.Nullable;
 
+//TODO use the right navigator and rely on goals for following the player
 public class SaddledThunderTailEntity extends TameableDragonEntity {
     private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
     private int alarmedTimer;
@@ -161,7 +162,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
         if (!isSleeping()) {
             if (!world.isRemote) {
                 if (isTamed()) {
-                    if (getState() == WanderState.FOLLOW) {
+                    if (!isSitting()) {
                         LivingEntity owner = getOwner();
                         if (owner != null) {
                             getNavigator().tryMoveToEntityLiving(owner, 0.2);

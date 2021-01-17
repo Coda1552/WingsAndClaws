@@ -73,12 +73,6 @@ public class WingsAndClaws {
     public static final SimpleChannel NETWORK = INetworkPacket.makeChannel("network", "1");
     private static int currentNetworkId;
 
-    @OnlyIn(Dist.CLIENT)
-    public static KeyBinding callHatchetBeakKey;
-
-    @OnlyIn(Dist.CLIENT)
-    public static KeyBinding hatchetBeakAttackKey;
-
     public WingsAndClaws() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::registerCommon);

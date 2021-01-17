@@ -57,25 +57,13 @@ public class HornHornItem extends ToolItem {
             Vector3d vec = player.getPositionVec().add(player.getLookVec());
             EntityRayTraceResult entityTrace = world.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(vec.x - 2, vec.y - 2, vec.z - 2, vec.x + 2, vec.y + 2, vec.z + 2)).stream().reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b).map(EntityRayTraceResult::new).orElse(null);
             RayTraceResult hit = entityTrace == null || entityTrace.getType() == RayTraceResult.Type.MISS ? rayTrace(world, player, RayTraceContext.FluidMode.NONE) : entityTrace;
-            if (hit.getType() == RayTraceResult.Type.MISS) {
-                MimangoEntity last = null;
-                for (MimangoEntity entity : world.getEntitiesWithinAABB(MimangoEntity.class, player.getBoundingBox().grow(4))) {
-                    if (entity.isOwner(player) && (last == null || last.getDistanceSq(player) > entity.getDistanceSq(player))) {
-                        last = entity;
-                    }
-                }
-                if (last != null) {
-                    changeEntityState(last, player);
-                    return stack;
-                }
-            } else {
+            if (hit.getType() != RayTraceResult.Type.MISS) {
                 boolean flag = false;
                 if (hit.getType() == RayTraceResult.Type.ENTITY && hit instanceof EntityRayTraceResult) {
                     EntityRayTraceResult result = ((EntityRayTraceResult) hit);
                     if (!(result.getEntity() instanceof TameableDragonEntity) || !((TameableDragonEntity) result.getEntity()).isOwner(player)) {
                         flag = world.getFluidState(result.getEntity().getPosition()).getFluid() == Fluids.WATER;
                     } else {
-                        changeEntityState((TameableDragonEntity) result.getEntity(), player);
                         return stack;
                     }
                 } else if (hit instanceof BlockRayTraceResult) {
@@ -93,8 +81,8 @@ public class HornHornItem extends ToolItem {
                         }
                     }
                     if (last != null) {
-                        if (last.getState() == TameableDragonEntity.WanderState.STAY)
-                            last.setState(TameableDragonEntity.WanderState.WANDER);
+                        if (last.isSitting())
+                            last.func_233687_w_(false);
                         last.setTarget(hit);
                         last.setHorn(stack);
                         player.getCooldownTracker().setCooldown(this, 48);
@@ -115,14 +103,6 @@ public class HornHornItem extends ToolItem {
             }
         }
         return super.onItemUseFinish(stack, world, entityLiving);
-    }
-
-    private void changeEntityState(TameableDragonEntity entity, PlayerEntity player) {
-        TameableDragonEntity.WanderState state = entity.getState();
-        TameableDragonEntity.WanderState newState = state == TameableDragonEntity.WanderState.FOLLOW ? TameableDragonEntity.WanderState.WANDER : TameableDragonEntity.WanderState.VALUES[state.ordinal() + 1];
-        entity.setState(newState);
-        player.sendStatusMessage(new TranslationTextComponent("entity." + WingsAndClaws.MOD_ID + ".state." + newState.name().toLowerCase()), true);
-        player.getCooldownTracker().setCooldown(this, 48);
     }
 
     @Override

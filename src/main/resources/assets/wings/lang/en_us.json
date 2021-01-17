@@ -87,10 +87,6 @@
   "subtitles.wings.entity.hatchet_beak.death": "Hatchet Beak dies",
   "subtitles.wings.entity.player.whistle": "Player whistles",
 
-  "entity.wings.state.wander": "Wander",
-  "entity.wings.state.stay": "Stay",
-  "entity.wings.state.follow": "Follow",
-
   "item.wings.music_disc_blissful_dunes": "Music Disc",
   "item.wings.music_disc_blissful_dunes.desc": "Mr. Esuoh - Blissful Dunes",
   "item.wings.music_disc_ashen_lands": "Music Disc",
@@ -100,6 +96,8 @@
   "item.wings.music_disc_mantas_melody": "Music Disc",
   "item.wings.music_disc_mantas_melody.desc": "Mr. Esuoh - Manta's Melody",
 
-  "keys.category.wings": "Wings And Claws",
-  "key.callHatchetBeak": "Call Hatchet Beak"
+  "key.categories.wings": "Wings And Claws",
+  "key.callHatchetBeak": "Call Hatchet Beak",
+  "key.hatchetBeakAttack": "Command Hatchet Beak",
+  "key.hatchetBeakDescent": "Descent with Hatchet Beak"
 }

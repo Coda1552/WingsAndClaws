@@ -9,25 +9,28 @@ import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 
 import java.util.EnumSet;
+import java.util.function.Predicate;
 
-public class MimangoFlyGoal extends Goal {
-    protected final MimangoEntity creature;
+public class FlyGoal<T extends TameableDragonEntity> extends Goal {
+    protected final T creature;
+    private final Predicate<T> canFly;
     protected double x;
     protected double y;
     protected double z;
     protected boolean mustUpdate = true;
 
-    public MimangoFlyGoal(MimangoEntity creatureIn) {
+    public FlyGoal(T creatureIn, Predicate<T> canFly) {
         this.creature = creatureIn;
+        this.canFly = canFly;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     public boolean shouldExecute() {
-        if (this.creature.isBeingRidden() || this.creature.isHiding()) {
+        if (this.creature.isBeingRidden() || canFly != null && !canFly.test(creature)) {
             return false;
         } else {
             if (mustUpdate) {
-                if (this.creature.getState() == TameableDragonEntity.WanderState.STAY) {
+                if (this.creature.isSitting()) {
                     goToGround();
                     return true;
                 }

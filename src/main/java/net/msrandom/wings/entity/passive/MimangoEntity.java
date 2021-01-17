@@ -33,7 +33,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.goal.MimangoFlyGoal;
+import net.msrandom.wings.entity.goal.FlyGoal;
 import net.msrandom.wings.entity.goal.MimangoHangGoal;
 
 import javax.annotation.Nullable;
@@ -91,14 +91,9 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
                 return animalentity;
             }
         });
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WanderState.FOLLOW;
-            }
-        });
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(3, new MimangoHangGoal(this, 5.0D));
-        this.goalSelector.addGoal(4, new MimangoFlyGoal(this));
+        this.goalSelector.addGoal(4, new FlyGoal<>(this, entity -> !entity.isHiding()));
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
 
@@ -209,7 +204,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
 
     public void tick() {
         super.tick();
-        if (getState() == WanderState.STAY) setMotion(getMotion().add(0, -0.05, 0));
+        if (isSitting()) setMotion(getMotion().add(0, -0.05, 0));
         if (this.isHiding()) {
             this.setMotion(Vector3d.ZERO);
             this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), this.getPosZ());

@@ -1,9 +1,6 @@
 package net.msrandom.wings.entity;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +24,6 @@ import net.msrandom.wings.entity.passive.SaddledThunderTailEntity;
 import javax.annotation.Nullable;
 
 public abstract class TameableDragonEntity extends TameableEntity implements IDragonEntity {
-    private static final DataParameter<Byte> STATE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
 
     protected TameableDragonEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
@@ -37,7 +33,6 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(STATE, (byte) 0);
         this.dataManager.register(GENDER, false);
     }
 
@@ -46,16 +41,25 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         ItemStack stack = player.getHeldItem(hand);
         float maxHealth = this.getMaxHealth();
         float health = this.getHealth();
-        if (isTamed() && stack.getItem() == WingsItems.SUGARSCALE && health < maxHealth) {
-            if (!player.isCreative()) {
-                stack.shrink(1);
+        if (isTamed()) {
+            if (stack.getItem() == WingsItems.SUGARSCALE) {
+                if (health < maxHealth) {
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                    }
+                    heal(4);
+                    double d0 = this.rand.nextGaussian() * 0.02D;
+                    double d1 = this.rand.nextGaussian() * 0.02D;
+                    double d2 = this.rand.nextGaussian() * 0.02D;
+                    this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                    return ActionResultType.SUCCESS;
+                }
+            } else if (stack.isEmpty()) {
+                this.func_233687_w_(!this.isSitting());
+                this.isJumping = false;
+                this.navigator.clearPath();
+                this.setAttackTarget(null);
             }
-            heal(4);
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
-            return ActionResultType.SUCCESS;
         }
         return super.func_230254_b_(player, hand);
     }
@@ -101,14 +105,6 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         this.dataManager.set(GENDER, gender);
     }
 
-    public WanderState getState() {
-        return WanderState.VALUES[dataManager.get(STATE)];
-    }
-
-    public void setState(WanderState state) {
-        dataManager.set(STATE, (byte) state.ordinal());
-    }
-
     public boolean shouldSleep() {
         return world.getDayTime() > 13000 && world.getDayTime() < 23000;
     }
@@ -147,11 +143,5 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
             return true;
         }
         return false;
-    }
-
-    public enum WanderState {
-        WANDER, STAY, FOLLOW;
-
-        public static final WanderState[] VALUES = values();
     }
 }

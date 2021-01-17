@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.msrandom.wings.client.WingsKeyBindings;
 import net.msrandom.wings.entity.item.MimangoEggEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.item.WingsItems;
@@ -138,7 +139,7 @@ public class WingsEventHandler {
     @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         if (hatchetBeakCallTimer == 0) {
-            if (WingsAndClaws.callHatchetBeakKey.isKeyDown()) {
+            if (WingsKeyBindings.CALL_HATCHET_BEAK.isKeyDown()) {
                 WingsAndClaws.NETWORK.sendToServer(new CallHatchetBeaksPacket());
                 hatchetBeakCallTimer = 200;
             }
@@ -147,7 +148,7 @@ public class WingsEventHandler {
         }
 
         if (hatchetBeakAttackTimer == 0) {
-            if (WingsAndClaws.hatchetBeakAttackKey.isKeyDown()) {
+            if (WingsKeyBindings.HATCHET_BEAK_ATTACK.isKeyDown()) {
                 WingsAndClaws.NETWORK.sendToServer(new HatchetBeakAttackPacket());
                 hatchetBeakAttackTimer = 10;
             }

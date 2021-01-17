@@ -29,7 +29,7 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
-import net.msrandom.wings.entity.goal.SongvernFlyGoal;
+import net.msrandom.wings.entity.goal.FlyGoal;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -88,13 +88,8 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
                 return animalentity;
             }
         });
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WanderState.FOLLOW;
-            }
-        });
-        this.goalSelector.addGoal(4, new SongvernFlyGoal(this));
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(4, new FlyGoal<>(this, null));
         this.goalSelector.addGoal(5, new FlockGoal(this));
         this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, OcelotEntity.class, 6, 1, 1.2));
     }
@@ -173,7 +168,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
 
     public void tick() {
         super.tick();
-        if (getState() == WanderState.STAY) setMotion(getMotion().add(0, -0.05, 0));
+        if (isSitting()) setMotion(getMotion().add(0, -0.05, 0));
         else {
             if (this.isGroupLeader() && this.world.rand.nextInt(200) == 1) {
                 List<SongvernEntity> list = this.world.getEntitiesWithinAABB(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));

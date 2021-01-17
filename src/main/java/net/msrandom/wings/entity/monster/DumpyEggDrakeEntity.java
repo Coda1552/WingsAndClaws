@@ -56,29 +56,19 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
         });
         this.goalSelector.addGoal(7, new FollowParentGoal(this, 1.1D));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WanderState.FOLLOW;
-            }
-        });
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D) {
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && getState() == WanderState.WANDER;
-            }
-        });
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
             @Override
             public boolean shouldExecute() {
-                return super.shouldExecute() && target.get() == null && getState() == WanderState.WANDER;
+                return super.shouldExecute() && !isSitting() && target.get() == null;
             }
         });
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1) {
             @Override
             public boolean shouldExecute() {
-                boolean execute = isChild() && getState() == WanderState.WANDER && super.shouldExecute();
+                boolean execute = isChild() && !isSitting() && super.shouldExecute();
                 if (execute && getDistanceSq(closestEntity) >= 9) {
                     getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
                 }

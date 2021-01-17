@@ -70,12 +70,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
-		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40) {
-			@Override
-			public boolean shouldExecute() {
-				return super.shouldExecute() && getState() == WanderState.WANDER;
-			}
-		});
+		this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 1, 40));
 		this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
 	}
 
@@ -200,7 +195,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 			if (!world.isRemote) {
 				if (isTamed()) {
-					if (getState() == WanderState.FOLLOW) {
+					if (!isSitting()) {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
 							getNavigator().tryMoveToEntityLiving(owner, 0.2);

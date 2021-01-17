@@ -163,7 +163,7 @@ public class HatchetBeakModel extends AgeableModel<HatchetBeakEntity> {
 
     @Override
     public void setRotationAngles(HatchetBeakEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float flyTimer = entity.getFlyTimer() / 25f;
+        float flyTimer = entity.getFlyTimer() / 10f;
         if (entity.isFlying()) {
             limbSwingAmount = MathHelper.clamp(limbSwingAmount, -0.35f, 0.35f);
             this.neck.rotateAngleX = MathHelper.cos(limbSwing * 0.32F + 4) * 0.04F * limbSwingAmount + 1.35F;

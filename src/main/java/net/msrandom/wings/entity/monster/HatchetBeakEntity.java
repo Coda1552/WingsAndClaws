@@ -38,6 +38,7 @@ import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.msrandom.wings.client.WingsKeyBindings;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.resources.TamePointsManager;
@@ -144,15 +145,12 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         if (this.isAlive()) {
             if (this.isBeingRidden() && this.canBeSteered() && hasSaddle()) {
                 LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
-                float rotationDifference = MathHelper.wrapSubtractDegrees(rotationYaw, passenger.rotationYaw);
-                float sign = Math.signum(rotationDifference);
-                if (MathHelper.abs(rotationDifference) > 3) rotationYaw += sign * 3f;
+                rotationYaw += passenger.moveStrafing * -3f;
                 this.prevRotationYaw = this.rotationYaw;
                 this.rotationPitch = passenger.rotationPitch * 0.5F;
                 this.setRotation(this.rotationYaw, this.rotationPitch);
                 this.renderYawOffset = this.rotationYaw;
                 this.rotationYawHead = this.renderYawOffset;
-                float f = passenger.moveStrafing * 0.5F;
 
                 float f1;
                 if (isFlying()) {
@@ -170,17 +168,18 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
                 this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
                 if (this.canPassengerSteer()) {
-                    this.setAIMoveSpeed((float) this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
                     float verticalMotion = 0f;
-                    if (isFlying()) {
-                        verticalMotion = (rotationPitch / -22.5f) * 2;
+                    this.setAIMoveSpeed((float) this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+                    if (world.isRemote) {
+                        verticalMotion = checkFlight();
                         if (verticalMotion <= 0) {
                             setMotion(getMotion().add(0, verticalMotion / 22.5f, 0));
+                        } else if (!isFlying() && verticalMotion > 0 && getFlyTimer() == 0) {
+                            setFlyTimer(10);
+                            verticalMotion = 0;
                         }
-                    } else if (world.isRemote) {
-                        checkFlight();
                     }
-                    super.travel(new Vector3d(f, positionIn.y + verticalMotion, f1));
+                    super.travel(new Vector3d(0f, moveVertical + verticalMotion, f1));
                 } else if (passenger instanceof PlayerEntity) {
                     this.setMotion(Vector3d.ZERO);
                 }
@@ -204,11 +203,14 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void checkFlight() {
+    private float checkFlight() {
         if (Minecraft.getInstance().gameSettings.keyBindJump.isKeyDown()) {
-            setFlyTimer(25);
-            setMotion(getMotion().add(0, 0.2, 0));
+            return 1f;
+        } else if (WingsKeyBindings.HATCHET_BEAK_DESCENT.isKeyDown()) {
+            return -1f;
         }
+
+        return 0f;
     }
 
     @Override
@@ -287,9 +289,16 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             if (pos.getY() == original + 8) return null;
         }
 
-        int xDistance = rand.nextInt(32) + 64;
-        int zDistance = rand.nextInt(32) + 64;
-        double rotation = Math.toRadians(rand.nextInt(361));
+        LivingEntity owner = getOwner();
+        double ownerDistanceX = 0;
+        double ownerDistanceZ = 0;
+        if (owner != null) {
+            ownerDistanceX = owner.getPosX() - getPosX();
+            ownerDistanceZ = owner.getPosZ() - getPosZ();
+        }
+        int xDistance = Math.abs(ownerDistanceX) > 32 ? (int) ownerDistanceX : rand.nextInt(32) + 64;
+        int zDistance = Math.abs(ownerDistanceZ) > 32 ? (int) ownerDistanceZ : rand.nextInt(32) + 64;
+        double rotation = Math.toRadians(ownerDistanceX * ownerDistanceX + ownerDistanceZ * ownerDistanceZ > 1024 ? MathHelper.atan2(ownerDistanceZ, ownerDistanceX) + 90 : rand.nextInt(361));
         return new Vector3d(pos.getX() + Math.sin(rotation) * xDistance, pos.getY(), pos.getZ() + Math.cos(-rotation) * zDistance);
     }
 
@@ -313,7 +322,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                     Vector3d target = getTargetPosition(land);
                     if (target != null) {
                         if (!isFlying() && !shouldSleep() && !land) {
-                            setFlyTimer(25);
+                            setFlyTimer(10);
                         }
                         targetSupplier = () -> target;
                     }
