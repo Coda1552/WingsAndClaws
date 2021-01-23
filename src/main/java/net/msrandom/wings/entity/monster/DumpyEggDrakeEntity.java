@@ -137,7 +137,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isChild() && entity.getGender() && !entity.isOwner((LivingEntity) source.getTrueSource());
+            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isChild() && entity.getGender() == Gender.MALE && !entity.isOwner((LivingEntity) source.getTrueSource());
             if (canAttack.test(this)) {
                 setAttackTarget((LivingEntity) source.getTrueSource());
             }

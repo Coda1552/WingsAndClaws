@@ -12,6 +12,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.msrandom.wings.block.WingsBlocks;
+import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 import net.msrandom.wings.tileentity.DEDNestTileEntity;
@@ -63,12 +64,12 @@ public class DEDNestStructure extends Feature<NoFeatureConfig> {
 
                 BlockPos base = pos.add(-3, 0, -3);
                 DumpyEggDrakeEntity male = spawn(base, rand, reader.getWorld());
-                male.setGender(true);
+                male.setGender(TameableDragonEntity.Gender.MALE);
                 reader.addEntity(male);
 
                 for (int i = 1; i < (rand.nextBoolean() ? 2 : 3); i++) {
                     DumpyEggDrakeEntity female = spawn(base, rand, reader.getWorld());
-                    female.setGender(false);
+                    female.setGender(TameableDragonEntity.Gender.FEMALE);
                     reader.addEntity(female);
                 }
 

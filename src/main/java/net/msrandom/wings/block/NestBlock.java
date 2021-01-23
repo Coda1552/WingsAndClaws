@@ -98,7 +98,7 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
     @Override
     public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
         if (!player.abilities.isCreativeMode)
-            worldIn.getEntitiesWithinAABB(entity, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
+            worldIn.getEntitiesWithinAABB(entity, player.getBoundingBox().grow(32)).stream().filter(entity -> !entity.isChild() && entity.getGender() == TameableDragonEntity.Gender.MALE && !entity.isOwner(player) && !entity.isSleeping()).forEach(e -> e.setAttackTarget(player));
         super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 }

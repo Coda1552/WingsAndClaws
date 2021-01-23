@@ -70,7 +70,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     @Override
     protected void setRandomGender(ILivingEntityData spawnDataIn) {
         if (spawnDataIn instanceof STTData) {
-            this.setGender(!((STTData) spawnDataIn).canMaleSpawn());
+            this.setGender(((STTData) spawnDataIn).canMaleSpawn() ? Gender.FEMALE : Gender.MALE);
         }
     }
 
@@ -116,7 +116,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-            if (!isChild() && getGender() && !isOwner((LivingEntity) source.getTrueSource()))
+            if (!isChild() && getGender() == Gender.MALE && !isOwner((LivingEntity) source.getTrueSource()))
                 setAttackTarget((LivingEntity) source.getTrueSource());
         }
 

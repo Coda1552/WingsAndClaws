@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.layer.LayerDEDBandana;
 import net.msrandom.wings.client.renderer.entity.model.DumpyEggDrakeModel;
+import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
 public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
@@ -39,7 +40,7 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
     public ResourceLocation getEntityTexture(DumpyEggDrakeEntity entity) {
         byte texture = 0;
         if (entity.isChild()) texture |= 1;
-        if (entity.getGender()) texture |= 2;
+        if (entity.getGender() == TameableDragonEntity.Gender.MALE) texture |= 2;
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {
             String entityTexture = String.format("%s_%s%s", ((texture & 1) != 0) ? "child" : "adult", ((texture & 2) != 0) ? "male" : "female", ((texture & 4) != 0) ? "_sleep" : "");

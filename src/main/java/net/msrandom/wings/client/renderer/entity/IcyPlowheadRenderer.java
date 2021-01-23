@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.msrandom.wings.WingsAndClaws;
 import net.msrandom.wings.client.renderer.entity.model.IcyPlowheadModel;
+import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.monster.IcyPlowheadEntity;
 
 public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowheadModel> {
@@ -37,7 +38,7 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
     public ResourceLocation getEntityTexture(IcyPlowheadEntity entity) {
         byte texture = 0;
         if (entity.isChild()) texture |= 1;
-        if (entity.getGender()) texture |= 2;
+        if (entity.getGender() == TameableDragonEntity.Gender.MALE) texture |= 2;
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {
             String entityTexture = String.format("%s_%s%s", ((texture & 1) != 0) ? "child" : "adult", ((texture & 2) != 0) ? "male" : "female", ((texture & 4) != 0) ? "_sleep" : "");

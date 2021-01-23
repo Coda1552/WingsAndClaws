@@ -73,7 +73,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     }
 
     protected void setRandomGender(ILivingEntityData spawnDataIn) {
-        this.setGender(rand.nextBoolean());
+        this.setGender(Gender.fromBool(rand.nextBoolean()));
     }
 
     @Override
@@ -87,22 +87,22 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
-        compound.putBoolean("Gender", this.getGender());
+        compound.putBoolean("Gender", this.getGender().toBool());
         super.writeAdditional(compound);
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
-        this.setGender(compound.getBoolean("Gender"));
+        this.setGender(Gender.fromBool(compound.getBoolean("Gender")));
         super.readAdditional(compound);
     }
 
-    public boolean getGender() {
-        return this.dataManager.get(GENDER);
+    public Gender getGender() {
+        return Gender.fromBool(this.dataManager.get(GENDER));
     }
 
-    public void setGender(boolean gender) {
-        this.dataManager.set(GENDER, gender);
+    public void setGender(Gender gender) {
+        this.dataManager.set(GENDER, gender.toBool());
     }
 
     public boolean shouldSleep() {
@@ -149,6 +149,12 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
         FEMALE,
         MALE;
 
+        public static Gender fromBool(boolean bool) {
+            return bool ? MALE : FEMALE;
+        }
 
+        public boolean toBool() {
+            return this == MALE;
+        }
     }
 }
