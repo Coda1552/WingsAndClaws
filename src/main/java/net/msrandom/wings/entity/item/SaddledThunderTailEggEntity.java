@@ -32,7 +32,7 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
     }
 
     public SaddledThunderTailEggEntity(World worldIn, double x, double y, double z) {
-        this(WingsEntities.SADDLED_THUNDER_TAIL_EGG, worldIn);
+        this(null/*WingsEntities.SADDLED_THUNDER_TAIL_EGG*/, worldIn);
         setPosition(x, y, z);
     }
 
@@ -80,7 +80,7 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
     public void handleStatusUpdate(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG)), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
+                //this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG)), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
             }
         }
     }
@@ -90,14 +90,14 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
         this.setAir(300);
         if (!this.world.isRemote) {
             if (hatchTime++ >= 24000) {
-                SaddledThunderTailEntity thunderTailEntity = WingsEntities.SADDLED_THUNDER_TAIL.create(this.world);
+/*                SaddledThunderTailEntity thunderTailEntity = WingsEntities.SADDLED_THUNDER_TAIL.create(this.world);
                 if (thunderTailEntity != null) {
                     thunderTailEntity.setGrowingAge(-24000);
                     thunderTailEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
                     thunderTailEntity.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(thunderTailEntity.getPosition()), SpawnReason.NATURAL, null, null);
                     world.getEntitiesWithinAABB(PlayerEntity.class, thunderTailEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> thunderTailEntity.getDistanceSq(p1) < thunderTailEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(thunderTailEntity::setTamedBy);
                     this.world.addEntity(thunderTailEntity);
-                }
+                }*/
 
                 this.world.setEntityState(this, (byte) 3);
                 this.remove();
@@ -109,9 +109,11 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
     public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
-            if (player.addItemStackToInventory(new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG))) {
-                remove();
+            ItemStack egg = ItemStack.EMPTY;//new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG);
+            if (!player.addItemStackToInventory(egg)) {
+                player.dropItem(egg, false);
             }
+            remove();
             return ActionResultType.SUCCESS;
         }
 

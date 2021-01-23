@@ -193,10 +193,10 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
         return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 1000;
     }
 
-    @Override
+/*    @Override
     public ItemStack getEgg() {
         return new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG);
-    }
+    }*/
 
     public static class STTData extends AgeableData {
         public boolean canMaleSpawn = true;

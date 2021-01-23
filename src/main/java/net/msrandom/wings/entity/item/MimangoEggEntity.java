@@ -108,7 +108,12 @@ public class MimangoEggEntity extends LivingEntity {
     @Override
     public void tick() {
         if (!this.world.isRemote) {
-            if (startedInLeaves && !world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES) || hatchTime++ >= 1200) {
+            if (startedInLeaves && !world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES)) {
+                entityDropItem(new ItemStack(WingsItems.MIMANGO_EGG));
+                remove();
+                return;
+            }
+            if (hatchTime++ >= 1200) {
                 MimangoEntity mimangoEntity = WingsEntities.MIMANGO.create(this.world);
                 if (mimangoEntity != null) {
                     mimangoEntity.setGrowingAge(-24000);
@@ -128,9 +133,11 @@ public class MimangoEggEntity extends LivingEntity {
     public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
-            if (player.addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG))) {
-                remove();
+            ItemStack egg = new ItemStack(WingsItems.MIMANGO_EGG);
+            if (!player.addItemStackToInventory(egg)) {
+                player.dropItem(egg, false);
             }
+            remove();
             return ActionResultType.SUCCESS;
         }
         return super.processInitialInteract(player, hand);

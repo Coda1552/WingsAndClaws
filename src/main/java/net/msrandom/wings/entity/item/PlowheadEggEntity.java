@@ -109,9 +109,11 @@ public class PlowheadEggEntity extends LivingEntity {
 	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (stack.isEmpty()) {
-			if (player.addItemStackToInventory(new ItemStack(WingsItems.ICY_PLOWHEAD_EGG))) {
-				remove();
-			}
+            ItemStack egg = new ItemStack(WingsItems.ICY_PLOWHEAD_EGG);
+            if (!player.addItemStackToInventory(egg)) {
+                player.dropItem(egg, false);
+            }
+            remove();
 			return ActionResultType.SUCCESS;
 		}
 

@@ -20,6 +20,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.msrandom.wings.entity.TameableDragonEntity;
+import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.NestTileEntity;
 
 import javax.annotation.Nullable;
@@ -68,7 +69,12 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
         if (tile.isInstance(te)) {
             if (stack.isEmpty()) {
                 boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.addItemStackToInventory(new ItemStack(item));
+                if (removed) {
+                    ItemStack egg = new ItemStack(item);
+                    if (!player.addItemStackToInventory(egg)) {
+                        player.dropItem(egg, false);
+                    }
+                }
                 return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             } else if (stack.getItem() == item) {
                 if (player.isSneaking() && ((NestTileEntity) te).addEgg()) {
@@ -77,7 +83,12 @@ public class NestBlock<T extends NestTileEntity> extends ContainerBlock {
                     return ActionResultType.SUCCESS;
                 }
                 boolean removed = ((NestTileEntity) te).removeEgg();
-                if (removed) player.addItemStackToInventory(new ItemStack(item));
+                if (removed) {
+                    ItemStack egg = new ItemStack(item);
+                    if (!player.addItemStackToInventory(egg)) {
+                        player.dropItem(egg, false);
+                    }
+                }
                 return removed ? ActionResultType.SUCCESS : ActionResultType.PASS;
             }
         }

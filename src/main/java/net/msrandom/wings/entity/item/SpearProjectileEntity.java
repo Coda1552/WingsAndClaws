@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 
 public class SpearProjectileEntity extends AbstractArrowEntity {
     private static final DataParameter<Byte> LOYALTY_LEVEL = EntityDataManager.createKey(SpearProjectileEntity.class, DataSerializers.BYTE);
-    private ItemStack thrownStack = new ItemStack(WingsItems.ST_SPEAR);
+    private ItemStack thrownStack = ItemStack.EMPTY;//new ItemStack(WingsItems.STT_SPEAR);
     private boolean dealtDamage;
     public int returningTicks;
 

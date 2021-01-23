@@ -46,12 +46,12 @@ public class WingsItems {
     public static final Item SUGARSCALE = register("sugarscale", new Item(new Item.Properties().group(GROUP)));
     //public static final Item LEAPING_GRUB_SHRIMP_BUCKET = register("leaping_grub_shrimp_bucket", new FishBucketItem(WingsEntities.LEAPING_GRUB_SHRIMP, Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
     //public static final Item LEAPING_GRUB_SHRIMP = register("leaping_grub_shrimp", new Item(new Item.Properties().group(GROUP)));
-//    public static final Item MANGO_SEEDS = register("mango_seeds", new BlockNamedItem(WingsBlocks.MANGO_BUNCH, (new Item.Properties().group(GROUP))));
+    //public static final Item MANGO_SEEDS = register("mango_seeds", new BlockNamedItem(WingsBlocks.MANGO_BUNCH, (new Item.Properties().group(GROUP))));
     public static final Item GOLDEN_MANGO = register("golden_mango", new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).group(GROUP)));
     public static final Item HAROLDS_GREENDRAKE_HORN = register("harolds_greendrake_horn", new Item(new Item.Properties().group(GROUP)));
-    public static final Item ST_SPEAR = register("stt_spear", new STSpearItem());
-    public static final Item ST_HORN = register("stt_horn", new STTHornItem());
-    public static final Item SADDLED_THUNDER_TAIL_EGG = register("saddled_thunder_tail_egg", new SaddledThunderTailEggItem());
+    //public static final Item STT_SPEAR = register("stt_spear", new STSpearItem());
+    //public static final Item STT_HORN = register("stt_horn", new STTHornItem());
+    //public static final Item SADDLED_THUNDER_TAIL_EGG = register("saddled_thunder_tail_egg", new SaddledThunderTailEggItem());
     //public static final Item DUMPY_EGG_DRAKE_TAIL = register("dumpy_egg_drake_tail", new Item(new Item.Properties().group(GROUP)));
     //public static final Item DUMPY_EGG_DRAKE_MACE = register("dumpy_egg_drake_mace", new SwordItem(ItemTier.IRON, 3, -2.4F, new Item.Properties().group(GROUP)));
     public static final Item MIMANGO = register("mimango", new Item(new Item.Properties().food(WingsFoods.MIMANGO).group(GROUP)));

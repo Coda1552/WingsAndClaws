@@ -11,6 +11,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -119,9 +120,9 @@ public class WingsAndClaws {
                     event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.HAROLDS_GREENDRAKE, 15, 3, 4));
                 }
                 break;
-            case PLAINS:
+/*            case PLAINS:
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.SADDLED_THUNDER_TAIL, 1, 3, 10));
-                break;
+                break;*/
         }
 
         //biome1.addStructure(WingsFeatures.MIMANGO_SHRINE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
@@ -143,9 +144,9 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, MobEntity.func_233666_p_().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailEntity.registerSTTAttributes().create());
+        /*GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL_EGG, LivingEntity.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailEntity.registerSTTAttributes().create());*/
     }
 
     private <T extends INetworkPacket> void registerMessage(Class<T> message, Supplier<T> supplier, LogicalSide side) {
@@ -155,12 +156,13 @@ public class WingsAndClaws {
             return msg;
         }, (msg, contextSupplier) -> {
             NetworkEvent.Context context = contextSupplier.get();
-            if (context.getDirection().getOriginationSide().isServer()) {
-                DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> msg.handle(Minecraft.getInstance().player));
-            } else {
-                context.enqueueWork(() -> msg.handle(context.getSender()));
-            }
+            context.enqueueWork(() -> msg.handle(context.getDirection().getOriginationSide().isServer() ? getClientPlayer() : context.getSender()));
             context.setPacketHandled(true);
         }, Optional.of(side.isClient() ? NetworkDirection.PLAY_TO_CLIENT : NetworkDirection.PLAY_TO_SERVER));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static PlayerEntity getClientPlayer() {
+        return Minecraft.getInstance().player;
     }
 }

@@ -98,7 +98,10 @@ public class WingsEventHandler {
         if (event.getWorld().getBlockState(event.getPos()).isIn(BlockTags.LEAVES)) {
             MimangoEggEntity egg = MimangoEggEntity.getEgg(event.getWorld(), event.getPos());
             if (egg != null) {
-                event.getPlayer().addItemStackToInventory(new ItemStack(WingsItems.MIMANGO_EGG));
+                ItemStack eggItem = new ItemStack(WingsItems.MIMANGO_EGG);
+                if (!event.getPlayer().addItemStackToInventory(eggItem)) {
+                    event.getPlayer().dropItem(eggItem, false);
+                }
                 egg.remove();
             }
         }

@@ -96,10 +96,12 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
     }
 
+    @Override
     public boolean onLivingFall(float distance, float damageMultiplier) {
         return false;
     }
 
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 

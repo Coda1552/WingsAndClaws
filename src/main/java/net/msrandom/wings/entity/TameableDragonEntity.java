@@ -54,7 +54,7 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
                     this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
                     return ActionResultType.SUCCESS;
                 }
-            } else if (stack.isEmpty()) {
+            } else if (player.isSneaking()) {
                 this.func_233687_w_(!this.isSitting());
                 this.isJumping = false;
                 this.navigator.clearPath();
@@ -143,5 +143,12 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
             return true;
         }
         return false;
+    }
+
+    public enum Gender {
+        FEMALE,
+        MALE;
+
+
     }
 }

@@ -31,8 +31,8 @@ public class WingsEntities {
     public static final EntityType<SpearProjectileEntity> ST_PROJECTILE_ENTITY = create("spear_projectile_entity", SpearProjectileEntity::new, EntityClassification.MISC, 0.4f, 0.4f);
     public static final EntityType<SugarscaleEntity> SUGARSCALE = create("sugarscale", SugarscaleEntity::new, EntityClassification.WATER_CREATURE, 0.4f, 0.2f, 0x4a4e80, 0x413852);
     public static final EntityType<HaroldsGreendrakeEntity> HAROLDS_GREENDRAKE = create("harolds_greendrake", HaroldsGreendrakeEntity::new, EntityClassification.CREATURE, 0.9f, 1.1f, 0x4b5832, 0xb59a2f);
-    public static final EntityType<SaddledThunderTailEntity> SADDLED_THUNDER_TAIL = create("saddled_thunder_tail", SaddledThunderTailEntity::new, EntityClassification.CREATURE, 4.0f, 3.2f, 0xFE9A2E, 0x8A2908);
-    public static final EntityType<SaddledThunderTailEggEntity> SADDLED_THUNDER_TAIL_EGG = create("saddled_thunder_tail_egg", SaddledThunderTailEggEntity::new, EntityClassification.MISC, 0.5f, 0.75f);
+    //public static final EntityType<SaddledThunderTailEntity> SADDLED_THUNDER_TAIL = create("saddled_thunder_tail", SaddledThunderTailEntity::new, EntityClassification.CREATURE, 4.0f, 3.2f, 0xFE9A2E, 0x8A2908);
+    //public static final EntityType<SaddledThunderTailEggEntity> SADDLED_THUNDER_TAIL_EGG = create("saddled_thunder_tail_egg", SaddledThunderTailEggEntity::new, EntityClassification.MISC, 0.5f, 0.75f);
 
     //public static final EntityType<LeapingGrubShrimpEntity> LEAPING_GRUB_SHRIMP = create("leaping_grub_shrimp", LeapingGrubShrimpEntity::new, EntityClassification.WATER_CREATURE, 0.6f, 0.5f, 0x9eb3ba, 0x647382);
     //public static final EntityType<SongvernEntity> SONGVERN = create("songvern", SongvernEntity::new, EntityClassification.CREATURE, 0.65f, 0.3f, 0xc8602b, 0xc3b0b0);
