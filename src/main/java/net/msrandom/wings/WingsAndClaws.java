@@ -11,6 +11,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
+import net.minecraft.entity.passive.fish.CodEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -144,7 +145,7 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, MobEntity.func_233666_p_().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, CodEntity.registerAttributes().create());
         /*GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailEntity.registerSTTAttributes().create());*/
     }

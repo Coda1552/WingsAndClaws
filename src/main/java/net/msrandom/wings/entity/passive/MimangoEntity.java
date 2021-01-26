@@ -52,7 +52,7 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public static AttributeModifierMap.MutableAttribute registerMimangoAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 14);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 8);
     }
 
     @Override
