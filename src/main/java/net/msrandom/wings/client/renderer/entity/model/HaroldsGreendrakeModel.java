@@ -92,17 +92,15 @@ public class HaroldsGreendrakeModel extends AgeableModel<HaroldsGreendrakeEntity
     }
 
     @Override
-    public void setRotationAngles(HaroldsGreendrakeEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
-        float speed = 1.0f;
-        float degree = 1.0f;
-        this.head.rotateAngleX = headPitch * ((float)Math.PI / 180F);
-        this.head.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
-        this.armRight.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * -0.8F * f1;
-        this.armLeft.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
-        this.legRight.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
-        this.legLeft.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * -0.8F * f1;
-        this.head.rotateAngleZ = MathHelper.cos(f * speed * 0.4F) * degree * 0.2F * f1;
-        this.body.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.1F * f1;
+    public void setRotationAngles(HaroldsGreendrakeEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.head.rotateAngleX = (float) Math.toRadians(headPitch);
+        this.head.rotateAngleY = (float) Math.toRadians(netHeadYaw);
+        this.armRight.rotateAngleX = MathHelper.cos(limbSwing * 0.4F) * -0.8F * limbSwingAmount;
+        this.armLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.4F) * 0.8F * limbSwingAmount;
+        this.legRight.rotateAngleX = MathHelper.cos(limbSwing * 0.4F) * 0.8F * limbSwingAmount;
+        this.legLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.4F) * -0.8F * limbSwingAmount;
+        this.head.rotateAngleZ = MathHelper.cos(limbSwing * 0.4F) * 0.2F * limbSwingAmount;
+        this.body.rotateAngleY = MathHelper.cos(limbSwing * 0.4F) * 0.1F * limbSwingAmount;
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
