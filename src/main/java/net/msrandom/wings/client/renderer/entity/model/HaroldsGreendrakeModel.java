@@ -95,6 +95,8 @@ public class HaroldsGreendrakeModel extends AgeableModel<HaroldsGreendrakeEntity
     public void setRotationAngles(HaroldsGreendrakeEntity entityIn, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch) {
         float speed = 1.0f;
         float degree = 1.0f;
+        this.head.rotateAngleX = headPitch * ((float)Math.PI / 180F);
+        this.head.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
         this.armRight.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * -0.8F * f1;
         this.armLeft.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
         this.legRight.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
