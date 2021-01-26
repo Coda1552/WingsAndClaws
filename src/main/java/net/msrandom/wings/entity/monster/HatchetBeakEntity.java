@@ -117,7 +117,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         dataManager.set(FLY_TIMER, timer);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public int getFlyTimer() {
         return dataManager.get(FLY_TIMER);
     }
