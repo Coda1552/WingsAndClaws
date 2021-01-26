@@ -240,7 +240,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 AtomicInteger playerPoints = players.computeIfAbsent(player.getUniqueID(), k -> new AtomicInteger());
                 playerPoints.set(playerPoints.get() + points);
                 if (!player.abilities.isCreativeMode) stack.shrink(1);
-                if (playerPoints.get() >= 100 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                if (playerPoints.get() >= 150 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.setTamedBy(player);
                     this.navigator.clearPath();
                     this.setAttackTarget(null);
