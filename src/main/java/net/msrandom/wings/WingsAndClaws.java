@@ -54,6 +54,7 @@ import net.msrandom.wings.entity.passive.HaroldsGreendrakeEntity;
 import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 import net.msrandom.wings.entity.passive.MimangoEntity;
 import net.msrandom.wings.entity.passive.SaddledThunderTailEntity;
+import net.msrandom.wings.entity.passive.SugarscaleEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.network.CallHatchetBeaksPacket;
 import net.msrandom.wings.network.HatchetBeakAttackPacket;
@@ -145,7 +146,7 @@ public class WingsAndClaws {
         GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE, HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.PLOWHEAD_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG, LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, CodEntity.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE, SugarscaleEntity.func_234176_m_().create());
         /*GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailEntity.registerSTTAttributes().create());*/
     }

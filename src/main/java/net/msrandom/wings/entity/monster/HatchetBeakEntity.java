@@ -244,7 +244,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                     this.setTamedBy(player);
                     this.navigator.clearPath();
                     this.setAttackTarget(null);
-                    this.setHealth(20.0F);
+                    this.setHealth(90.0F);
                     players.clear();
                     this.world.setEntityState(this, (byte) 7);
                 } else {
