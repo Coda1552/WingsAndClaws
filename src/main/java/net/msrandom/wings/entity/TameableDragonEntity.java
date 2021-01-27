@@ -24,6 +24,7 @@ import net.msrandom.wings.entity.passive.SaddledThunderTailEntity;
 import javax.annotation.Nullable;
 
 public abstract class TameableDragonEntity extends TameableEntity implements IDragonEntity {
+    public static final byte HEAL_PARTICLES_ID = 9;
     private static final DataParameter<Boolean> GENDER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
 
     protected TameableDragonEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
@@ -34,6 +35,20 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
     protected void registerData() {
         super.registerData();
         this.dataManager.register(GENDER, false);
+    }
+
+    @Override
+    public void livingTick() {
+        super.livingTick();
+        if (isSleeping() && getHealth() < getMaxHealth() && getRNG().nextDouble() < 0.008) {
+            world.setEntityState(this, HEAL_PARTICLES_ID);
+            heal(1);
+        }
+    }
+
+    @Override
+    protected boolean isMovementBlocked() {
+        return isSleeping() || super.isMovementBlocked();
     }
 
     @Override
@@ -59,9 +74,26 @@ public abstract class TameableDragonEntity extends TameableEntity implements IDr
                 this.isJumping = false;
                 this.navigator.clearPath();
                 this.setAttackTarget(null);
+                return ActionResultType.SUCCESS;
             }
         }
         return super.func_230254_b_(player, hand);
+    }
+
+    @Override
+    public void handleStatusUpdate(byte id) {
+        if (id == HEAL_PARTICLES_ID)
+        {
+            double d = getWidth() * getHeight();
+            for (int i = 0; i < d * d; ++i)
+            {
+                double x = getPosX() + (2 * rand.nextDouble() - 1) * getWidth() + 0.4d;
+                double y = getPosY() + getRNG().nextDouble() * getHeight();
+                double z = getPosZ() + (2 * rand.nextDouble() - 1) * getWidth() + 0.4d;
+                world.addParticle(ParticleTypes.HAPPY_VILLAGER, x, y, z, 0, 0, 0);
+            }
+        }
+        super.handleStatusUpdate(id);
     }
 
     @Nullable

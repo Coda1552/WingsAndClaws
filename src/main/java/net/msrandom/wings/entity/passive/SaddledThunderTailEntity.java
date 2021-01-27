@@ -40,7 +40,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerSTTAttributes() {
-        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23).createMutableAttribute(Attributes.MAX_HEALTH, 100).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3);
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23).createMutableAttribute(Attributes.MAX_HEALTH, 150).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3);
     }
 
     @Nullable
@@ -106,10 +106,10 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
         if (tamed) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(150);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(200);
             this.setHealth(150);
         } else {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(150);
         }
     }
 
