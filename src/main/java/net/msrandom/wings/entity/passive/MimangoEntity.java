@@ -1,8 +1,6 @@
 package net.msrandom.wings.entity.passive;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SweetBerryBushBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -38,7 +36,6 @@ import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.entity.goal.FlyGoal;
-import net.msrandom.wings.entity.goal.MimangoHangGoal;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
