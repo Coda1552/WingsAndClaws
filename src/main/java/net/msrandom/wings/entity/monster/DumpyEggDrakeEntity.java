@@ -70,9 +70,10 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 return super.shouldExecute() && !isSitting() && target.get() == null;
             }
         });
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 15, 1) {{
-            setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        }
+        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 15, 1) {
+            {
+                setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            }
 
             @Override
             public boolean shouldExecute() {
@@ -100,8 +101,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(13, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<DumpyEggDrakeEntity>(this, DumpyEggDrakeEntity.class, 10, true, false, entity -> ((DumpyEggDrakeEntity) entity).getGender() == Gender.MALE)
-        {
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<DumpyEggDrakeEntity>(this, DumpyEggDrakeEntity.class, 10, true, false, entity -> ((DumpyEggDrakeEntity) entity).getGender() == Gender.MALE) {
             @Override
             public boolean shouldExecute() {
                 return getGender() == Gender.MALE && super.shouldExecute();
@@ -258,7 +258,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
             if (alarmedTimer-- <= 0) alarmedTimer = 0;
         } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
-        sleepTimer.add(isSleeping()? 0.085f : -0.085f);
+        sleepTimer.add(isSleeping() ? 0.085f : -0.085f);
     }
 
     @Override
@@ -293,6 +293,11 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     public ItemStack getEgg() {
         return new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG);
+    }
+
+    @Override
+    public void createEgg() {
+        this.entityDropItem(getEgg());
     }
 
     public DyeColor getBandanaColor() {
