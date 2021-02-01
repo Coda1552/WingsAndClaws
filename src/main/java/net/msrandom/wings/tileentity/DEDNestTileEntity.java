@@ -6,10 +6,12 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.entity.WingsEntities;
 import net.msrandom.wings.entity.monster.DumpyEggDrakeEntity;
 
@@ -30,16 +32,17 @@ public class DEDNestTileEntity extends NestTileEntity {
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
         compound.putIntArray("Eggs", eggs.stream().map(AtomicInteger::get).collect(Collectors.toList()));
-        return super.write(compound);
+        return compound;
     }
 
     @Override
     public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         List<AtomicInteger> list = new ArrayList<>();
         for (int i : compound.getIntArray("Eggs")) list.add(new AtomicInteger(i));
         this.eggs = list;
-        super.read(state, compound);
     }
 
     public boolean addEgg() {
@@ -92,6 +95,8 @@ public class DEDNestTileEntity extends NestTileEntity {
                 }
                 eggs.remove(0);
                 current = null;
+                world.notifyBlockUpdate(pos, WingsBlocks.DED_NEST.getDefaultState(), WingsBlocks.DED_NEST.getDefaultState(), 3);
+                markDirty();
             }
         }
     }
@@ -110,5 +115,11 @@ public class DEDNestTileEntity extends NestTileEntity {
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(getPos(), 1, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        CompoundNBT tag = pkt.getNbtCompound();
+        read(WingsBlocks.DED_NEST.getDefaultState(), tag);
     }
 }
