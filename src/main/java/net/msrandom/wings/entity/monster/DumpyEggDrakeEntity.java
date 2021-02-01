@@ -295,11 +295,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         return new ItemStack(WingsItems.DUMPY_EGG_DRAKE_EGG);
     }
 
-    @Override
-    public void createEgg() {
-        this.entityDropItem(getEgg());
-    }
-
     public DyeColor getBandanaColor() {
         return DyeColor.byId(this.dataManager.get(BANDANA_COLOR));
     }
