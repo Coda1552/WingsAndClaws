@@ -71,8 +71,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
             }
         });
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 15, 1) {{
-                setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-            }
+            setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
 
             @Override
             public boolean shouldExecute() {
