@@ -127,7 +127,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	public boolean attackEntityFrom(DamageSource source, float amount) {
         if (!isChild() && source.getTrueSource() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) source.getTrueSource();
-            if (EntityPredicates.CAN_AI_TARGET.test(entity) && !isOwner(entity) && (!(entity instanceof TameableEntity) || getOwnerId() == null || !getOwnerId().equals(((TameableEntity) entity).getOwnerId()))) {
+            if (!isOwner(entity) && (!(entity instanceof TameableEntity) || getOwnerId() == null || !getOwnerId().equals(((TameableEntity) entity).getOwnerId()))) {
                 setAttackTarget((LivingEntity) source.getTrueSource());
             }
         }
@@ -214,7 +214,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 					if (attackTarget == null) {
 						PlayerEntity player = world.getClosestPlayer(this, 16);
-						if (player != null && EntityPredicates.CAN_AI_TARGET.test(player)) {
+						if (player != null && !player.abilities.isCreativeMode) {
 							setAttackTarget(player);
 							attacking = true;
 						}

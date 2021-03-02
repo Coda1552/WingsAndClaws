@@ -23,56 +23,53 @@ public abstract class DumpyEggDrakeModel extends SegmentedModel<DumpyEggDrakeEnt
     public ModelRenderer jaw;
     public ModelRenderer hornLeft;
     public ModelRenderer hornRight;
-    public final ImmutableList<ModelRenderer> parts;
 
     public DumpyEggDrakeModel() {
         setAngles();
-        this.parts = ImmutableList.of(body);
     }
 
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return parts;
+        return ImmutableList.of(body);
     }
 
     protected abstract void setAngles();
 
     @Override
-    public void setLivingAnimations(DumpyEggDrakeEntity entity, float limbSwing, float limbSwingAmount, float partialTick) {
-        super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTick);
-        float ageInTicks = entity.ticksExisted + partialTick;
-        float t = entity.sleepTimer.get(partialTick);
-        body.rotateAngleZ = 1.6f * t;
-        armLeft.rotateAngleZ = 0.23f * t;
-        armRight.rotateAngleZ = -0.28f * t;
-        legLeft.rotateAngleZ = 0.1f * t;
-        legRight.rotateAngleZ = -0.02f * t;
-        legRight.rotateAngleX = -0.01f * t;
-        tail1.rotateAngleX = -0.5f * t;
-        tail1.rotateAngleY = 0.1f * t;
-        tail2.rotateAngleX = -0.6f * t;
-        headJoint.rotateAngleX = 0.6f * t;
-
-        if (!entity.isSleeping()) {
-            LivingEntity target = entity.getAttackTarget();
-            boolean attacking = target != null && entity.getDistanceSq(target) < 4;
+    public void setLivingAnimations(DumpyEggDrakeEntity entityIn, float limbSwing, float limbSwingAmount, float partialTick) {
+        super.setLivingAnimations(entityIn, limbSwing, limbSwingAmount, partialTick);
+        if (entityIn.isSleeping()) {
+            body.rotateAngleZ = 1.6f;
+            armLeft.rotateAngleZ = 0.23f;
+            armRight.rotateAngleZ = -0.28f;
+            legLeft.rotateAngleZ = 0.1f;
+            legRight.rotateAngleZ = -0.02f;
+            legRight.rotateAngleX = -0.01f;
+            tail1.rotateAngleX = -0.5f;
+            tail1.rotateAngleY = 0.1f;
+            tail2.rotateAngleX = -0.6f;
+            headJoint.rotateAngleX = 0.6f;
+        } else {
+            LivingEntity target = entityIn.getAttackTarget();
+            boolean attacking = target != null && entityIn.getDistanceSq(target) < 4;
             if (attacking) {
-                jaw.rotateAngleX = MathHelper.cos(ageInTicks * 0.4f) * 0.16f + 0.2f;
-                legLeft.rotateAngleX = MathHelper.cos(ageInTicks * 0.3f) * -0.01f + 0.05f;
-                legRight.rotateAngleX = MathHelper.cos(ageInTicks * 0.3f) * -0.01f + 0.05f;
+                jaw.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.4f) * 0.16f + 0.2f;
+                legLeft.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.3f) * -0.01f + 0.05f;
+                legRight.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.3f) * -0.01f + 0.05f;
                 tail1.rotateAngleY = 0.2f;
                 tail2.rotateAngleY = 0.3f;
             } else {
                 jaw.rotateAngleX = 0;
-                tail1.rotateAngleY = MathHelper.cos(ageInTicks * 0.1f + 0.2f) * 0.15f;
-                tail2.rotateAngleY = MathHelper.cos(ageInTicks * 0.1f + 0.15f) * (0.13f + (limbSwingAmount / 2));
-                tailTip.rotateAngleY = MathHelper.cos(ageInTicks * 0.1f + 0.1f) * 0.1f;
-                legLeft.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * limbSwingAmount * 0.5f) - MathHelper.cos(ageInTicks * 0.3f) * 0.01f + 0.1f;
-                legRight.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * -limbSwingAmount * 0.5f) - MathHelper.cos(ageInTicks * 0.3f) * 0.01f + 0.1f;
+                tail1.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.2f) * 0.15f;
+                tail2.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.15f) * (0.13f + (limbSwingAmount / 2));
+                tailTip.rotateAngleY = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.1f) * 0.1f;
+                legLeft.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.ticksExisted * 0.3f) * 0.01f + 0.1f;
+                legRight.rotateAngleX = (MathHelper.cos(limbSwing * 0.5f) * -limbSwingAmount * 0.5f) - MathHelper.cos(entityIn.ticksExisted * 0.3f) * 0.01f + 0.1f;
             }
-            body.rotateAngleX = MathHelper.cos(ageInTicks * (attacking ? 0.1f : 0.3f)) * (0.01f + (attacking ? 0.1f : 0)) - (0.1f + (attacking ? -0.1f : 0));
-            armLeft.rotateAngleX = MathHelper.cos(ageInTicks * 0.1f + 0.3f) * (-(limbSwingAmount / (attacking ? 2 : 4)) - 0.1f) + 0.1f;
-            armRight.rotateAngleX = MathHelper.cos(ageInTicks * 0.1f + 0.3f) * ((limbSwingAmount / (attacking ? 2 : 4)) + 0.1f) + 0.1f;
+            body.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * (attacking ? 0.1f : 0.3f)) * (0.01f + (attacking ? 0.1f : 0)) - (0.1f + (attacking ? -0.1f : 0));
+            armLeft.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.3f) * (-(limbSwingAmount / (attacking ? 2 : 4)) - 0.1f) + 0.1f;
+            armRight.rotateAngleX = MathHelper.cos(entityIn.ticksExisted * 0.1f + 0.3f) * ((limbSwingAmount / (attacking ? 2 : 4)) + 0.1f) + 0.1f;
+            body.rotateAngleZ = 0;
             armLeft.rotateAngleZ = 0;
             armRight.rotateAngleZ = 0;
             legLeft.rotateAngleZ = 0;

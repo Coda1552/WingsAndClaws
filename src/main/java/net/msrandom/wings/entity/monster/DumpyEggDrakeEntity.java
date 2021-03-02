@@ -1,9 +1,6 @@
 package net.msrandom.wings.entity.monster;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -28,10 +25,8 @@ import net.minecraft.world.World;
 import net.msrandom.wings.client.WingsSounds;
 import net.msrandom.wings.entity.TameableDragonEntity;
 import net.msrandom.wings.item.WingsItems;
-import net.msrandom.wings.util.LerpFloat;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
@@ -44,7 +39,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     private int attackCooldown;
     private Vector3d oldPos;
     private PlayerEntity closestPlayer;
-    public LerpFloat sleepTimer = new LerpFloat().setLimit(0, 1);
 
     public DumpyEggDrakeEntity(EntityType<? extends DumpyEggDrakeEntity> type, World worldIn) {
         super(type, worldIn);
@@ -54,26 +48,24 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(3, new SwimGoal(this));
-        this.goalSelector.addGoal(4, new SitGoal(this));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.1, false));
-        this.goalSelector.addGoal(6, new PanicGoal(this, 1.0D) {
+        this.goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new PanicGoal(this, 1.0D) {
             @Override
             public boolean shouldExecute() {
                 return super.shouldExecute() && getAttackTarget() == null;
             }
         });
-        this.goalSelector.addGoal(7, new BreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(9, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
+        this.goalSelector.addGoal(7, new FollowParentGoal(this, 1.1D));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(2, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
             @Override
             public boolean shouldExecute() {
                 return super.shouldExecute() && !isSitting() && target.get() == null;
             }
         });
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 15, 1) {{
-            setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        }
-
+        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 15, 1) {
             @Override
             public boolean shouldExecute() {
                 boolean execute = isChild() && !isSitting() && super.shouldExecute();
@@ -94,19 +86,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 }
             }
         });
-
-        this.goalSelector.addGoal(11, new FollowParentGoal(this, 1.1D));
-        this.goalSelector.addGoal(12, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(13, new LookRandomlyGoal(this));
-
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<DumpyEggDrakeEntity>(this, DumpyEggDrakeEntity.class, 10, true, false, entity -> ((DumpyEggDrakeEntity) entity).getGender() == Gender.MALE)
-        {
-            @Override
-            public boolean shouldExecute() {
-                return getGender() == Gender.MALE && super.shouldExecute();
-            }
-        });
+        this.goalSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
     }
 
     public static AttributeModifierMap.MutableAttribute registerDEDAttributes() {
@@ -116,7 +96,7 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.WHITE.getId());
+        this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.RED.getId());
     }
 
     @Override
@@ -187,8 +167,6 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
 
     @Override
     public void livingTick() {
-        super.livingTick();
-
         if (oldPos != null) {
             setPositionAndRotation(oldPos.x, oldPos.y, oldPos.z, 0, 0);
             oldPos = null;
@@ -257,8 +235,8 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                 }
             }
             if (alarmedTimer-- <= 0) alarmedTimer = 0;
+            super.livingTick();
         } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
-        sleepTimer.add(isSleeping()? 0.085f : -0.085f);
     }
 
     @Override

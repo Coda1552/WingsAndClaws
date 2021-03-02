@@ -22,7 +22,7 @@ import java.util.Random;
 public class MangoBlock extends CropsBlock implements IGrowable {
     public static final IntegerProperty MANGOES = IntegerProperty.create("mango_bunch", 1, 4);
 
-    protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(6.0D, 10.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(4.0D, 10.0D, 4.0D, 12.0D, 16.0D, 12.0D);
     protected static final VoxelShape TWO_SHAPE = Block.makeCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
     protected static final VoxelShape THREE_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);

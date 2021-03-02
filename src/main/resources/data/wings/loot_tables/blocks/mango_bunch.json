@@ -2,57 +2,66 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1,
+      "rolls": 1.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "functions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "function": "minecraft:set_count",
+              "type": "minecraft:item",
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "wings:mango_bunch",
-                  "properties": {
-                    "mango_bunch": "2"
-                  }
-                }
-              ],
-              "count": 2
-            },
-            {
-              "function": "minecraft:set_count",
-              "conditions": [
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "wings:mango_bunch",
-                  "properties": {
-                    "mango_bunch": "3"
-                  }
-                }
-              ],
-              "count": 3
-            },
-            {
-              "function": "minecraft:set_count",
-              "conditions": [
-                {
-                  "condition": "minecraft:block_state_property",
-                  "block": "wings:mango_bunch",
+                  "block": "minecraft:wheat",
                   "properties": {
                     "mango_bunch": "4"
                   }
                 }
               ],
-              "count": 4
+              "name": "wings:mango"
             },
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:item",
+              "name": "wings:mango_seeds",
+              "count": 3
             }
-          ],
-          "name": "wings:mango_bunch"
+          ]
         }
       ]
+    },
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters": {
+                "extra": 3,
+                "probability": 0.5714286
+              }
+            }
+          ],
+          "name": "minecraft:wheat_seeds"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "wings:mango_bunch",
+          "properties": {
+            "mango_bunch": "4"
+          }
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
     }
   ]
 }

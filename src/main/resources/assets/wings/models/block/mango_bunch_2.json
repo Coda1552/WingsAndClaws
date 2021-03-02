@@ -1,83 +1,199 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "wings:block/mango_bunch",
-		"particle": "wings:block/mango_bunch"
+		"0": "wings:block/mango_bunch_2",
+		"particle": "wings:block/mango_bunch_2"
 	},
 	"elements": [
 		{
-			"from": [8, 14, 5.5],
-			"to": [11, 16, 5.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [16, 22, 12]},
+			"name": "stem",
+			"from": [4, 13, 3],
+			"to": [4, 16, 7],
+			"rotation": {"angle": 45, "axis": "y", "origin": [4, 14.5, 5]},
 			"faces": {
-				"north": {"uv": [3, 2, 6, 4], "texture": "#0"},
-				"east": {"uv": [0, 0, 0, 2], "texture": "#0"},
-				"south": {"uv": [3, 0, 6, 2], "texture": "#0"},
-				"west": {"uv": [0, 0, 0, 2], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 0], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 0], "texture": "#0"}
+				"north": {"uv": [0, 0, 0, 3], "texture": "#0"},
+				"east": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#0"},
+				"west": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0"}
 			}
 		},
 		{
-			"from": [8, 10, 4],
-			"to": [11, 14, 7],
-			"rotation": {"angle": 0, "axis": "y", "origin": [16, 18, 12]},
+			"name": "stem",
+			"from": [4, 13, 3],
+			"to": [4, 16, 7],
+			"rotation": {"angle": -45, "axis": "y", "origin": [4, 14.5, 5]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"east": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"south": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"west": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 3], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 3], "texture": "#0"}
+				"north": {"uv": [0, 0, 0, 3], "texture": "#0"},
+				"east": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#0"},
+				"west": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0"}
 			}
 		},
 		{
-			"from": [5, 14, 10.5],
-			"to": [8, 16, 10.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [13, 22, 17]},
+			"name": "mango",
+			"from": [3, 9, 4],
+			"to": [5, 13, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4, 10, 6]},
 			"faces": {
-				"north": {"uv": [3, 2, 6, 4], "texture": "#0"},
-				"east": {"uv": [0, 0, 0, 2], "texture": "#0"},
-				"south": {"uv": [3, 0, 6, 2], "texture": "#0"},
-				"west": {"uv": [0, 0, 0, 2], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 0], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 0], "texture": "#0"}
+				"north": {"uv": [2, 0, 4, 4], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 4], "texture": "#0"},
+				"south": {"uv": [2, 0, 4, 4], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 4], "texture": "#0"},
+				"up": {"uv": [4, 2, 6, 4], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0"}
 			}
 		},
 		{
-			"from": [5, 10, 9],
-			"to": [8, 14, 12],
-			"rotation": {"angle": 0, "axis": "y", "origin": [13, 18, 17]},
+			"name": "stem",
+			"from": [11, 13, 1],
+			"to": [11, 16, 5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [11, 14.5, 3]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"east": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"south": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"west": {"uv": [0, 0, 3, 4], "texture": "#0"},
-				"up": {"uv": [0, 0, 3, 3], "texture": "#0"},
-				"down": {"uv": [0, 0, 3, 3], "texture": "#0"}
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [11, 13, 1],
+			"to": [11, 16, 5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [11, 14.5, 3]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "mango",
+			"from": [10, 10, 2],
+			"to": [12, 13, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [11, 10, 3]},
+			"faces": {
+				"north": {"uv": [2, 1, 4, 4], "texture": "#0"},
+				"east": {"uv": [0, 1, 2, 4], "texture": "#0"},
+				"south": {"uv": [2, 1, 4, 4], "texture": "#0"},
+				"west": {"uv": [0, 1, 2, 4], "texture": "#0"},
+				"up": {"uv": [4, 4, 6, 6], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [12, 13, 9],
+			"to": [12, 16, 13],
+			"rotation": {"angle": -45, "axis": "y", "origin": [12, 14.5, 11]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [12, 13, 9],
+			"to": [12, 16, 13],
+			"rotation": {"angle": 45, "axis": "y", "origin": [12, 14.5, 11]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "mango",
+			"from": [11, 9, 10],
+			"to": [13, 13, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 10, 12]},
+			"faces": {
+				"north": {"uv": [2, 0, 4, 4], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 4], "texture": "#0"},
+				"south": {"uv": [2, 0, 4, 4], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 4], "texture": "#0"},
+				"up": {"uv": [4, 2, 6, 4], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [4, 13, 10],
+			"to": [4, 16, 14],
+			"rotation": {"angle": -45, "axis": "y", "origin": [4, 14.5, 12]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [4, 13, 10],
+			"to": [4, 16, 14],
+			"rotation": {"angle": 45, "axis": "y", "origin": [4, 14.5, 12]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [9, 0, 13, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [6, 0, 10, 3], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 4], "texture": "#missing"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#missing"}
+			}
+		},
+		{
+			"name": "mango",
+			"from": [3, 10, 11],
+			"to": [5, 13, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4, 10, 12]},
+			"faces": {
+				"north": {"uv": [2, 1, 4, 4], "texture": "#0"},
+				"east": {"uv": [0, 1, 2, 4], "texture": "#0"},
+				"south": {"uv": [2, 1, 4, 4], "texture": "#0"},
+				"west": {"uv": [0, 1, 2, 4], "texture": "#0"},
+				"up": {"uv": [4, 4, 6, 6], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 6, 2], "texture": "#0"}
 			}
 		}
 	],
 	"groups": [
 		{
-			"name": "group",
-			"origin": [10, 22, 13],
-			"children": []
+			"name": "mango_1",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2]
 		},
 		{
-			"name": "group",
-			"origin": [10, 22, 13],
-			"children": []
+			"name": "mango_2",
+			"origin": [8, 8, 8],
+			"children": [3, 4, 5]
 		},
 		{
-			"name": "group",
-			"origin": [10, 22, 13],
-			"children": [0, 1]
+			"name": "mango_3",
+			"origin": [8, 8, 8],
+			"children": [6, 7, 8]
 		},
 		{
-			"name": "group",
-			"origin": [10, 22, 13],
-			"children": [2, 3]
+			"name": "mango_4",
+			"origin": [8, 8, 8],
+			"children": [9, 10, 11]
 		}
 	]
 }
