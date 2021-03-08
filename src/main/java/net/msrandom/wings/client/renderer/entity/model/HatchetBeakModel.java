@@ -178,12 +178,12 @@ public class HatchetBeakModel extends AgeableModel<HatchetBeakEntity> {
             this.tail2.rotateAngleX = MathHelper.cos(limbSwing * 0.32F + 0.5f) * 0.005F * limbSwingAmount + 0.2F;
             this.tailThing.rotateAngleZ = MathHelper.cos(limbSwing * 0.32F) * 0.06F * limbSwingAmount - 0.25F;
             this.tailThing2.rotateAngleZ = MathHelper.cos(limbSwing * 0.32F) * 0.06F * limbSwingAmount + 0.25F;
-            this.wingRightBone1.rotateAngleZ = MathHelper.cos(entity.ticksExisted * 0.4F) * 0.456f - 0.1f;
+            this.wingRightBone1.rotateAngleZ = MathHelper.cos(ageInTicks * 0.4F) * 0.456f - 0.1f;
             this.wingRightBone1.rotateAngleY = 0.15F;
-            this.wingRightBone2.rotateAngleZ = MathHelper.cos(entity.ticksExisted * 0.4F + 4) * 0.342f - 0.2F;
-            this.wingLeftBone1.rotateAngleZ = MathHelper.cos(entity.ticksExisted * 0.4F) * -0.456f + 0.1f;
+            this.wingRightBone2.rotateAngleZ = MathHelper.cos(ageInTicks * 0.4F + 4) * 0.342f - 0.2F;
+            this.wingLeftBone1.rotateAngleZ = MathHelper.cos(ageInTicks * 0.4F) * -0.456f + 0.1f;
             this.wingLeftBone1.rotateAngleY = -0.15F;
-            this.wingLeftBone2.rotateAngleZ = MathHelper.cos(entity.ticksExisted * 0.4F + 4) * -0.342f + 0.2F;
+            this.wingLeftBone2.rotateAngleZ = MathHelper.cos(ageInTicks * 0.4F + 4) * -0.342f + 0.2F;
             this.body.rotateAngleX = MathHelper.cos(limbSwing * 0.32F + 1) * -0.0475F * limbSwingAmount + 0.05F;
         } else {
             if (flyTimer == 0) {

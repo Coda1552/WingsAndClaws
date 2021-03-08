@@ -30,10 +30,9 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
     }
 
     @Override
-    protected void preRenderCallback(DumpyEggDrakeEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
-        super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
-        if (entitylivingbaseIn.isSleeping())
-            matrixStackIn.translate(0, entitylivingbaseIn.isChild() ? 0.325 : 0.65, 0);
+    protected void preRenderCallback(DumpyEggDrakeEntity entity, MatrixStack matrixStackIn, float partialTickTime) {
+        super.preRenderCallback(entity, matrixStackIn, partialTickTime);
+        matrixStackIn.translate(0, (entity.isChild() ? 0.325 : 0.65) * entity.sleepTimer.get(partialTickTime), 0);
     }
 
     @Override

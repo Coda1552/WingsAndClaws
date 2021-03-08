@@ -28,7 +28,7 @@ public class HatchetBeakWanderGoal extends Goal {
             return true;
         }
         if (hatchetBeak.world.rand.nextInt(5) == 0) {
-            boolean flying = hatchetBeak.isFlying();
+            boolean flying = hatchetBeak.isFlying() && !hatchetBeak.isShotDown();
             boolean grounded = !flying || hatchetBeak.ticksExisted <= 25;
             LivingEntity attackTarget = hatchetBeak.getAttackTarget();
             if (attackTarget == null) {

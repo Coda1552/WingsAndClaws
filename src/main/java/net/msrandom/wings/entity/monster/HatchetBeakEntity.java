@@ -56,9 +56,11 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     public int ticksAfloat;
     public int attackTimer;
     public Vector3d callerPosition;
+    private boolean shotDown;
 
     public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);
+        stepHeight = 1;
         moveController = new MovementController(this, 10, true);
         setNoGravity(true);
     }
@@ -66,7 +68,13 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, false));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.1, true)
+        {
+            @Override
+            protected double getAttackReachSqr(LivingEntity attackTarget) {
+                return 9;
+            }
+        });
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(3, new LookAtGoal(this, PlayerEntity.class, 15, 1));
         this.goalSelector.addGoal(4, new HatchetBeakWanderGoal(this));
@@ -86,23 +94,25 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     public static AttributeModifierMap.MutableAttribute registerHBAttributes() {
-        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 60).createMutableAttribute(Attributes.FLYING_SPEED, 0.5).createMutableAttribute(Attributes.ATTACK_DAMAGE, 4);
+        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 40).createMutableAttribute(Attributes.FLYING_SPEED, 0.5).createMutableAttribute(Attributes.ATTACK_DAMAGE, 4);
     }
 
     @Override
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(tamed ? 90 : 60);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(tamed ? 60 : 40);
+        setHealth(getMaxHealth());
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8);
     }
 
     @Override
     public boolean onLivingFall(float distance, float damageMultiplier) {
-        return false;
+        return shotDown && super.onLivingFall(distance, damageMultiplier);
     }
 
     @Override
     protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+        if (shotDown) super.updateFallState(y, onGroundIn, state, pos);
     }
 
     public boolean isFlying() {
@@ -144,6 +154,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @Override
     public void travel(Vector3d positionIn) {
         if (this.isAlive()) {
+            setShotDown(shotDown && !onGround);
             if (this.isBeingRidden() && this.canBeSteered() && hasSaddle()) {
                 LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
                 rotationYaw += passenger.moveStrafing * -3.35f;
@@ -224,8 +235,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 }
                 this.dataManager.set(SADDLED, true);
                 return ActionResultType.SUCCESS;
-            }
-            else if (hasSaddle()) {
+            } else if (hasSaddle()) {
                 if (stack.getItem() == Items.SHEARS) {
                     this.dataManager.set(SADDLED, false);
                     entityDropItem(new ItemStack(Items.SADDLE));
@@ -268,6 +278,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (isFlying() && source.isProjectile() && !source.getDamageType().equals("thrown")) {
+            setShotDown(true);
+        }
         if (world.getDifficulty() != Difficulty.PEACEFUL && source.getTrueSource() instanceof LivingEntity) {
             setAttackTarget((LivingEntity) source.getTrueSource());
         }
@@ -319,6 +332,15 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 players.put(nbt.getUniqueId("UUID"), new AtomicInteger(nbt.getInt("Values")));
             }
         }
+    }
+
+    public void setShotDown(boolean shotDown) {
+        this.shotDown = shotDown;
+        setNoGravity(!shotDown);
+    }
+
+    public boolean isShotDown() {
+        return shotDown;
     }
 
     @Override
