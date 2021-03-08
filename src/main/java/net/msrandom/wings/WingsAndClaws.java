@@ -23,6 +23,7 @@ import net.minecraft.world.gen.foliageplacer.BlobFoliagePlacer;
 import net.minecraft.world.gen.foliageplacer.JungleFoliagePlacer;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.treedecorator.CocoaTreeDecorator;
 import net.minecraft.world.gen.treedecorator.LeaveVineTreeDecorator;
@@ -102,7 +103,7 @@ public class WingsAndClaws {
         switch (event.getCategory()) {
             case DESERT:
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.DUMPY_EGG_DRAKE, 1, 1, 1));
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
                 break;
             case JUNGLE:
                 event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).removeIf(configuredFeature -> configuredFeature.get().feature == Feature.DECORATED && ((DecoratedFeatureConfig) configuredFeature.get().config).feature.get().feature == Feature.RANDOM_SELECTOR);
@@ -120,6 +121,12 @@ public class WingsAndClaws {
             case FOREST:
                 if (climate.downfall == 0.8f && climate.temperature == 0.7f) {
                     event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.HAROLDS_GREENDRAKE, 15, 3, 4));
+                }
+                break;
+            case SAVANNA:
+                if (event.getDepth() >= 0.36f && event.getScale() >= 1.22f) {
+                    event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.HB_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                    event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.HATCHET_BEAK, 1, 1, 1));
                 }
                 break;
 /*            case PLAINS:
