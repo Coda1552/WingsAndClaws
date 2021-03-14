@@ -2,6 +2,7 @@
   "type": "minecraft:entity",
   "pools": [
     {
+      "name": "main",
       "rolls": 1,
       "entries": [
         {
@@ -38,6 +39,32 @@
             }
           ],
           "name": "wings:dragon_meat"
+        }
+      ]
+    },
+    {
+      "name": "roasted",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:entity_properties",
+              "predicate": {
+                "flags": {
+                  "is_on_fire": true
+                },
+                "equipment": {
+                  "mainhand": {
+                    "item": "minecraft:apple"
+                  }
+                }
+              },
+              "entity": "this"
+            }
+          ],
+          "name": "wings:roasted_harolds_greendrake"
         }
       ]
     }

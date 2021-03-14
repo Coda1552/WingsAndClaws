@@ -24,6 +24,9 @@ public class HatchetBeakWanderGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
+        if (hatchetBeak.isBeingRidden()) {
+            return false;
+        }
         if (hatchetBeak.callerPosition != null) {
             return true;
         }
@@ -71,7 +74,7 @@ public class HatchetBeakWanderGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return target != null && hatchetBeak.getDistanceSq(target) > 8;
+        return target != null && hatchetBeak.getDistanceSq(target) > 8 && !hatchetBeak.isBeingRidden();
     }
 
     @Override

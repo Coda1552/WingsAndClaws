@@ -3,8 +3,12 @@ package net.msrandom.wings.client;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +17,7 @@ import net.msrandom.wings.block.WingsBlocks;
 import net.msrandom.wings.client.renderer.entity.*;
 import net.msrandom.wings.client.renderer.tileentity.*;
 import net.msrandom.wings.entity.WingsEntities;
+import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 import net.msrandom.wings.item.WingsItems;
 import net.msrandom.wings.tileentity.WingsTileEntities;
 
@@ -46,5 +51,13 @@ public class ClientEventHandler {
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.SONGVERN, SongvernRenderer::new);*/
 
         WingsKeyBindings.LIST.forEach(ClientRegistry::registerKeyBinding);
+    }
+
+    @SubscribeEvent
+    public static void renderPlayer(RenderPlayerEvent.Pre event) {
+        if (event.getPlayer().getRidingEntity() instanceof HatchetBeakEntity) {
+            final HatchetBeakEntity hb = (HatchetBeakEntity) event.getPlayer().getRidingEntity();
+            event.getMatrixStack().rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), hb.prevTilt, hb.tilt)));
+        }
     }
 }

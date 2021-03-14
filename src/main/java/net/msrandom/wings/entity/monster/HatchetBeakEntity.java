@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
@@ -57,6 +58,8 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     public int attackTimer;
     public Vector3d callerPosition;
     private boolean shotDown;
+    public float prevTilt;
+    public float tilt;
 
     public HatchetBeakEntity(EntityType<? extends TameableDragonEntity> type, World worldIn) {
         super(type, worldIn);
@@ -144,6 +147,26 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         if (isFlying() && vec3d.y < 0.0D) {
             this.setMotion(vec3d.mul(1.0D, 0.6D, 1.0D));
         }
+
+        prevTilt = tilt;
+        if (isFlying()) {
+            final float v = MathHelper.wrapSubtractDegrees(rotationYaw, prevRotationYaw);
+            if (Math.abs(v) > 1) {
+                if (Math.abs(tilt) < 25) {
+                    tilt += Math.signum(v);
+                }
+            } else {
+                if (Math.abs(tilt) > 0) {
+                    final float tiltSign = Math.signum(tilt);
+                    tilt -= tiltSign * 3;
+                    if (tilt * tiltSign < 0) {
+                        tilt = 0;
+                    }
+                }
+            }
+        } else {
+            tilt = 0;
+        }
     }
 
     @Override
@@ -157,9 +180,8 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
             setShotDown(shotDown && !onGround);
             if (this.isBeingRidden() && this.canBeSteered() && hasSaddle()) {
                 LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
+                prevRotationYaw = rotationYaw;
                 rotationYaw += passenger.moveStrafing * -3.35f;
-                this.prevRotationYaw = this.rotationYaw;
-                this.rotationPitch = passenger.rotationPitch * 0.5F;
                 this.setRotation(this.rotationYaw, this.rotationPitch);
                 this.renderYawOffset = this.rotationYaw;
                 this.rotationYawHead = this.renderYawOffset;

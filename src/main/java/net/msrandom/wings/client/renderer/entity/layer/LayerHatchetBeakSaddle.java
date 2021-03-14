@@ -11,7 +11,7 @@ import net.msrandom.wings.client.renderer.entity.model.HatchetBeakModel;
 import net.msrandom.wings.entity.monster.HatchetBeakEntity;
 
 public class LayerHatchetBeakSaddle extends LayerRenderer<HatchetBeakEntity, HatchetBeakModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/hatchet_beak_saddle.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/hatchet_beak/saddle.png");
 
     public LayerHatchetBeakSaddle(IEntityRenderer<HatchetBeakEntity, HatchetBeakModel> entityRendererIn) {
         super(entityRendererIn);

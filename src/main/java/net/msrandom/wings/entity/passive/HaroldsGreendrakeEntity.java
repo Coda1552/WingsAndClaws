@@ -8,9 +8,13 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -28,6 +32,8 @@ import net.msrandom.wings.entity.WingsEntities;
 import java.util.Random;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(HaroldsGreendrakeEntity.class, DataSerializers.ITEMSTACK);
+
     public HaroldsGreendrakeEntity(EntityType<? extends HaroldsGreendrakeEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -41,6 +47,12 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+    }
+
+    @Override
+    protected void registerData() {
+        super.registerData();
+        dataManager.register(ITEM, ItemStack.EMPTY);
     }
 
     public static boolean canHaroldsSpawn(EntityType<? extends HaroldsGreendrakeEntity> animal, IWorld worldIn, SpawnReason reason, BlockPos pos, Random random) {
@@ -85,20 +97,43 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     @Override
+    public void setItemStackToSlot(EquipmentSlotType slot, ItemStack stack) {
+        if (slot == EquipmentSlotType.MAINHAND) {
+            dataManager.set(ITEM, stack);
+        } else {
+            super.setItemStackToSlot(slot, stack);
+        }
+    }
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slot) {
+        return slot == EquipmentSlotType.MAINHAND ? dataManager.get(ITEM) : super.getItemStackFromSlot(slot);
+    }
+
+    @Override
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         float maxHealth = this.getMaxHealth();
         float health = this.getHealth();
-        if (stack.getItem() == Items.POISONOUS_POTATO && health < maxHealth) {
+        if (stack.getItem() == Items.POISONOUS_POTATO) {
+            if (health < maxHealth) {
+                if (!player.isCreative()) {
+                    stack.shrink(1);
+                }
+                heal(4);
+                double x = this.rand.nextGaussian() * 0.02D;
+                double y = this.rand.nextGaussian() * 0.02D;
+                double z = this.rand.nextGaussian() * 0.02D;
+                this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), x, y, z);
+                return ActionResultType.SUCCESS;
+            }
+        } else if (stack.getItem() == Items.APPLE) {
             if (!player.isCreative()) {
                 stack.shrink(1);
             }
-            heal(4);
-            double x = this.rand.nextGaussian() * 0.02D;
-            double y = this.rand.nextGaussian() * 0.02D;
-            double z = this.rand.nextGaussian() * 0.02D;
-            this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), x, y, z);
-            return ActionResultType.SUCCESS;
+            final ItemStack apple = stack.copy();
+            apple.setCount(1);
+            setHeldItem(Hand.MAIN_HAND, apple);
         }
         return super.func_230254_b_(player, hand);
     }
