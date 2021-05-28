@@ -1,3 +1,4 @@
+/*
 package coda.wingsandclaws.entity.goal;
 
 import net.minecraft.entity.Entity;
@@ -91,3 +92,4 @@ public class LeapingGrubShrimpJumpGoal  extends JumpGoal {
 
     }
 }
+*/

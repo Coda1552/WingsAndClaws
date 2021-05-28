@@ -55,8 +55,7 @@ jar {
             "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor": "coda",
-            "MixinConfigs": "wingsandclaws.mixin.json"
+            "Implementation-Vendor": "coda"
         ])
     }
 }

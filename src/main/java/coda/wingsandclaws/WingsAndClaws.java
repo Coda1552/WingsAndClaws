@@ -1,30 +1,21 @@
 package coda.wingsandclaws;
 
-import coda.wingsandclaws.init.WingsBlocks;
 import coda.wingsandclaws.client.ClientEventHandler;
-import coda.wingsandclaws.init.WingsSounds;
-import coda.wingsandclaws.init.WingsEntities;
-import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
-import coda.wingsandclaws.entity.HatchetBeakEntity;
-import coda.wingsandclaws.entity.IcyPlowheadEntity;
-import coda.wingsandclaws.entity.MimangoEntity;
-import coda.wingsandclaws.init.WingsItems;
-import coda.wingsandclaws.item.WingsSpawnEggItem;
-import coda.wingsandclaws.mixin.SpawnEggsAccessor;
+import coda.wingsandclaws.entity.*;
+import coda.wingsandclaws.init.*;
+import coda.wingsandclaws.network.CallHatchetBeaksPacket;
+import coda.wingsandclaws.network.HatchetBeakAttackPacket;
+import coda.wingsandclaws.network.INetworkPacket;
 import coda.wingsandclaws.world.gen.feature.MangoBunchTreeDecorator;
-import coda.wingsandclaws.init.WingsFeatures;
 import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -49,7 +40,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -57,16 +47,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import coda.wingsandclaws.entity.HaroldsGreendrakeEntity;
-import coda.wingsandclaws.entity.SugarscaleEntity;
-import coda.wingsandclaws.network.CallHatchetBeaksPacket;
-import coda.wingsandclaws.network.HatchetBeakAttackPacket;
-import coda.wingsandclaws.network.INetworkPacket;
-import coda.wingsandclaws.init.WingsTileEntities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -146,14 +129,6 @@ public class WingsAndClaws {
 
         EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
         EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
-
-        final Map<EntityType<?>, SpawnEggItem> eggs = SpawnEggsAccessor.getEggs(); //Reference to SpawnEggItem.EGGS
-        for (Pair<RegistryObject<? extends EntityType<?>>, RegistryObject<WingsSpawnEggItem>> egg : WingsEntities.EGGS) {
-            eggs.put(egg.getFirst().get(), egg.getSecond().get());
-        }
-        //We add a null key by doing what we do in WingsSpawnEggItem, so we remove it so that our eggs aren't handled twice
-        eggs.remove(null);
-        WingsEntities.EGGS.clear();
     }
     
     private void registerEntityAttributes() {

@@ -1,3 +1,4 @@
+/*
 package coda.wingsandclaws.client.renderer.entity.model;
 
 import com.google.common.collect.ImmutableList;
@@ -90,12 +91,15 @@ public class LeapingGrubShrimpModel<T extends Entity> extends EntityModel<Leapin
     @Override
     public void setRotationAngles(LeapingGrubShrimpEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {}
 
-    /**
+    */
+/**
      * This is a helper function from Tabula to set the rotation of model parts
-     */
+     *//*
+
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 }
+*/

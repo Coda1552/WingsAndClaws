@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -41,12 +42,17 @@ public class WingsEntities {
 
     private static <T extends CreatureEntity> RegistryObject<EntityType<T>> create(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height, int pri, int sec) {
         final Item.Properties properties = new Item.Properties().group(WingsItems.GROUP);
-        RegistryObject<EntityType<T>> type = create(name, factory, classification, width, height);
-        EGGS.add(new Pair<>(type, WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new WingsSpawnEggItem(type::get, pri, sec, properties))));
-        return type;
+        EntityType<T> type = createType(name, factory, classification, width, height);
+        WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new SpawnEggItem(type, pri, sec, properties));
+        //EGGS.add(new Pair<>(type, )));
+        return REGISTRY.register(name, () -> type);
     }
 
     private static <T extends Entity> RegistryObject<EntityType<T>> create(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height) {
-        return REGISTRY.register(name, () -> EntityType.Builder.create(factory, classification).size(width, height).setTrackingRange(128).build(name));
+        return REGISTRY.register(name, () -> createType(name, factory, classification, width, height));
+    }
+
+    private static <T extends Entity> EntityType<T> createType(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height) {
+        return EntityType.Builder.create(factory, classification).size(width, height).setTrackingRange(128).build(name);
     }
 }
