@@ -1,8 +1,8 @@
 {
     "parent": "block/slab_top",
     "textures": {
-        "bottom": "wings:block/gilded_stone_bricks",
-        "top": "wings:block/gilded_stone_bricks",
-        "side": "wings:block/gilded_stone_bricks"
+        "bottom": "wingsandclaws:block/gilded_stone_bricks",
+        "top": "wingsandclaws:block/gilded_stone_bricks",
+        "side": "wingsandclaws:block/gilded_stone_bricks"
     }
 }

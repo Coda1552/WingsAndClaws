@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "wings:gilded_stone_brick_slab",
-    "wings:mossy_gilded_stone_brick_slab"
+    "wingsandclaws:gilded_stone_brick_slab",
+    "wingsandclaws:mossy_gilded_stone_brick_slab"
   ]
 }

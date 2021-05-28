@@ -1,16 +1,16 @@
 {
   "variants": {
     "mango_bunch=1": {
-      "model": "wings:block/mango_bunch_1"
+      "model": "wingsandclaws:block/mango_bunch_1"
     },
     "mango_bunch=2": {
-      "model": "wings:block/mango_bunch_2"
+      "model": "wingsandclaws:block/mango_bunch_2"
     },
     "mango_bunch=3": {
-      "model": "wings:block/mango_bunch_3"
+      "model": "wingsandclaws:block/mango_bunch_3"
     },
     "mango_bunch=4": {
-      "model": "wings:block/mango_bunch_4"
+      "model": "wingsandclaws:block/mango_bunch_4"
     }
   }
 }

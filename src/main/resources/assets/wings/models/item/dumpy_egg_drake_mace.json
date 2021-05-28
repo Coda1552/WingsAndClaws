@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"0": "wings:item/dumpy_egg_drake_mace",
-		"particle": "wings:item/dumpy_egg_drake_mace"
+		"0": "wingsandclaws:item/dumpy_egg_drake_mace",
+		"particle": "wingsandclaws:item/dumpy_egg_drake_mace"
 	},
 	"elements": [
 		{

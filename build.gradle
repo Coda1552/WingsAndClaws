@@ -25,7 +25,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             mods {
-                wings {
+                wingsandclaws {
                     source sourceSets.main
                 }
             }
@@ -36,7 +36,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             mods {
-                wings {
+                wingsandclaws {
                     source sourceSets.main
                 }
             }
@@ -51,8 +51,8 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "wings",
-            "Specification-Vendor": "wingssareus",
+            "Specification-Title": "wingsandclaws",
+            "Specification-Vendor": "wingsandclawssareus",
             "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",

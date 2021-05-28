@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wings:gilded_stone_brick_stairs"
+          "name": "wingsandclaws:gilded_stone_brick_stairs"
         }
       ],
       "conditions": [

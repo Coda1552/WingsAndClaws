@@ -5,11 +5,11 @@
   ],
   "key": {
     "#": {
-      "item": "wings:mossy_gilded_stone_bricks"
+      "item": "wingsandclaws:mossy_gilded_stone_bricks"
     }
   },
   "result": {
-    "item": "wings:mossy_gilded_stone_brick_slab",
+    "item": "wingsandclaws:mossy_gilded_stone_brick_slab",
     "count": 6
   }
 }

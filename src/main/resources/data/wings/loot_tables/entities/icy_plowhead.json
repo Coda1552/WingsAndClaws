@@ -37,7 +37,7 @@
               }
             }
           ],
-          "name": "wings:dragon_meat"
+          "name": "wingsandclaws:dragon_meat"
         }
       ]
     },
@@ -46,7 +46,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wings:plowhead_horn"
+          "name": "wingsandclaws:plowhead_horn"
         }
       ]
     }

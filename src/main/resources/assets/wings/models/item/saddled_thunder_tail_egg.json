@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:item/saddled_thunder_tail_egg"
+    "layer0": "wingsandclaws:item/saddled_thunder_tail_egg"
   }
 }

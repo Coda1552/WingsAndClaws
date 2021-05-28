@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:item/leaping_grub_shrimp"
+    "layer0": "wingsandclaws:item/leaping_grub_shrimp"
   }
 }

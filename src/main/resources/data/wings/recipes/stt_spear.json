@@ -8,7 +8,7 @@
   ],
   "key": {
     "h": {
-      "item": "wings:stt_horn"
+      "item": "wingsandclaws:stt_horn"
     },
     "s": {
       "item" : "minecraft:stick"
@@ -17,7 +17,7 @@
   },
 
   "result":{
-    "item": "wings:stt_spear",
+    "item": "wingsandclaws:stt_spear",
     "count": 1
   }
 }

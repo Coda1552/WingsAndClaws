@@ -10,11 +10,11 @@
             "item": "minecraft:iron_ingot"
         },
         "W": {
-            "item": "wings:plowhead_horn"
+            "item": "wingsandclaws:plowhead_horn"
         }
     },
     "result": {
-        "item": "wings:horn_horn",
+        "item": "wingsandclaws:horn_horn",
         "count": 1
     }
 }

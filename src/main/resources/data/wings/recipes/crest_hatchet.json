@@ -7,14 +7,14 @@
   ],
   "key": {
     "#": {
-      "item": "wings:hatchet_beak_crest"
+      "item": "wingsandclaws:hatchet_beak_crest"
     },
     "s": {
       "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "wings:crest_hatchet",
+    "item": "wingsandclaws:crest_hatchet",
     "count": 1
   }
 }

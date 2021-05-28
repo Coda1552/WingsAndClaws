@@ -7,14 +7,14 @@
   ],
   "key": {
     "#": {
-      "item": "wings:gilded_stone_bricks"
+      "item": "wingsandclaws:gilded_stone_bricks"
     },
     "G": {
       "item": "minecraft:vine"
     }
   },
   "result": {
-    "item": "wings:mossy_gilded_stone_bricks",
+    "item": "wingsandclaws:mossy_gilded_stone_bricks",
     "count": 8
   }
 }

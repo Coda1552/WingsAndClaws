@@ -37,7 +37,7 @@
               }
             }
           ],
-          "name": "wings:dragon_meat"
+          "name": "wingsandclaws:dragon_meat"
         }
       ]
     },
@@ -46,7 +46,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wings:hatchet_beak_crest"
+          "name": "wingsandclaws:hatchet_beak_crest"
         }
       ]
     }

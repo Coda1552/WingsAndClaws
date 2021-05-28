@@ -38,7 +38,7 @@
               }
             }
           ],
-          "name": "wings:dragon_meat"
+          "name": "wingsandclaws:dragon_meat"
         }
       ]
     },
@@ -64,7 +64,7 @@
               "entity": "this"
             }
           ],
-          "name": "wings:roasted_harolds_greendrake"
+          "name": "wingsandclaws:roasted_harolds_greendrake"
         }
       ]
     }

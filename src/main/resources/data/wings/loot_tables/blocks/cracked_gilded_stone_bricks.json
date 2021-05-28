@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wings:cracked_gilded_stone_bricks"
+          "name": "wingsandclaws:cracked_gilded_stone_bricks"
         }
       ],
       "conditions": [

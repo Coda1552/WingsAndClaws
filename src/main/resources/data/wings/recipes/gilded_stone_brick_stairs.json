@@ -8,12 +8,12 @@
   "key": {
     "#": [
       {
-        "item": "wings:gilded_stone_bricks"
+        "item": "wingsandclaws:gilded_stone_bricks"
       }
     ]
   },
   "result": {
-    "item": "wings:gilded_stone_brick_stairs",
+    "item": "wingsandclaws:gilded_stone_brick_stairs",
     "count": 4
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:item/breaded_mimango"
+    "layer0": "wingsandclaws:item/breaded_mimango"
   }
 }

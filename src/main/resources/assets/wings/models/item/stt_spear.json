@@ -124,9 +124,9 @@
   "overrides": [
     {
       "predicate": {
-        "wings:throwing": 1
+        "wingsandclaws:throwing": 1
       },
-      "model": "wings:item/stt_spear_throwing"
+      "model": "wingsandclaws:item/stt_spear_throwing"
     }
   ]
 }

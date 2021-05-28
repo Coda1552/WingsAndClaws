@@ -6,11 +6,11 @@
   ],
   "key": {
     "#": {
-      "item": "wings:gilded_stone_bricks"
+      "item": "wingsandclaws:gilded_stone_bricks"
     }
   },
   "result": {
-    "item": "wings:gilded_stone_brick_wall",
+    "item": "wingsandclaws:gilded_stone_brick_wall",
     "count": 6
   }
 }

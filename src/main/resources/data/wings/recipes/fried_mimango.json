@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "wings:breaded_mimango"
+    "item": "wingsandclaws:breaded_mimango"
   },
-  "result": "wings:fried_mimango",
+  "result": "wingsandclaws:fried_mimango",
   "experience": 0.35,
   "cookingtime": 200
 }

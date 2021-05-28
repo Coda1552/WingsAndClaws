@@ -1,6 +1,6 @@
 {
     "parent": "block/wall_inventory",
     "textures": {
-        "wall": "wings:block/mossy_gilded_stone_bricks"
+        "wall": "wingsandclaws:block/mossy_gilded_stone_bricks"
     }
 }

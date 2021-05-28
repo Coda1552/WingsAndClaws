@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:item/music_disc_ashen_lands"
+    "layer0": "wingsandclaws:item/music_disc_ashen_lands"
   }
 }

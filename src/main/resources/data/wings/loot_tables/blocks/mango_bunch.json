@@ -18,11 +18,11 @@
                   }
                 }
               ],
-              "name": "wings:mango"
+              "name": "wingsandclaws:mango"
             },
             {
               "type": "minecraft:item",
-              "name": "wings:mango_seeds",
+              "name": "wingsandclaws:mango_seeds",
               "count": 3
             }
           ]
@@ -51,7 +51,7 @@
       "conditions": [
         {
           "condition": "minecraft:block_state_property",
-          "block": "wings:mango_bunch",
+          "block": "wingsandclaws:mango_bunch",
           "properties": {
             "mango_bunch": "4"
           }

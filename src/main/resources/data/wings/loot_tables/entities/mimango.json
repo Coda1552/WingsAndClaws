@@ -16,7 +16,7 @@
               }
             }
           ],
-          "name": "wings:mimango"
+          "name": "wingsandclaws:mimango"
         }
       ]
     },
@@ -25,7 +25,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "wings:mango_bunch"
+          "name": "wingsandclaws:mango_bunch"
         }
       ]
     }

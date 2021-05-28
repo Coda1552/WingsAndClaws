@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "wings:block/chiseled_gilded_stone_bricks"
+    "all": "wingsandclaws:block/chiseled_gilded_stone_bricks"
   }
 }

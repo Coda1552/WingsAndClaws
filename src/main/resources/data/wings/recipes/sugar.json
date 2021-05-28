@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [{
-    "item": "wings:sugarscale"
+    "item": "wingsandclaws:sugarscale"
   }],
   "result": {
     "item": "minecraft:sugar",

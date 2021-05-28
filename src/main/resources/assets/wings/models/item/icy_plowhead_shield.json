@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "wings:entity/icy_plowhead/shield"
+    "particle": "wingsandclaws:entity/icy_plowhead/shield"
   },
   "display": {
     "thirdperson_righthand": {
@@ -81,7 +81,7 @@
       "predicate": {
         "blocking": 1
       },
-      "model": "wings:item/shield_blocking"
+      "model": "wingsandclaws:item/shield_blocking"
     }
   ]
 }

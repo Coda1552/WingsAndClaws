@@ -6,10 +6,10 @@
   ],
   "key": {
     "#": {
-      "item": "wings:gilded_stone_brick_slab"
+      "item": "wingsandclaws:gilded_stone_brick_slab"
     }
   },
   "result": {
-    "item": "wings:chiseled_gilded_stone_bricks"
+    "item": "wingsandclaws:chiseled_gilded_stone_bricks"
   }
 }

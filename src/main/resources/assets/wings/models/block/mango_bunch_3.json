@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "wings:block/mango_bunch_3",
-		"particle": "wings:block/mango_bunch_3"
+		"0": "wingsandclaws:block/mango_bunch_3",
+		"particle": "wingsandclaws:block/mango_bunch_3"
 	},
 	"elements": [
 		{

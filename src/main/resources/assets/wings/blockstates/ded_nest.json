@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "wings:block/ded_nest"
+      "model": "wingsandclaws:block/ded_nest"
     }
   }
 }

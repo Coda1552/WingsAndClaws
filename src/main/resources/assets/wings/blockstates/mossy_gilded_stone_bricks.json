@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "wings:block/mossy_gilded_stone_bricks"
+      "model": "wingsandclaws:block/mossy_gilded_stone_bricks"
     }
   }
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
   "ingredient": {
-    "item": "wings:gilded_stone_bricks"
+    "item": "wingsandclaws:gilded_stone_bricks"
   },
-  "result": "wings:gilded_stone_brick_stairs",
+  "result": "wingsandclaws:gilded_stone_brick_stairs",
   "count": 1
 }

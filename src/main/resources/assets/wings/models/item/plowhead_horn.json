@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "wings:item/plowhead_horn"
+    "layer0": "wingsandclaws:item/plowhead_horn"
   }
 }

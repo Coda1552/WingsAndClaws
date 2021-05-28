@@ -5,11 +5,11 @@
       "item": "minecraft:bread"
     },
     {
-      "item": "wings:mimango"
+      "item": "wingsandclaws:mimango"
     }
   ],
   "result": {
-    "item": "wings:breaded_mimango",
+    "item": "wingsandclaws:breaded_mimango",
     "count": 1
   }
 }

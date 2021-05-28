@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
   "ingredient": {
-    "item": "wings:mossy_gilded_stone_bricks"
+    "item": "wingsandclaws:mossy_gilded_stone_bricks"
   },
-  "result": "wings:mossy_gilded_stone_brick_stairs",
+  "result": "wingsandclaws:mossy_gilded_stone_brick_stairs",
   "count": 1
 }

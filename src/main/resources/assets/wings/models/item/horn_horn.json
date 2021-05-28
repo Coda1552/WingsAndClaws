@@ -1,7 +1,7 @@
 {
   "parent": "builtin/entity",
   "textures": {
-    "particle": "wings:entity/icy_plowhead/horn"
+    "particle": "wingsandclaws:entity/icy_plowhead/horn"
   },
   "display": {
     "thirdperson_righthand": {
@@ -127,9 +127,9 @@
   "overrides": [
     {
       "predicate": {
-        "wings:using": 1
+        "wingsandclaws:using": 1
       },
-      "model": "wings:item/horn_using"
+      "model": "wingsandclaws:item/horn_using"
     }
   ]
 }

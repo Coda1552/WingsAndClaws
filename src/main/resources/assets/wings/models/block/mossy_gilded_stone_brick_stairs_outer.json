@@ -1,8 +1,8 @@
 {
   "parent": "block/outer_stairs",
   "textures": {
-    "bottom": "wings:block/mossy_gilded_stone_bricks",
-    "top": "wings:block/mossy_gilded_stone_bricks",
-    "side": "wings:block/mossy_gilded_stone_bricks"
+    "bottom": "wingsandclaws:block/mossy_gilded_stone_bricks",
+    "top": "wingsandclaws:block/mossy_gilded_stone_bricks",
+    "side": "wingsandclaws:block/mossy_gilded_stone_bricks"
   }
 }

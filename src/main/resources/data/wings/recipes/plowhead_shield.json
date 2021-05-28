@@ -7,7 +7,7 @@
     ],
     "key": {
         "#": {
-            "item": "wings:plowhead_horn"
+            "item": "wingsandclaws:plowhead_horn"
         },
         "i": {
             "item": "minecraft:iron_ingot"
@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "wings:icy_plowhead_shield",
+        "item": "wingsandclaws:icy_plowhead_shield",
         "count": 1
     }
 }

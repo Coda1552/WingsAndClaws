@@ -10,10 +10,10 @@
       "item": "minecraft:gold_ingot"
     },
     "X": {
-      "item": "wings:mango_bunch"
+      "item": "wingsandclaws:mango_bunch"
     }
   },
   "result": {
-    "item": "wings:golden_mango"
+    "item": "wingsandclaws:golden_mango"
   }
 }
