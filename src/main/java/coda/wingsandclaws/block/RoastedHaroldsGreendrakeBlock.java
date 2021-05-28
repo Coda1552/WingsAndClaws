@@ -29,7 +29,7 @@ public class RoastedHaroldsGreendrakeBlock extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
 
-    protected RoastedHaroldsGreendrakeBlock(Block.Properties properties) {
+    public RoastedHaroldsGreendrakeBlock(Block.Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(BITES, Integer.valueOf(0)));
         this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));

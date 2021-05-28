@@ -32,8 +32,8 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import coda.wingsandclaws.client.WingsSounds;
-import coda.wingsandclaws.block.WingsBlocks;
+import coda.wingsandclaws.init.WingsSounds;
+import coda.wingsandclaws.init.WingsBlocks;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.goal.FlyGoal;
 

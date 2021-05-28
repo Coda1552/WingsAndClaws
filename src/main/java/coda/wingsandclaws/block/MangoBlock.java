@@ -27,7 +27,7 @@ public class MangoBlock extends CropsBlock implements IGrowable {
     protected static final VoxelShape THREE_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
-    protected MangoBlock() {
+    public MangoBlock() {
         super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0F).sound(SoundType.CROP));
         this.setDefaultState(this.stateContainer.getBaseState().with(MANGOES, 1));
     }

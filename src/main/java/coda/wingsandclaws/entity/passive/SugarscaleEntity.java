@@ -1,6 +1,6 @@
 package coda.wingsandclaws.entity.passive;
 
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;

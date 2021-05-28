@@ -1,7 +1,8 @@
 package coda.wingsandclaws.tileentity;
 
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsEntities;
 import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.init.WingsTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;

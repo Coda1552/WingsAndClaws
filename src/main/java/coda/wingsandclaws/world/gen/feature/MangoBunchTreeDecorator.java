@@ -9,7 +9,7 @@ import net.minecraft.world.gen.feature.TreeFeature;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import coda.wingsandclaws.block.MangoBlock;
-import coda.wingsandclaws.block.WingsBlocks;
+import coda.wingsandclaws.init.WingsBlocks;
 
 import java.util.List;
 import java.util.Random;

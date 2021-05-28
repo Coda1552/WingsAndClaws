@@ -1,22 +1,15 @@
 package coda.wingsandclaws.world.gen.feature;
 
-import coda.wingsandclaws.entity.WingsEntities;
-import com.mojang.serialization.Codec;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.ReportedException;
+import coda.wingsandclaws.init.WingsEntities;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import coda.wingsandclaws.WingsAndClaws;
-
-import javax.annotation.Nonnull;
-import java.lang.reflect.Constructor;
 
 public class WingsFeatures {
     public static final DeferredRegister<Feature<?>> FEATURE_REGISTRY = DeferredRegister.create(ForgeRegistries.FEATURES, WingsAndClaws.MOD_ID);

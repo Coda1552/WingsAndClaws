@@ -38,7 +38,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
 import coda.wingsandclaws.client.WingsKeyBindings;
-import coda.wingsandclaws.client.WingsSounds;
+import coda.wingsandclaws.init.WingsSounds;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.goal.HatchetBeakWanderGoal;
 import coda.wingsandclaws.resources.TamePointsManager;

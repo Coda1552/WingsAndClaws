@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity;
+package coda.wingsandclaws.init;
 
 import coda.wingsandclaws.WingsAndClaws;
 import coda.wingsandclaws.entity.item.MimangoEggEntity;
@@ -19,8 +19,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsItems;
 
 public class WingsEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, WingsAndClaws.MOD_ID);

@@ -1,6 +1,7 @@
 package coda.wingsandclaws.item;
 
 import coda.wingsandclaws.block.NestBlock;
+import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

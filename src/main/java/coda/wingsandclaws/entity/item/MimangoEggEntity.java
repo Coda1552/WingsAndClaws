@@ -22,8 +22,8 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import coda.wingsandclaws.entity.WingsEntities;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsEntities;
+import coda.wingsandclaws.init.WingsItems;
 
 import java.util.Collections;
 import java.util.List;

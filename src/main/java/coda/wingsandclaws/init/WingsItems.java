@@ -1,9 +1,7 @@
-package coda.wingsandclaws.item;
+package coda.wingsandclaws.init;
 
-import coda.wingsandclaws.block.WingsBlocks;
-import coda.wingsandclaws.client.WingsSounds;
 import coda.wingsandclaws.client.renderer.tileentity.WingsISTER;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.item.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.util.SoundEvent;

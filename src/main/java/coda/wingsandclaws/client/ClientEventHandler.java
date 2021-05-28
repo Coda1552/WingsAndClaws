@@ -2,7 +2,7 @@ package coda.wingsandclaws.client;
 
 import coda.wingsandclaws.client.renderer.entity.*;
 import coda.wingsandclaws.client.renderer.tileentity.*;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsEntities;
 import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -16,9 +16,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.block.WingsBlocks;
-import coda.wingsandclaws.item.WingsItems;
-import coda.wingsandclaws.tileentity.WingsTileEntities;
+import coda.wingsandclaws.init.WingsBlocks;
+import coda.wingsandclaws.init.WingsItems;
+import coda.wingsandclaws.init.WingsTileEntities;
 
 @Mod.EventBusSubscriber(modid = WingsAndClaws.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler {

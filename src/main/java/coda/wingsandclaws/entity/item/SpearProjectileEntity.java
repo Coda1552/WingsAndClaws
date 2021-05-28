@@ -25,7 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsEntities;
 
 import javax.annotation.Nullable;
 

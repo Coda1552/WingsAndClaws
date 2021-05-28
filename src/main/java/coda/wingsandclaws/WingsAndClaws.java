@@ -1,14 +1,14 @@
 package coda.wingsandclaws;
 
-import coda.wingsandclaws.block.WingsBlocks;
+import coda.wingsandclaws.init.WingsBlocks;
 import coda.wingsandclaws.client.ClientEventHandler;
-import coda.wingsandclaws.client.WingsSounds;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsSounds;
+import coda.wingsandclaws.init.WingsEntities;
 import coda.wingsandclaws.entity.monster.DumpyEggDrakeEntity;
 import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
 import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
 import coda.wingsandclaws.entity.passive.MimangoEntity;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsItems;
 import coda.wingsandclaws.world.gen.feature.MangoBunchTreeDecorator;
 import coda.wingsandclaws.world.gen.feature.WingsFeatures;
 import com.google.common.collect.ImmutableList;
@@ -56,7 +56,7 @@ import coda.wingsandclaws.entity.passive.SugarscaleEntity;
 import coda.wingsandclaws.network.CallHatchetBeaksPacket;
 import coda.wingsandclaws.network.HatchetBeakAttackPacket;
 import coda.wingsandclaws.network.INetworkPacket;
-import coda.wingsandclaws.tileentity.WingsTileEntities;
+import coda.wingsandclaws.init.WingsTileEntities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

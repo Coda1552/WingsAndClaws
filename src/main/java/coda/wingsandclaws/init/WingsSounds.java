@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client;
+package coda.wingsandclaws.init;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;

@@ -1,6 +1,6 @@
 package coda.wingsandclaws.entity.passive;
 
-import coda.wingsandclaws.client.WingsSounds;
+import coda.wingsandclaws.init.WingsSounds;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;

@@ -1,5 +1,8 @@
-package coda.wingsandclaws.block;
+package coda.wingsandclaws.init;
 
+import coda.wingsandclaws.block.MangoBlock;
+import coda.wingsandclaws.block.NestBlock;
+import coda.wingsandclaws.block.RoastedHaroldsGreendrakeBlock;
 import coda.wingsandclaws.entity.monster.DumpyEggDrakeEntity;
 import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
 import net.minecraft.block.*;
@@ -10,8 +13,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.item.WingsFoods;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsFoods;
+import coda.wingsandclaws.init.WingsItems;
 import coda.wingsandclaws.tileentity.DEDNestTileEntity;
 import coda.wingsandclaws.tileentity.HBNestTileEntity;
 

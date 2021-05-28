@@ -1,5 +1,6 @@
 package coda.wingsandclaws.item;
 
+import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;

@@ -17,7 +17,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsItems;
 
 import javax.annotation.Nullable;
 

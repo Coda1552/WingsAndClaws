@@ -1,8 +1,11 @@
-package coda.wingsandclaws.tileentity;
+package coda.wingsandclaws.init;
 
 import coda.wingsandclaws.WingsAndClaws;
 import coda.wingsandclaws.block.NestBlock;
-import coda.wingsandclaws.block.WingsBlocks;
+import coda.wingsandclaws.init.WingsBlocks;
+import coda.wingsandclaws.tileentity.DEDNestTileEntity;
+import coda.wingsandclaws.tileentity.HBNestTileEntity;
+import coda.wingsandclaws.tileentity.NestTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

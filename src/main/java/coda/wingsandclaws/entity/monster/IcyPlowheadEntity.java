@@ -31,10 +31,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
-import coda.wingsandclaws.client.WingsSounds;
+import coda.wingsandclaws.init.WingsSounds;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.item.PlowheadEggEntity;
-import coda.wingsandclaws.item.WingsItems;
+import coda.wingsandclaws.init.WingsItems;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

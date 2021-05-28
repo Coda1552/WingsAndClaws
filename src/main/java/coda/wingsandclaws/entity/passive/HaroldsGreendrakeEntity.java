@@ -1,7 +1,7 @@
 package coda.wingsandclaws.entity.passive;
 
-import coda.wingsandclaws.client.WingsSounds;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsSounds;
+import coda.wingsandclaws.init.WingsEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;

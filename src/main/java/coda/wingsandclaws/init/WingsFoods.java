@@ -1,4 +1,4 @@
-package coda.wingsandclaws.item;
+package coda.wingsandclaws.init;
 
 import net.minecraft.item.Food;
 

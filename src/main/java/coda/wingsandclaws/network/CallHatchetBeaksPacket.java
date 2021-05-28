@@ -1,7 +1,7 @@
 package coda.wingsandclaws.network;
 
-import coda.wingsandclaws.client.WingsSounds;
-import coda.wingsandclaws.entity.WingsEntities;
+import coda.wingsandclaws.init.WingsSounds;
+import coda.wingsandclaws.init.WingsEntities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.vector.Vector3d;

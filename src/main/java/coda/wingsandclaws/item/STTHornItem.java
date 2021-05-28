@@ -1,5 +1,6 @@
 package coda.wingsandclaws.item;
 
+import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.item.Item;
 
 //If this isn't changed to include logic then it should be removed.

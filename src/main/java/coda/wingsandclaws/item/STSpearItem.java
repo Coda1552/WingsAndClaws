@@ -2,6 +2,7 @@ package coda.wingsandclaws.item;
 
 import coda.wingsandclaws.client.renderer.tileentity.SpearProjectileTileRenderer;
 import coda.wingsandclaws.entity.item.SpearProjectileEntity;
+import coda.wingsandclaws.init.WingsItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.EnchantmentHelper;
