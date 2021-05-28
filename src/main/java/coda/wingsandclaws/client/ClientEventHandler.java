@@ -24,16 +24,16 @@ import coda.wingsandclaws.tileentity.WingsTileEntities;
 public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     public static void init() {
-        RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE, RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.getTranslucent());
 
-        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST, DEDNestTileEntityRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST, HBNestTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST.get(), DEDNestTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST.get(), HBNestTileEntityRenderer::new);
 
         WingsISTER.get().addDelegate(WingsItems.ICY_PLOWHEAD_SHIELD.get(), new PlowheadShieldRenderer());
-        WingsISTER.get().addDelegate(WingsBlocks.DED_NEST.asItem(), new NestItemRenderer(WingsTileEntities.DED_NEST));
-        WingsISTER.get().addDelegate(WingsBlocks.HB_NEST.asItem(), new NestItemRenderer(WingsTileEntities.HB_NEST));
+        WingsISTER.get().addDelegate(WingsBlocks.DED_NEST.get().asItem(), new NestItemRenderer(WingsTileEntities.DED_NEST.get()));
+        WingsISTER.get().addDelegate(WingsBlocks.HB_NEST.get().asItem(), new NestItemRenderer(WingsTileEntities.HB_NEST.get()));
 
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.DUMPY_EGG_DRAKE.get(), DumpyEggDrakeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(WingsEntities.HATCHET_BEAK.get(), HatchetBeakRenderer::new);

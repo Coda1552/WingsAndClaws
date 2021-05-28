@@ -68,15 +68,15 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return WingsSounds.HAROLD_AMBIENT;
+        return WingsSounds.HAROLD_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return WingsSounds.HAROLD_HURT;
+        return WingsSounds.HAROLD_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return WingsSounds.HAROLD_DEATH;
+        return WingsSounds.HAROLD_DEATH.get();
     }
 
     protected void playStepSound(BlockPos pos, BlockState state) {

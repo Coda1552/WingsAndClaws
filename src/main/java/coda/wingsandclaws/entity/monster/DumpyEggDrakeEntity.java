@@ -127,19 +127,19 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return WingsSounds.DED_AMBIENT;
+        return WingsSounds.DED_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return WingsSounds.DED_HURT;
+        return WingsSounds.DED_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return WingsSounds.DED_DEATH;
+        return WingsSounds.DED_DEATH.get();
     }
 
     @Override

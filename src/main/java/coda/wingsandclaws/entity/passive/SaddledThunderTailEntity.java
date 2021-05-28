@@ -81,19 +81,19 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return isSleeping() ? null : WingsSounds.STT_AMBIENT;
+        return isSleeping() ? null : WingsSounds.STT_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return WingsSounds.STT_HURT;
+        return WingsSounds.STT_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return WingsSounds.STT_DEATH;
+        return WingsSounds.STT_DEATH.get();
     }
 
     @Override

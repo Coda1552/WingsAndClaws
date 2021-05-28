@@ -43,7 +43,7 @@ public class HornHornItem extends ToolItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         playerIn.setActiveHand(handIn);
-        worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN, SoundCategory.PLAYERS, 0.5f, 1);
+        worldIn.playSound(null, playerIn.getPosition(), WingsSounds.BATTLE_HORN.get(), SoundCategory.PLAYERS, 0.5f, 1);
         return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
     }
 

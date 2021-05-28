@@ -27,7 +27,7 @@ public class DEDNestTileEntity extends NestTileEntity {
     private AtomicInteger current;
 
     public DEDNestTileEntity() {
-        super(WingsTileEntities.DED_NEST);
+        super(WingsTileEntities.DED_NEST.get());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class DEDNestTileEntity extends NestTileEntity {
                 }
                 eggs.remove(0);
                 current = null;
-                world.notifyBlockUpdate(pos, WingsBlocks.DED_NEST.getDefaultState(), WingsBlocks.DED_NEST.getDefaultState(), 3);
+                world.notifyBlockUpdate(pos, WingsBlocks.DED_NEST.get().getDefaultState(), WingsBlocks.DED_NEST.get().getDefaultState(), 3);
                 markDirty();
             }
         }
@@ -120,6 +120,6 @@ public class DEDNestTileEntity extends NestTileEntity {
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         CompoundNBT tag = pkt.getNbtCompound();
-        read(WingsBlocks.DED_NEST.getDefaultState(), tag);
+        read(WingsBlocks.DED_NEST.get().getDefaultState(), tag);
     }
 }

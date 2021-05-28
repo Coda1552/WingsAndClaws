@@ -140,13 +140,13 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.isEmpty()) {
-            playSound(WingsSounds.MIMANGO_HAPPY, getSoundVolume(), getSoundPitch());
+            playSound(WingsSounds.MIMANGO_HAPPY.get(), getSoundVolume(), getSoundPitch());
             return ActionResultType.SUCCESS;
         }
 
         if (handleSpawnEgg(player, stack)) return ActionResultType.SUCCESS;
 
-        if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.asItem()) {
+        if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.get().asItem()) {
             if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                 if (!player.isCreative()) {
                     stack.shrink(1);
@@ -181,19 +181,19 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return WingsSounds.MIMANGO_AMBIENT;
+        return WingsSounds.MIMANGO_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return WingsSounds.MIMANGO_HURT;
+        return WingsSounds.MIMANGO_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return WingsSounds.MIMANGO_DEATH;
+        return WingsSounds.MIMANGO_DEATH.get();
     }
 
     public boolean isHiding() {

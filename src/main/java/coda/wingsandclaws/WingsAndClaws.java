@@ -97,7 +97,7 @@ public class WingsAndClaws {
         switch (event.getCategory()) {
             case DESERT:
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.DUMPY_EGG_DRAKE.get(), 1, 1, 1));
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
                 break;
             case JUNGLE:
                 event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).removeIf(configuredFeature -> configuredFeature.get().feature == Feature.DECORATED && ((DecoratedFeatureConfig) configuredFeature.get().config).feature.get().feature == Feature.RANDOM_SELECTOR);
@@ -119,7 +119,7 @@ public class WingsAndClaws {
                 break;
             case SAVANNA:
                 if (event.getDepth() >= 0.36f && event.getScale() >= 1.22f) {
-                    event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.HB_NEST.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                    event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.HB_NEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
                     event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.HATCHET_BEAK.get(), 1, 1, 1));
                 }
                 break;

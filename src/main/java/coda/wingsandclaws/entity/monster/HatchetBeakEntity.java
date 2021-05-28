@@ -367,17 +367,17 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return WingsSounds.HB_AMBIENT;
+        return WingsSounds.HB_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return WingsSounds.HB_DEATH;
+        return WingsSounds.HB_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return WingsSounds.HB_HURT;
+        return WingsSounds.HB_HURT.get();
     }
 
     private static class MovementController extends net.minecraft.entity.ai.controller.MovementController {

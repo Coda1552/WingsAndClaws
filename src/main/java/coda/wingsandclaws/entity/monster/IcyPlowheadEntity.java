@@ -93,19 +93,19 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	@Nullable
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return isSleeping() ? null : WingsSounds.PLOWHEAD_AMBIENT;
+		return isSleeping() ? null : WingsSounds.PLOWHEAD_AMBIENT.get();
 	}
 
 	@Nullable
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return WingsSounds.PLOWHEAD_HURT;
+		return WingsSounds.PLOWHEAD_HURT.get();
 	}
 
 	@Nullable
 	@Override
 	protected SoundEvent getDeathSound() {
-		return WingsSounds.PLOWHEAD_DEATH;
+		return WingsSounds.PLOWHEAD_DEATH.get();
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 				if (target != null) {
 					if (startedCharging == 0) {
-						playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
+						playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getSoundPitch());
 						startedCharging = 120;
 					}
 					getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 0.4);
@@ -234,7 +234,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				} else {
 					if (iceBlock != null) {
 						if (startedCharging == 0) {
-							playSound(WingsSounds.PLOWHEAD_ANGRY, getSoundVolume(), getSoundPitch());
+							playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getSoundPitch());
 							startedCharging = 120;
 						} else if (startedCharging == 1) {
 							iceBlock = null;
