@@ -1,5 +1,6 @@
 package coda.wingsandclaws.world.gen.feature;
 
+import coda.wingsandclaws.init.WingsFeatures;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;

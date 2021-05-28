@@ -10,18 +10,22 @@ import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
 import coda.wingsandclaws.entity.passive.MimangoEntity;
 import coda.wingsandclaws.entity.passive.HaroldsGreendrakeEntity;
 import coda.wingsandclaws.entity.passive.SugarscaleEntity;
+import coda.wingsandclaws.item.WingsSpawnEggItem;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import coda.wingsandclaws.init.WingsItems;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WingsEntities {
+    public static final List<Pair<RegistryObject<? extends EntityType<?>>, RegistryObject<WingsSpawnEggItem>>> EGGS = new ArrayList<>();
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, WingsAndClaws.MOD_ID);
     public static final RegistryObject<EntityType<DumpyEggDrakeEntity>> DUMPY_EGG_DRAKE = create("dumpy_egg_drake",DumpyEggDrakeEntity::new, EntityClassification.CREATURE, 1.2f, 1.3f, 0xddbc8b, 0xbc9161);
     public static final RegistryObject<EntityType<HatchetBeakEntity>> HATCHET_BEAK = create("hatchet_beak", HatchetBeakEntity::new, EntityClassification.CREATURE, 3.35f, 2.5f, 0x54392a, 0x04a08e);
@@ -38,7 +42,7 @@ public class WingsEntities {
     private static <T extends CreatureEntity> RegistryObject<EntityType<T>> create(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height, int pri, int sec) {
         final Item.Properties properties = new Item.Properties().group(WingsItems.GROUP);
         RegistryObject<EntityType<T>> type = create(name, factory, classification, width, height);
-        WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new SpawnEggItem(type.get(), pri, sec, properties));
+        EGGS.add(new Pair<>(type, WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new WingsSpawnEggItem(type::get, pri, sec, properties))));
         return type;
     }
 

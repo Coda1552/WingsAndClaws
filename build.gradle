@@ -52,11 +52,11 @@ jar {
     manifest {
         attributes([
             "Specification-Title": "wingsandclaws",
-            "Specification-Vendor": "wingsandclawssareus",
             "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"msrandom",
+            "Implementation-Vendor": "coda",
+            "MixinConfigs": "wingsandclaws.mixin.json"
         ])
     }
 }

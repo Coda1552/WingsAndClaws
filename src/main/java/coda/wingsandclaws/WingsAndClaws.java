@@ -9,17 +9,22 @@ import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
 import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
 import coda.wingsandclaws.entity.passive.MimangoEntity;
 import coda.wingsandclaws.init.WingsItems;
+import coda.wingsandclaws.item.WingsSpawnEggItem;
+import coda.wingsandclaws.mixin.SpawnEggsAccessor;
 import coda.wingsandclaws.world.gen.feature.MangoBunchTreeDecorator;
-import coda.wingsandclaws.world.gen.feature.WingsFeatures;
+import coda.wingsandclaws.init.WingsFeatures;
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
@@ -44,6 +49,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -60,6 +66,7 @@ import coda.wingsandclaws.init.WingsTileEntities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -83,9 +90,6 @@ public class WingsAndClaws {
         WingsTileEntities.REGISTRY.register(bus);
         WingsFeatures.FEATURE_REGISTRY.register(bus);
         WingsFeatures.TREE_DECORATOR_REGISTRY.register(bus);
-
-        EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
-        EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
 
         registerMessage(CallHatchetBeaksPacket.class, CallHatchetBeaksPacket::new, LogicalSide.SERVER);
         registerMessage(HatchetBeakAttackPacket.class, HatchetBeakAttackPacket::new, LogicalSide.SERVER);
@@ -135,8 +139,21 @@ public class WingsAndClaws {
     private void registerClient(FMLClientSetupEvent event) {
         ClientEventHandler.init();
     }
+
+    @SuppressWarnings("unchecked")
     private void registerCommon(FMLCommonSetupEvent event) {
         registerEntityAttributes();
+
+        EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
+        EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
+
+        final Map<EntityType<?>, SpawnEggItem> eggs = SpawnEggsAccessor.getEggs(); //Reference to SpawnEggItem.EGGS
+        for (Pair<RegistryObject<? extends EntityType<?>>, RegistryObject<WingsSpawnEggItem>> egg : WingsEntities.EGGS) {
+            eggs.put(egg.getFirst().get(), egg.getSecond().get());
+        }
+        //We add a null key by doing what we do in WingsSpawnEggItem, so we remove it so that our eggs aren't handled twice
+        eggs.remove(null);
+        WingsEntities.EGGS.clear();
     }
     
     private void registerEntityAttributes() {

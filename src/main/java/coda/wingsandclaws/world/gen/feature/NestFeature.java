@@ -10,11 +10,12 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class NestFeature extends WingsNbtStructure {
-    private final EntityType<? extends TameableDragonEntity> entity;
+    private final Supplier<EntityType<? extends TameableDragonEntity>> entity;
 
-    public NestFeature(ResourceLocation path, EntityType<? extends TameableDragonEntity> entity) {
+    public NestFeature(ResourceLocation path, Supplier<EntityType<? extends TameableDragonEntity>> entity) {
         super(new ResourceLocation(path.getNamespace(), "nest/" + path.getPath()));
         this.entity = entity;
     }
@@ -26,7 +27,7 @@ public class NestFeature extends WingsNbtStructure {
         switch (function) {
             case "baby":
                 if (rand.nextInt(4) != 0) {
-                    TameableDragonEntity entity = this.entity.create(world);
+                    TameableDragonEntity entity = this.entity.get().create(world);
                     if (entity != null) {
                         entity.setGrowingAge(-24000);
                         entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
@@ -37,7 +38,7 @@ public class NestFeature extends WingsNbtStructure {
                 break;
             case "adult":
                 if (rand.nextInt(3) != 0) {
-                    TameableDragonEntity entity = this.entity.create(world);
+                    TameableDragonEntity entity = this.entity.get().create(world);
                     if (entity != null) {
                         entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                         entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.STRUCTURE, null, null);
