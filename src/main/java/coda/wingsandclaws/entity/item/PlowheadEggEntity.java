@@ -1,6 +1,6 @@
 package coda.wingsandclaws.entity.item;
 
-import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
+import coda.wingsandclaws.entity.IcyPlowheadEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;

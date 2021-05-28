@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.entity.passive.SaddledThunderTailEntity;
+import coda.wingsandclaws.entity.SaddledThunderTailEntity;
 
 public class SaddledThunderTailRenderer extends MobRenderer<SaddledThunderTailEntity, SaddledThunderTailModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[8];

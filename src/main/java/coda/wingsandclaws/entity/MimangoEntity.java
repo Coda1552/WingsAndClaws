@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity.passive;
+package coda.wingsandclaws.entity;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;

@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import coda.wingsandclaws.entity.passive.LeapingGrubShrimpEntity;
+import coda.wingsandclaws.entity.LeapingGrubShrimpEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class LeapingGrubShrimpModel<T extends Entity> extends EntityModel<LeapingGrubShrimpEntity> {

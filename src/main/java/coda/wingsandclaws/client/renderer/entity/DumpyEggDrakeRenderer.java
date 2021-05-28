@@ -3,7 +3,7 @@ package coda.wingsandclaws.client.renderer.entity;
 import coda.wingsandclaws.client.renderer.entity.layer.LayerDEDBandana;
 import coda.wingsandclaws.client.renderer.entity.model.DumpyEggDrakeModel;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
-import coda.wingsandclaws.entity.monster.DumpyEggDrakeEntity;
+import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

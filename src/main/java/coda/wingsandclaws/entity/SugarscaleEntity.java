@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity.passive;
+package coda.wingsandclaws.entity;
 
 import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.entity.EntityType;

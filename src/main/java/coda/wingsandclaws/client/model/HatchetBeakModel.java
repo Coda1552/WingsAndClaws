@@ -1,6 +1,6 @@
 package coda.wingsandclaws.client.renderer.entity.model;
 
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.AgeableModel;
 import net.minecraft.client.renderer.model.ModelRenderer;

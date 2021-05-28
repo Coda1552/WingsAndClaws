@@ -3,7 +3,7 @@ package coda.wingsandclaws.client.renderer.entity;
 import coda.wingsandclaws.client.renderer.entity.layer.LayerHatchetBeakSaddle;
 import coda.wingsandclaws.client.renderer.entity.model.HatchetBeakModel;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;

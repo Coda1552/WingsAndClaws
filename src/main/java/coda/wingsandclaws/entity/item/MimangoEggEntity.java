@@ -1,6 +1,6 @@
 package coda.wingsandclaws.entity.item;
 
-import coda.wingsandclaws.entity.passive.MimangoEntity;
+import coda.wingsandclaws.entity.MimangoEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

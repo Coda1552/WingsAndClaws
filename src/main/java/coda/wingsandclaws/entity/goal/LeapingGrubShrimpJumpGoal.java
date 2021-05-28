@@ -9,7 +9,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import coda.wingsandclaws.entity.passive.LeapingGrubShrimpEntity;
+import coda.wingsandclaws.entity.LeapingGrubShrimpEntity;
 
 public class LeapingGrubShrimpJumpGoal  extends JumpGoal {
     private static final int[] JUMP_DISTANCES = new int[]{0, 1, 4, 5, 6, 7};

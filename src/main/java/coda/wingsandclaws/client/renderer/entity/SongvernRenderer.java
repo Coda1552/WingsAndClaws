@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.entity.passive.SongvernEntity;
+import coda.wingsandclaws.entity.SongvernEntity;
 
 public class SongvernRenderer extends MobRenderer<SongvernEntity, SongvernModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[16];

@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity.passive;
+package coda.wingsandclaws.entity;
 
 import coda.wingsandclaws.init.WingsSounds;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;

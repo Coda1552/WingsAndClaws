@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import coda.wingsandclaws.entity.passive.SugarscaleEntity;
+import coda.wingsandclaws.entity.SugarscaleEntity;
 
 @OnlyIn(Dist.CLIENT)
 public class SugarscaleModel<T extends Entity> extends EntityModel<SugarscaleEntity> {

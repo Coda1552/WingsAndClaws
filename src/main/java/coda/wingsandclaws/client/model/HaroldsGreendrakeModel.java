@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import coda.wingsandclaws.entity.passive.HaroldsGreendrakeEntity;
+import coda.wingsandclaws.entity.HaroldsGreendrakeEntity;
 
 import java.util.Collections;
 

@@ -3,7 +3,7 @@ package coda.wingsandclaws.client;
 import coda.wingsandclaws.client.renderer.entity.*;
 import coda.wingsandclaws.client.renderer.tileentity.*;
 import coda.wingsandclaws.init.WingsEntities;
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.util.math.MathHelper;

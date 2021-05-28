@@ -2,7 +2,7 @@ package coda.wingsandclaws.tileentity;
 
 import coda.wingsandclaws.init.WingsBlocks;
 import coda.wingsandclaws.init.WingsEntities;
-import coda.wingsandclaws.entity.monster.DumpyEggDrakeEntity;
+import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
 import coda.wingsandclaws.init.WingsTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.network.play.IClientPlayNetHandler;

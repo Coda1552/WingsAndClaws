@@ -1,7 +1,7 @@
 package coda.wingsandclaws.client.renderer.entity;
 
 import coda.wingsandclaws.client.renderer.entity.model.MimangoModel;
-import coda.wingsandclaws.entity.passive.MimangoEntity;
+import coda.wingsandclaws.entity.MimangoEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

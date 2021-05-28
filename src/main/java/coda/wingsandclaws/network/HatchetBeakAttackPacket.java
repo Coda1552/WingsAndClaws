@@ -1,6 +1,6 @@
 package coda.wingsandclaws.network;
 
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 

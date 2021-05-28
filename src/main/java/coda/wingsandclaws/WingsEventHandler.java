@@ -2,7 +2,7 @@ package coda.wingsandclaws;
 
 import coda.wingsandclaws.client.WingsKeyBindings;
 import coda.wingsandclaws.entity.item.MimangoEggEntity;
-import coda.wingsandclaws.entity.passive.MimangoEntity;
+import coda.wingsandclaws.entity.MimangoEntity;
 import coda.wingsandclaws.init.WingsItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;

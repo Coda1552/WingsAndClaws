@@ -1,6 +1,6 @@
 package coda.wingsandclaws.client.renderer.entity.model;
 
-import coda.wingsandclaws.entity.monster.DumpyEggDrakeEntity;
+import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;

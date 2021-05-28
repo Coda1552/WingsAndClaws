@@ -1,6 +1,6 @@
 package coda.wingsandclaws.entity.goal;
 
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;

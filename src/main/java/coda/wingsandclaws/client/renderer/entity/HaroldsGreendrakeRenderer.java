@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.entity.passive.HaroldsGreendrakeEntity;
+import coda.wingsandclaws.entity.HaroldsGreendrakeEntity;
 
 public class HaroldsGreendrakeRenderer extends MobRenderer<HaroldsGreendrakeEntity, HaroldsGreendrakeModel> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/harolds_greendrake.png");

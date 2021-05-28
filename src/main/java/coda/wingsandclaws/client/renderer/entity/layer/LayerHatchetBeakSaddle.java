@@ -1,7 +1,7 @@
 package coda.wingsandclaws.client.renderer.entity.layer;
 
 import coda.wingsandclaws.client.renderer.entity.model.HatchetBeakModel;
-import coda.wingsandclaws.entity.monster.HatchetBeakEntity;
+import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;

@@ -3,7 +3,7 @@ package coda.wingsandclaws.item;
 import coda.wingsandclaws.init.WingsSounds;
 import coda.wingsandclaws.client.renderer.tileentity.PlowheadHornRenderer;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
-import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
+import coda.wingsandclaws.entity.IcyPlowheadEntity;
 import coda.wingsandclaws.init.WingsItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

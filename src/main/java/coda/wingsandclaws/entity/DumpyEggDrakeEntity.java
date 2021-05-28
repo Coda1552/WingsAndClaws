@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity.monster;
+package coda.wingsandclaws.entity;
 
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
-import coda.wingsandclaws.entity.passive.HaroldsGreendrakeEntity;
+import coda.wingsandclaws.entity.HaroldsGreendrakeEntity;
 
 public class HaroldsGreendrakeItemLayer extends LayerRenderer<HaroldsGreendrakeEntity, HaroldsGreendrakeModel> {
     public HaroldsGreendrakeItemLayer(IEntityRenderer<HaroldsGreendrakeEntity, HaroldsGreendrakeModel> renderer) {

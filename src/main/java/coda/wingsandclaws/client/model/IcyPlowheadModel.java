@@ -1,6 +1,6 @@
 package coda.wingsandclaws.client.renderer.entity.model;
 
-import coda.wingsandclaws.entity.monster.IcyPlowheadEntity;
+import coda.wingsandclaws.entity.IcyPlowheadEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;

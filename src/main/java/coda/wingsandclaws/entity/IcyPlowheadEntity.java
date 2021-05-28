@@ -1,4 +1,4 @@
-package coda.wingsandclaws.entity.monster;
+package coda.wingsandclaws.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
