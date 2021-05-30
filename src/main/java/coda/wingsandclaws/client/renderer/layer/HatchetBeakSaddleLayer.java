@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity.layer;
+package coda.wingsandclaws.client.renderer.layer;
 
-import coda.wingsandclaws.client.renderer.entity.model.HatchetBeakModel;
+import coda.wingsandclaws.client.model.HatchetBeakModel;
 import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -10,10 +10,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import coda.wingsandclaws.WingsAndClaws;
 
-public class LayerHatchetBeakSaddle extends LayerRenderer<HatchetBeakEntity, HatchetBeakModel> {
+public class HatchetBeakSaddleLayer extends LayerRenderer<HatchetBeakEntity, HatchetBeakModel> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/hatchet_beak/saddle.png");
 
-    public LayerHatchetBeakSaddle(IEntityRenderer<HatchetBeakEntity, HatchetBeakModel> entityRendererIn) {
+    public HatchetBeakSaddleLayer(IEntityRenderer<HatchetBeakEntity, HatchetBeakModel> entityRendererIn) {
         super(entityRendererIn);
     }
 

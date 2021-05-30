@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity.model;
+package coda.wingsandclaws.client.model;
 
 import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.google.common.collect.ImmutableList;
@@ -161,26 +161,27 @@ public class HatchetBeakModel extends AgeableModel<HatchetBeakEntity> {
     public void setRotationAngles(HatchetBeakEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         float flyTimer = entity.getFlyTimer() / 10F;
         if (entity.isFlying()) {
-            limbSwingAmount = MathHelper.clamp(limbSwingAmount, -0.5F, 0.5f);
-            float speed = 1.0F;
+            limbSwingAmount = MathHelper.clamp(limbSwingAmount, -0.4F, 0.4f);
+            float speed = 5.0F;
             float degree = 1.0F;
-            this.thighLeft.rotateAngleX = MathHelper.cos(-1.25F + limbSwing * speed * 0.2F) * degree * 0.5F * limbSwingAmount + 0.9F;
-            this.thighRight.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * speed * 0.2F) * degree * 0.5F * limbSwingAmount + 0.9F;
-            this.legLeft.rotateAngleX = MathHelper.cos(-2.25F + limbSwing * speed * 0.2F) * degree * 0.75F * limbSwingAmount + 0.4F;
-            this.legRight.rotateAngleX = MathHelper.cos(-2.0F + limbSwing * speed * 0.2F) * degree * 0.75F * limbSwingAmount + 0.4F;
+            this.thighLeft.rotateAngleX = MathHelper.cos(-1.25F + limbSwing * 0.3F) * 0.5F * limbSwingAmount + 0.9F;
+            this.thighRight.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * 0.3F) * 0.5F * limbSwingAmount + 0.9F;
+            this.legLeft.rotateAngleX = MathHelper.cos(-2.25F + limbSwing * 0.3F) * 0.75F * limbSwingAmount + 0.4F;
+            this.legRight.rotateAngleX = MathHelper.cos(-2.0F + limbSwing * 0.3F) * 0.75F * limbSwingAmount + 0.4F;
             this.legLeft.rotationPointY = limbSwingAmount - 0.05F + 14.0F;
             this.legRight.rotationPointY = limbSwingAmount - 0.05F + 14.0F;
-            this.tail1.rotateAngleX = MathHelper.cos(-3.5F + limbSwing * speed * 0.2F) * degree * 0.6F * limbSwingAmount - 0.05F;
-            this.hips.rotateAngleX = MathHelper.cos(-2.5F + limbSwing * speed * 0.2F) * degree * 0.5F * limbSwingAmount;
-            this.tail2.rotateAngleX = MathHelper.cos(-3.5F + limbSwing * speed * 0.2F) * degree * 0.7F * limbSwingAmount - 0.1F;
-            this.body.rotationPointY = MathHelper.cos(-1.0F + limbSwing * speed * 0.2F) * degree * 0.5F * limbSwingAmount - 4.0F;
-            this.neck.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * speed * 0.2F) * degree * 0.5F * limbSwingAmount + 1.8F;
-            this.wingRightBone1.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.2F) * degree * 3.0F * limbSwingAmount;
-            this.wingLeftBone1.rotateAngleZ = MathHelper.cos(limbSwing * speed * 0.2F) * degree * -3.0F * limbSwingAmount;
-            this.wingRightBone2.rotateAngleZ = MathHelper.cos(-2.0F + limbSwing * speed * 0.2F) * degree * 1.5F * limbSwingAmount;
-            this.wingLeftBone2.rotateAngleZ = MathHelper.cos(-2.0F + limbSwing * speed * 0.2F) * degree * -1.5F * limbSwingAmount;
-            this.head.rotateAngleX = MathHelper.cos(limbSwing * speed * 0.2F) * degree * -0.5F * limbSwingAmount - 1.75F;
-
+            this.tail1.rotateAngleX = MathHelper.cos(-3.5F + limbSwing * 0.3F) * 0.6F * limbSwingAmount - 0.05F;
+            this.hips.rotateAngleX = MathHelper.cos(-2.5F + limbSwing * 0.3F) * 0.5F * limbSwingAmount;
+            this.tail2.rotateAngleX = MathHelper.cos(-3.5F + limbSwing * 0.3F) * 0.7F * limbSwingAmount - 0.1F;
+            this.body.rotationPointY = MathHelper.cos(-1.0F + limbSwing * 0.3F) * 0.5F * limbSwingAmount - 4.0F;
+            this.neck.rotateAngleX = MathHelper.cos(-1.0F + limbSwing * 0.3F) * 0.5F * limbSwingAmount + 1.8F;
+            this.wingRightBone1.rotateAngleZ = MathHelper.cos(limbSwing * 0.3F) * 3.0F * limbSwingAmount;
+            this.wingLeftBone1.rotateAngleZ = MathHelper.cos(limbSwing * 0.3F) * -3.0F * limbSwingAmount;
+            this.wingRightBone2.rotateAngleZ = MathHelper.cos(-2.0F + limbSwing * 0.3F) * 1.5F * limbSwingAmount;
+            this.wingLeftBone2.rotateAngleZ = MathHelper.cos(-2.0F + limbSwing * 0.3F) * -1.5F * limbSwingAmount;
+            this.head.rotateAngleX = MathHelper.cos(limbSwing * 0.3F) * -0.5F * limbSwingAmount - 1.75F;
+            this.wingRightBone1.rotateAngleY = 0;
+            this.wingLeftBone1.rotateAngleY = 0;
         } else {
             if (flyTimer == 0) {
                 flyTimer = 1F;

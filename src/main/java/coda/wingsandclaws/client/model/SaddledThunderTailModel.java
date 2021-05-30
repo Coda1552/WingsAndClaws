@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity.model;
+package coda.wingsandclaws.client.model;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
@@ -6,10 +6,6 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 import coda.wingsandclaws.entity.SaddledThunderTailEntity;
 
-/**
- * ModelSaddledThunderTail - Coda
- * Created using Tabula 8.0.0
- */
 public abstract class SaddledThunderTailModel extends SegmentedModel<SaddledThunderTailEntity> {
     public ModelRenderer body;
     public ModelRenderer chest;

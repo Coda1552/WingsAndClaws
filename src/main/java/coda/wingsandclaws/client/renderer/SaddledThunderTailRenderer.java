@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.model.SaddledThunderTailModel;
+import coda.wingsandclaws.client.model.SaddledThunderTailModel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

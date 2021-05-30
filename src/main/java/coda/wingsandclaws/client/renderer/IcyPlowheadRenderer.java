@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.model.IcyPlowheadModel;
+import coda.wingsandclaws.client.model.IcyPlowheadModel;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.IcyPlowheadEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;

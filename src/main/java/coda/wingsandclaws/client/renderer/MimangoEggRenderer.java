@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
 import coda.wingsandclaws.entity.item.MimangoEggEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;

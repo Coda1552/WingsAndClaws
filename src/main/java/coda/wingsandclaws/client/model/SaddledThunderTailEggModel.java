@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity.model;
+package coda.wingsandclaws.client.model;
 
 import coda.wingsandclaws.entity.item.SaddledThunderTailEggEntity;
 import com.google.common.collect.ImmutableList;

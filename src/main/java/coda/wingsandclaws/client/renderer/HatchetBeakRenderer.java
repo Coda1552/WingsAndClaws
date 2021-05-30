@@ -1,7 +1,7 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.layer.LayerHatchetBeakSaddle;
-import coda.wingsandclaws.client.renderer.entity.model.HatchetBeakModel;
+import coda.wingsandclaws.client.renderer.layer.HatchetBeakSaddleLayer;
+import coda.wingsandclaws.client.model.HatchetBeakModel;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.HatchetBeakEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -17,14 +17,14 @@ public class HatchetBeakRenderer extends MobRenderer<HatchetBeakEntity, HatchetB
 
     public HatchetBeakRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new HatchetBeakModel(), 0.75f);
-        addLayer(new LayerHatchetBeakSaddle(this));
+        addLayer(new HatchetBeakSaddleLayer(this));
     }
 
     @Override
     protected void preRenderCallback(HatchetBeakEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
         super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
         matrixStackIn.translate(0, 0.0625, 0);
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
+        // matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
     }
 
     @Override

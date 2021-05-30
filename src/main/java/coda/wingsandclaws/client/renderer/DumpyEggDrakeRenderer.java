@@ -1,7 +1,7 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.layer.LayerDEDBandana;
-import coda.wingsandclaws.client.renderer.entity.model.DumpyEggDrakeModel;
+import coda.wingsandclaws.client.renderer.layer.DEDBandanaLayer;
+import coda.wingsandclaws.client.model.DumpyEggDrakeModel;
 import coda.wingsandclaws.entity.util.TameableDragonEntity;
 import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -20,7 +20,7 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
         super(p_i50961_1_, new DumpyEggDrakeModel.Adult(), 0.5f);
         adult = entityModel;
         child = new DumpyEggDrakeModel.Child();
-        addLayer(new LayerDEDBandana(this));
+        addLayer(new DEDBandanaLayer(this));
     }
 
     @Override

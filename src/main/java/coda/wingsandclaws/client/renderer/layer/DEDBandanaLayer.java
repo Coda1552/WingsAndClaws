@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity.layer;
+package coda.wingsandclaws.client.renderer.layer;
 
-import coda.wingsandclaws.client.renderer.entity.model.DumpyEggDrakeModel;
+import coda.wingsandclaws.client.model.DumpyEggDrakeModel;
 import coda.wingsandclaws.entity.DumpyEggDrakeEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ResourceLocation;
 import coda.wingsandclaws.WingsAndClaws;
-import coda.wingsandclaws.client.renderer.entity.DumpyEggDrakeRenderer;
+import coda.wingsandclaws.client.renderer.DumpyEggDrakeRenderer;
 
-public class LayerDEDBandana extends LayerRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
+public class DEDBandanaLayer extends LayerRenderer<DumpyEggDrakeEntity, DumpyEggDrakeModel> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[32];
 
-    public LayerDEDBandana(DumpyEggDrakeRenderer renderer) {
+    public DEDBandanaLayer(DumpyEggDrakeRenderer renderer) {
         super(renderer);
     }
 

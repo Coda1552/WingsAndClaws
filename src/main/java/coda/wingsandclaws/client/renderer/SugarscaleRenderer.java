@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.model.SugarscaleModel;
+import coda.wingsandclaws.client.model.SugarscaleModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;

@@ -1,7 +1,7 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.layer.HaroldsGreendrakeItemLayer;
-import coda.wingsandclaws.client.renderer.entity.model.HaroldsGreendrakeModel;
+import coda.wingsandclaws.client.renderer.layer.HaroldsGreendrakeItemLayer;
+import coda.wingsandclaws.client.model.HaroldsGreendrakeModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;

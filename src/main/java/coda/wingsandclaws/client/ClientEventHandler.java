@@ -1,6 +1,6 @@
 package coda.wingsandclaws.client;
 
-import coda.wingsandclaws.client.renderer.entity.*;
+import coda.wingsandclaws.client.renderer.*;
 import coda.wingsandclaws.client.renderer.tileentity.*;
 import coda.wingsandclaws.init.WingsEntities;
 import coda.wingsandclaws.entity.HatchetBeakEntity;

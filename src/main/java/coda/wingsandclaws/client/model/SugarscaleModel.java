@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity.model;
+package coda.wingsandclaws.client.model;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;

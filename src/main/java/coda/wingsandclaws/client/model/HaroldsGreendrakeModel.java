@@ -1,4 +1,4 @@
-package coda.wingsandclaws.client.renderer.entity.model;
+package coda.wingsandclaws.client.model;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.AgeableModel;

@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity;
+package coda.wingsandclaws.client.renderer;
 
-import coda.wingsandclaws.client.renderer.entity.model.SpearProjectileModel;
+import coda.wingsandclaws.client.model.SpearProjectileModel;
 import coda.wingsandclaws.entity.item.SpearProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

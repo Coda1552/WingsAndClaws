@@ -1,6 +1,6 @@
-package coda.wingsandclaws.client.renderer.entity.layer;
+package coda.wingsandclaws.client.renderer.layer;
 
-import coda.wingsandclaws.client.renderer.entity.model.HaroldsGreendrakeModel;
+import coda.wingsandclaws.client.model.HaroldsGreendrakeModel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
