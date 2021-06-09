@@ -28,7 +28,6 @@ public class RoastedHaroldsGreendrakeBlock extends Block {
     protected static final VoxelShape[] SHAPES = new VoxelShape[]{Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D), Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D)};
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
-
     public RoastedHaroldsGreendrakeBlock(Block.Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(BITES, Integer.valueOf(0)));

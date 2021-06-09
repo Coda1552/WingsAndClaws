@@ -226,7 +226,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @Override
     public void updatePassenger(Entity passenger) {
         if (isPassenger(passenger)) {
-            passenger.setPosition(getPosX() + 0.85 * Math.sin(Math.toRadians(-rotationYaw)), getPosY() + this.getMountedYOffset() + passenger.getYOffset(), getPosZ() + 0.85 * Math.cos(Math.toRadians(rotationYaw)));
+            passenger.setPosition(getPosX() + 0.45 * Math.sin(Math.toRadians(-rotationYaw)), getPosY() + this.getMountedYOffset() + passenger.getYOffset(), getPosZ() + 0.45 * Math.cos(Math.toRadians(rotationYaw)));
         }
     }
 
