@@ -26,7 +26,7 @@ public class MangoBunchTreeDecorator extends TreeDecorator {
                         Direction direction1 = direction.getOpposite();
                         BlockPos blockpos = pos.add(direction1.getXOffset(), 0, direction1.getZOffset());
                         if (TreeFeature.isAirAt(world, blockpos)) {
-                            BlockState blockstate = WingsBlocks.MANGO_BUNCH.get().getDefaultState().with(MangoBlock.MANGOES, random.nextInt(4) + 1);
+                            BlockState blockstate = WingsBlocks.MANGO_BUNCH.get().getDefaultState().with(MangoBlock.STAGE, random.nextInt(4) + 1);
                             this.func_227423_a_(world, blockpos, blockstate, set, boundingBox);
                         }
                     }
