@@ -15,6 +15,7 @@ public class HatchetBeakWanderGoal extends Goal {
     private final HatchetBeakEntity hatchetBeak;
     private Vector3d target;
     private int flyTime;
+    private int ticksAfloat;
 
     public HatchetBeakWanderGoal(HatchetBeakEntity hatchetBeak) {
         this.hatchetBeak = hatchetBeak;
@@ -34,13 +35,13 @@ public class HatchetBeakWanderGoal extends Goal {
             LivingEntity attackTarget = hatchetBeak.getAttackTarget();
             if (attackTarget == null) {
                 hatchetBeak.attackTimer = 0;
-                if (!grounded && hatchetBeak.ticksAfloat >= flyTime) {
+                if (!grounded && ticksAfloat >= flyTime) {
                     target = null;
                 }
                 if (target == null) {
                     if (!flying || hatchetBeak.world.rand.nextInt(10) == 0) {
-                        if (!grounded) ++hatchetBeak.ticksAfloat;
-                        boolean land = (grounded && hatchetBeak.world.rand.nextFloat() >= 0.05f) || hatchetBeak.ticksAfloat >= 300 && hatchetBeak.world.rand.nextFloat() <= 0.7f;
+                        if (!grounded) ++ticksAfloat;
+                        boolean land = (grounded && hatchetBeak.world.rand.nextFloat() >= 0.05f) || ticksAfloat >= 300 && hatchetBeak.world.rand.nextFloat() <= 0.7f;
                         Vector3d target = getTargetPosition(land);
                         if (target != null) {
                             if (!flying && !hatchetBeak.shouldSleep() && !land) {
@@ -110,7 +111,7 @@ public class HatchetBeakWanderGoal extends Goal {
     private Vector3d getTargetPosition(boolean land) {
         if (hatchetBeak.isInWaterOrBubbleColumn()) {
             Vector3d vec3d = RandomPositionGenerator.getLandPos(hatchetBeak, 15, 7);
-            hatchetBeak.ticksAfloat = 0;
+            ticksAfloat = 0;
             return vec3d == null ? RandomPositionGenerator.findRandomTarget(hatchetBeak, 10, 7) : vec3d;
         }
 
@@ -119,7 +120,7 @@ public class HatchetBeakWanderGoal extends Goal {
             return getAirPosition();
         }
 
-        hatchetBeak.ticksAfloat = 0;
+        ticksAfloat = 0;
         return RandomPositionGenerator.getLandPos(hatchetBeak, 10, 7);
     }
 

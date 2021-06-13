@@ -53,7 +53,6 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> FLY_TIMER = EntityDataManager.createKey(HatchetBeakEntity.class, DataSerializers.VARINT);
     private final Map<UUID, AtomicInteger> players = new HashMap<>();
-    public int ticksAfloat;
     public int attackTimer;
     public Vector3d callerPosition;
     private boolean shotDown;
@@ -174,7 +173,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     }
 
     @Override
-    public void travel(Vector3d positionIn) {
+    public void travel(Vector3d travelVector) {
         if (this.isAlive()) {
             setShotDown(shotDown && !onGround);
             if (this.isBeingRidden() && this.canBeSteered() && hasSaddle()) {
@@ -218,7 +217,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 }
             } else {
                 this.jumpMovementFactor = 0.02F;
-                super.travel(positionIn);
+                super.travel(travelVector);
             }
         }
     }
@@ -226,7 +225,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
     @Override
     public void updatePassenger(Entity passenger) {
         if (isPassenger(passenger)) {
-            passenger.setPosition(getPosX() + 0.45 * Math.sin(Math.toRadians(-rotationYaw)), getPosY() + this.getMountedYOffset() + passenger.getYOffset(), getPosZ() + 0.45 * Math.cos(Math.toRadians(rotationYaw)));
+            final double rotation = Math.toRadians(MathHelper.wrapDegrees(rotationYaw - 90));
+            final float offset = tilt / 25;
+            passenger.setPosition(getPosX() + Math.sin(-rotation) * offset, getPosY() + this.getMountedYOffset() + passenger.getYOffset(), getPosZ() + Math.cos(rotation) * offset);
         }
     }
 
@@ -391,8 +392,8 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
         }
 
         public void tick() {
-            if (this.action == net.minecraft.entity.ai.controller.MovementController.Action.MOVE_TO) {
-                this.action = net.minecraft.entity.ai.controller.MovementController.Action.WAIT;
+            if (this.action == MovementController.Action.MOVE_TO) {
+                this.action = MovementController.Action.WAIT;
                 this.mob.setNoGravity(true);
                 double d0 = this.posX - this.mob.getPosX();
                 double d1 = this.posY - this.mob.getPosY();
@@ -410,7 +411,7 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 if (this.mob.isOnGround()) {
                     f1 = (float)(this.speed * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 } else {
-                    f1 = (float)(this.speed * this.mob.getAttributeValue(Attributes.FLYING_SPEED));
+                    f1 = (float)(this.speed * this.mob.getAttributeValue(Attributes.FLYING_SPEED)) * 33;
                 }
 
                 this.mob.setAIMoveSpeed(f1);

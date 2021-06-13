@@ -23,8 +23,8 @@ public class HatchetBeakRenderer extends MobRenderer<HatchetBeakEntity, HatchetB
     @Override
     protected void preRenderCallback(HatchetBeakEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime) {
         super.preRenderCallback(entitylivingbaseIn, matrixStackIn, partialTickTime);
-        matrixStackIn.translate(0, 0.0625, 0);
-        // matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
+        matrixStackIn.translate(0, -0.5, 0);
+        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTickTime, entitylivingbaseIn.prevTilt, entitylivingbaseIn.tilt)));
     }
 
     @Override

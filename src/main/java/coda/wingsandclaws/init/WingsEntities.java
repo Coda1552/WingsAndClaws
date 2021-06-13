@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WingsEntities {
-    public static final List<Pair<RegistryObject<? extends EntityType<?>>, RegistryObject<WingsSpawnEggItem>>> EGGS = new ArrayList<>();
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, WingsAndClaws.MOD_ID);
     public static final RegistryObject<EntityType<DumpyEggDrakeEntity>> DUMPY_EGG_DRAKE = create("dumpy_egg_drake",DumpyEggDrakeEntity::new, EntityClassification.CREATURE, 1.2f, 1.3f, 0xddbc8b, 0xbc9161);
     public static final RegistryObject<EntityType<HatchetBeakEntity>> HATCHET_BEAK = create("hatchet_beak", HatchetBeakEntity::new, EntityClassification.CREATURE, 3.35f, 2.5f, 0x54392a, 0x04a08e);
@@ -44,7 +43,6 @@ public class WingsEntities {
         final Item.Properties properties = new Item.Properties().group(WingsItems.GROUP);
         EntityType<T> type = createType(name, factory, classification, width, height);
         WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new SpawnEggItem(type, pri, sec, properties));
-        //EGGS.add(new Pair<>(type, )));
         return REGISTRY.register(name, () -> type);
     }
 
