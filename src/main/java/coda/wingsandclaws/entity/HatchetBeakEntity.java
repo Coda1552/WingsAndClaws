@@ -187,6 +187,9 @@ public class HatchetBeakEntity extends TameableDragonEntity implements IFlyingAn
                 float f1;
                 if (isFlying()) {
                     f1 = Math.max(1.2f, moveForward + passenger.moveForward * 6 + 3);
+                    if (passenger.moveForward < 0) {
+                        f1 += passenger.moveForward;
+                    }
                 } else {
                     f1 = passenger.moveForward * 0.5F;
                     if (f1 <= 0.0F) {
