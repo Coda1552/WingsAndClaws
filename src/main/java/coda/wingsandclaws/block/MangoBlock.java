@@ -24,7 +24,7 @@ public class MangoBlock extends CropsBlock implements IGrowable {
     protected static final VoxelShape ONE_SHAPE = Block.makeCuboidShape(4.0D, 10.0D, 4.0D, 12.0D, 16.0D, 12.0D);
     protected static final VoxelShape TWO_SHAPE = Block.makeCuboidShape(3.0D, 10.0D, 3.0D, 13.0D, 16.0D, 13.0D);
     protected static final VoxelShape THREE_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
-    protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, 10.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    protected static final VoxelShape FOUR_SHAPE = Block.makeCuboidShape(2.0D, .0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     public MangoBlock() {
         super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0F).sound(SoundType.CROP));
@@ -69,7 +69,7 @@ public class MangoBlock extends CropsBlock implements IGrowable {
     }
 
     public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
-        return useContext.getItem().getItem() == this.asItem() && state.get(STAGE) < 4 || super.isReplaceable(state, useContext);
+        return /*useContext.getItem().getItem() == this.asItem() && state.get(STAGE) < 4 || super.isReplaceable(state, useContext)*/ false;
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

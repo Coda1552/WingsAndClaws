@@ -12,13 +12,13 @@
               "conditions": [
                 {
                   "condition": "minecraft:block_state_property",
-                  "block": "minecraft:wheat",
+                  "block": "wingsandclaws:mango_bunch",
                   "properties": {
                     "stage": "4"
                   }
                 }
               ],
-              "name": "wingsandclaws:mango"
+              "name": "wingsandclaws:mango_bunch"
             },
             {
               "type": "minecraft:item",
@@ -26,35 +26,6 @@
               "count": 3
             }
           ]
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:apply_bonus",
-              "enchantment": "minecraft:fortune",
-              "formula": "minecraft:binomial_with_bonus_count",
-              "parameters": {
-                "extra": 3,
-                "probability": 0.5714286
-              }
-            }
-          ],
-          "name": "minecraft:wheat_seeds"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:block_state_property",
-          "block": "wingsandclaws:mango_bunch",
-          "properties": {
-            "stage": "4"
-          }
         }
       ]
     }
