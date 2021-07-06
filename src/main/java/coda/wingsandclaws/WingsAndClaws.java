@@ -72,6 +72,7 @@ public class WingsAndClaws {
         WingsEntities.REGISTRY.register(bus);
         WingsTileEntities.REGISTRY.register(bus);
         WingsFeatures.FEATURE_REGISTRY.register(bus);
+        WingsFeatures.STRUCTURE_REGISTRY.register(bus);
         WingsFeatures.TREE_DECORATOR_REGISTRY.register(bus);
 
         registerMessage(CallHatchetBeaksPacket.class, CallHatchetBeaksPacket::new, LogicalSide.SERVER);
@@ -90,6 +91,7 @@ public class WingsAndClaws {
                 event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).removeIf(configuredFeature -> configuredFeature.get().feature == Feature.DECORATED && ((DecoratedFeatureConfig) configuredFeature.get().config).feature.get().feature == Feature.RANDOM_SELECTOR);
                 event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() -> Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.FANCY_OAK.weighted(0.1F), Features.JUNGLE_BUSH.weighted(0.5F), Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.defaultBlockState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.defaultBlockState()), new JungleFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 2), new MegaJungleTrunkPlacer(10, 2, 19), new TwoLayerFeature(1, 1, 2)).decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE, new MangoBunchTreeDecorator())).build()).weighted(0.33333334F)), Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.defaultBlockState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.defaultBlockState()), new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3), new StraightTrunkPlacer(4, 8, 0), new TwoLayerFeature(1, 0, 1)).decorators(ImmutableList.of(new CocoaTreeDecorator(0.2F), TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE, new MangoBunchTreeDecorator())).ignoreVines().build()).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(50, 0.1F, 1))))));
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.MIMANGO.get(), 30, 3, 5));
+                event.getGeneration().getStructures().add(() -> WingsFeatures.MIMANGO_SHRINE.get().configured(IFeatureConfig.NONE));
                 break;
             case OCEAN:
                 float temperature = climate.temperature;
@@ -114,9 +116,6 @@ public class WingsAndClaws {
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.SADDLED_THUNDER_TAIL, 1, 3, 10));
                 break;*/
         }
-
-        //biome1.addStructure(WingsFeatures.MIMANGO_SHRINE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-        //biome1.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, WingsFeatures.MIMANGO_SHRINE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.COUNT_EXTRA_HEIGHTMAP.configure(new AtSurfaceWithExtraConfig(15, 0.1f, 0))));
     }
 
     private void registerClient(FMLClientSetupEvent event) {

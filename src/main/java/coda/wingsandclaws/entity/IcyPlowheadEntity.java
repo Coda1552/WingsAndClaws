@@ -145,7 +145,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 			if (!player.abilities.instabuild) stack.shrink(1);
 			if (this.random.nextInt(3) == 0) {
 				this.tame(player);
-				this.setTarget(null);
+				this.setTarget((LivingEntity)null);
 				this.level.broadcastEntityEvent(this, (byte) 7);
 			} else {
 				this.level.broadcastEntityEvent(this, (byte) 6);
@@ -207,7 +207,7 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					} else if (attacking) {
 						getNavigation().stop();
 						attacking = false;
-						setTarget(null);
+						setTarget((LivingEntity)null);
 					}
 				}
 
