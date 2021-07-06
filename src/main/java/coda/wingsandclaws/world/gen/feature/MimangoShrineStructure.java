@@ -22,9 +22,11 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
 
+import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
+
 public class MimangoShrineStructure extends Structure<NoFeatureConfig> {
     public MimangoShrineStructure() {
-        super(NoFeatureConfig.field_236558_a_);
+        super(NoFeatureConfig.CODEC);
     }
 
     @Override
@@ -38,19 +40,19 @@ public class MimangoShrineStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        public void func_230364_a_(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int x, int z, Biome p_230364_6_, NoFeatureConfig p_230364_7_) {
-            components.add(new Piece(
+        public void generatePieces(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int x, int z, Biome p_230364_6_, NoFeatureConfig p_230364_7_) {
+            pieces.add(new Piece(
                     p_230364_3_,
                     new BlockPos(x * 16, 90, z * 16),
                     new ResourceLocation(WingsAndClaws.MOD_ID, "mimango_shrine"),
-                    Rotation.randomRotation(this.rand)
+                    Rotation.getRandom(this.random)
             ));
-            this.recalculateStructureSize();
+            this.calculateBoundingBox();
         }
     }
 
     @Override
-    public GenerationStage.Decoration getDecorationStage() {
+    public GenerationStage.Decoration step() {
         return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 
@@ -74,7 +76,7 @@ public class MimangoShrineStructure extends Structure<NoFeatureConfig> {
         }
 
         private void readTemplate(TemplateManager manager) {
-            Template template = manager.getTemplateDefaulted(structure);
+            Template template = manager.getOrCreate(structure);
             PlacementSettings placementsettings = (new PlacementSettings()).setRotation(rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
             setup(template, templatePosition, placementsettings);
         }
@@ -84,8 +86,8 @@ public class MimangoShrineStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        protected void readAdditional(CompoundNBT tag) {
-            super.readAdditional(tag);
+        protected void addAdditionalSaveData(CompoundNBT tag) {
+            super.addAdditionalSaveData(tag);
             tag.putString("Template", structure.toString());
             tag.putString("Rot", rotation.name());
         }

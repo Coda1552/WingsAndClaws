@@ -41,28 +41,30 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal {
-    private static final EntityPredicate CAN_BREED = new EntityPredicate().setDistance(64.0D).allowInvulnerable().allowFriendlyFire().setLineOfSiteRequired();
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(MimangoEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityPredicate CAN_BREED = new EntityPredicate().range(64.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(MimangoEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> HIDING = EntityDataManager.defineId(MimangoEntity.class, DataSerializers.BOOLEAN);
     //private static final Ingredient TEMPT_ITEM = Ingredient.fromItems(WingsBlocks.MANGO_BUNCH.asItem());
 
     public MimangoEntity(EntityType<? extends MimangoEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new FlyingMovementController(this, 10, true);
-        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
+        this.moveControl = new FlyingMovementController(this, 10, true);
+        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
     }
 
     public static AttributeModifierMap.MutableAttribute registerMimangoAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 8);
+        return MobEntity.createMobAttributes().add(Attributes.FLYING_SPEED, 0.8).add(Attributes.MOVEMENT_SPEED, 0.5).add(Attributes.MAX_HEALTH, 8);
     }
 
     @Override
-    protected PathNavigator createNavigator(World worldIn) {
+    protected PathNavigator createNavigation(World worldIn) {
         FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn);
         flyingpathnavigator.setCanOpenDoors(false);
-        flyingpathnavigator.setCanSwim(true);
-        flyingpathnavigator.setCanEnterDoors(true);
+        flyingpathnavigator.setCanFloat(true);
+        flyingpathnavigator.setCanPassDoors(true);
         return flyingpathnavigator;
     }
 
@@ -73,20 +75,20 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new BreedGoal(this, 1) {
             @Override
-            public boolean shouldExecute() {
-                return this.animal.isInLove() && (this.targetMate = this.getNearbyMate()) != null;
+            public boolean canUse() {
+                return this.animal.isInLove() && (this.partner = this.getNearbyMate()) != null;
             }
 
             @Nullable
             private AnimalEntity getNearbyMate() {
-                List<AnimalEntity> list = this.world.getTargettableEntitiesWithinAABB(MimangoEntity.class, CAN_BREED, this.animal, this.animal.getBoundingBox().grow(64.0D));
+                List<AnimalEntity> list = this.level.getNearbyEntities(MimangoEntity.class, CAN_BREED, this.animal, this.animal.getBoundingBox().inflate(64.0D));
                 double d0 = Double.MAX_VALUE;
                 AnimalEntity animalentity = null;
 
                 for (AnimalEntity animalentity1 : list) {
-                    if (this.animal.canMateWith(animalentity1) && this.animal.getDistanceSq(animalentity1) < d0) {
+                    if (this.animal.canMate(animalentity1) && this.animal.distanceToSqr(animalentity1) < d0) {
                         animalentity = animalentity1;
-                        d0 = this.animal.getDistanceSq(animalentity1);
+                        d0 = this.animal.distanceToSqr(animalentity1);
                     }
                 }
 
@@ -100,80 +102,80 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, 0);
-        this.dataManager.register(HIDING, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, 0);
+        this.entityData.define(HIDING, false);
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.COCOA_BEANS;
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        setVariant(rand.nextInt(5));
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        setVariant(random.nextInt(5));
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         this.setHiding(false);
-        if (source == DamageSource.IN_WALL && !world.getBlockState(getPosition()).isSolid()) {
-            setMotion(getMotion().add(0, -0.05, 0));
+        if (source == DamageSource.IN_WALL && !level.getBlockState(blockPosition()).canOcclude()) {
+            setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
             return false;
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (stack.isEmpty()) {
-            playSound(WingsSounds.MIMANGO_HAPPY.get(), getSoundVolume(), getSoundPitch());
+            playSound(WingsSounds.MIMANGO_HAPPY.get(), getSoundVolume(), getVoicePitch());
             return ActionResultType.SUCCESS;
         }
 
         if (handleSpawnEgg(player, stack)) return ActionResultType.SUCCESS;
 
-        if (!isTamed() && stack.getItem() == WingsBlocks.MANGO_BUNCH.get().asItem()) {
-            if (rand.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+        if (!isTame() && stack.getItem() == WingsBlocks.MANGO_BUNCH.get().asItem()) {
+            if (random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                 if (!player.isCreative()) {
                     stack.shrink(1);
                 }
-                this.setTamedBy(player);
-                this.navigator.clearPath();
-                this.setAttackTarget(null);
+                this.tame(player);
+                this.navigation.stop();
+                this.setTarget(null);
                 this.setHealth(20.0F);
-                this.world.setEntityState(this, (byte) 7);
+                this.level.broadcastEntityEvent(this, (byte) 7);
             } else {
-                this.world.setEntityState(this, (byte) 6);
+                this.level.broadcastEntityEvent(this, (byte) 6);
             }
             return ActionResultType.SUCCESS;
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Variant", getVariant());
         compound.putBoolean("Hiding", isHiding());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         setVariant(compound.getInt("Variant"));
         setHiding(compound.getBoolean("Hiding"));
     }
@@ -197,68 +199,68 @@ public class MimangoEntity extends TameableDragonEntity implements IFlyingAnimal
     }
 
     public boolean isHiding() {
-        return this.dataManager.get(HIDING);
+        return this.entityData.get(HIDING);
     }
 
     public void setHiding(boolean isHanging) {
-        this.dataManager.set(HIDING, isHanging);
+        this.entityData.set(HIDING, isHanging);
     }
 
     public void tick() {
         super.tick();
-        if (isSitting()) setMotion(getMotion().add(0, -0.05, 0));
+        if (isOrderedToSit()) setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
         if (this.isHiding()) {
-            this.setMotion(Vector3d.ZERO);
-            this.setRawPosition(this.getPosX(), (double) MathHelper.floor(this.getPosY()) + 1.0D - (double) this.getHeight(), this.getPosZ());
+            this.setDeltaMovement(Vector3d.ZERO);
+            this.setPosRaw(this.getX(), (double) MathHelper.floor(this.getY()) + 1.0D - (double) this.getBbHeight(), this.getZ());
         }
     }
 
     public boolean isFlying() {
-        return !this.onGround && !world.getBlockState(new BlockPos(getPosX() + 0.5, getPosY() - 0.5, getPosZ() + 0.5)).isSolid();
+        return !this.onGround && !level.getBlockState(new BlockPos(getX() + 0.5, getY() - 0.5, getZ() + 0.5)).canOcclude();
     }
 
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return true;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     class HangGoal extends MoveToBlockGoal
     {
         public HangGoal() {
             super(MimangoEntity.this, 5, 16, 16);
-            setMutexFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+            setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
         }
 
         @Override
-        protected boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos) {
-            return world.getBlockState(pos).isAir() && world.getBlockState(pos.up()).isIn(BlockTags.LEAVES);
+        protected boolean isValidTarget(IWorldReader worldIn, BlockPos pos) {
+            return level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).is(BlockTags.LEAVES);
         }
 
         @Override
-        public boolean shouldContinueExecuting() {
-            return super.shouldContinueExecuting();
+        public boolean canContinueToUse() {
+            return super.canContinueToUse();
         }
 
         @Override
         public void tick() {
             super.tick();
-            if (getIsAboveDestination())
+            if (isReachedTarget())
             {
-                setPosition(destinationBlock.getX() + 0.5, destinationBlock.getY(), destinationBlock.getZ() + 0.5);
+                setPos(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
                 setHiding(true);
             }
             else setHiding(false);
         }
 
         @Override
-        public void resetTask() {
-            super.resetTask();
+        public void stop() {
+            super.stop();
             setHiding(false);
         }
     }

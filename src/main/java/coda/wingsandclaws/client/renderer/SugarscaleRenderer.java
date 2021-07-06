@@ -14,7 +14,7 @@ public class SugarscaleRenderer extends MobRenderer<SugarscaleEntity, Sugarscale
         super(renderManagerIn, new SugarscaleModel<>(), 0.3F);
     }
 
-    public ResourceLocation getEntityTexture(SugarscaleEntity entity) {
+    public ResourceLocation getTextureLocation(SugarscaleEntity entity) {
         return TEXTURE;
     }
 }

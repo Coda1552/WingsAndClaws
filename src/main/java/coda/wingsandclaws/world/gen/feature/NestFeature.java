@@ -23,16 +23,16 @@ public class NestFeature extends WingsNbtStructure {
     @Override
     protected void handleDataMarker(String function, BlockPos pos, ISeedReader reader, Random rand, MutableBoundingBox mutableboundingbox) {
         super.handleDataMarker(function, pos, reader, rand, mutableboundingbox);
-        ServerWorld world = reader.getWorld();
+        ServerWorld world = reader.getLevel();
         switch (function) {
             case "baby":
                 if (rand.nextInt(4) != 0) {
                     TameableDragonEntity entity = this.entity.get().create(world);
                     if (entity != null) {
-                        entity.setGrowingAge(-24000);
-                        entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                        entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.STRUCTURE, null, null);
-                        reader.addEntity(entity);
+                        entity.setAge(-24000);
+                        entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                        entity.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), SpawnReason.STRUCTURE, null, null);
+                        reader.addFreshEntity(entity);
                     }
                 }
                 break;
@@ -40,9 +40,9 @@ public class NestFeature extends WingsNbtStructure {
                 if (rand.nextInt(3) != 0) {
                     TameableDragonEntity entity = this.entity.get().create(world);
                     if (entity != null) {
-                        entity.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                        entity.onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.STRUCTURE, null, null);
-                        reader.addEntity(entity);
+                        entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+                        entity.finalizeSpawn(world, world.getCurrentDifficultyAt(pos), SpawnReason.STRUCTURE, null, null);
+                        reader.addFreshEntity(entity);
                     }
                 }
         }

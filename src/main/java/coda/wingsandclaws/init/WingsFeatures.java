@@ -29,5 +29,5 @@ public class WingsFeatures {
     public static final IStructurePieceType SHRINE_PIECE_TYPE = Registry.register(Registry.STRUCTURE_PIECE, new ResourceLocation(WingsAndClaws.MOD_ID, "mimangoshrine"), MimangoShrineStructure.Piece::new);
     public static final RegistryObject<Structure<NoFeatureConfig>> MIMANGO_SHRINE = STRUCTURE_REGISTRY.register("mimango_shrine", MimangoShrineStructure::new);
 
-    public static final RegistryObject<TreeDecoratorType<TreeDecorator>> MANGO_BUNCH = TREE_DECORATOR_REGISTRY.register("mango_bunch", () -> new TreeDecoratorType<>(MangoBunchTreeDecorator.field_236874_c_));
+    public static final RegistryObject<TreeDecoratorType<TreeDecorator>> MANGO_BUNCH = TREE_DECORATOR_REGISTRY.register("mango_bunch", () -> new TreeDecoratorType<>(MangoBunchTreeDecorator.CODEC));
 }

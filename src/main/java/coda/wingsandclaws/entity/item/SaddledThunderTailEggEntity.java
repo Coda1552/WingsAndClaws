@@ -26,51 +26,51 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
 
     public SaddledThunderTailEggEntity(World worldIn, double x, double y, double z) {
         this(null/*WingsEntities.SADDLED_THUNDER_TAIL_EGG*/, worldIn);
-        setPosition(x, y, z);
+        setPos(x, y, z);
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
+    public Iterable<ItemStack> getArmorSlots() {
         return Collections.emptyList();
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {}
+    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {}
 
     @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
     @Override
-    public HandSide getPrimaryHand() {
+    public HandSide getMainArm() {
         return HandSide.RIGHT;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.hatchTime = compound.getInt("HatchTime");
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("HatchTime", hatchTime);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
                 //this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG)), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
@@ -80,8 +80,8 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
 
     @Override
     public void tick() {
-        this.setAir(300);
-        if (!this.world.isRemote) {
+        this.setAirSupply(300);
+        if (!this.level.isClientSide) {
             if (hatchTime++ >= 24000) {
 /*                SaddledThunderTailEntity thunderTailEntity = WingsEntities.SADDLED_THUNDER_TAIL.create(this.world);
                 if (thunderTailEntity != null) {
@@ -92,24 +92,24 @@ public class SaddledThunderTailEggEntity extends LivingEntity {
                     this.world.addEntity(thunderTailEntity);
                 }*/
 
-                this.world.setEntityState(this, (byte) 3);
+                this.level.broadcastEntityEvent(this, (byte) 3);
                 this.remove();
             }
         }
     }
 
     @Override
-    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType interact(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (stack.isEmpty()) {
             ItemStack egg = ItemStack.EMPTY;//new ItemStack(WingsItems.SADDLED_THUNDER_TAIL_EGG);
-            if (!player.addItemStackToInventory(egg)) {
-                player.dropItem(egg, false);
+            if (!player.addItem(egg)) {
+                player.drop(egg, false);
             }
             remove();
             return ActionResultType.SUCCESS;
         }
 
-        return super.processInitialInteract(player, hand);
+        return super.interact(player, hand);
     }
 }

@@ -19,22 +19,22 @@ public class MimangoEggRenderer extends EntityRenderer<MimangoEggEntity> {
     public MimangoEggRenderer(EntityRendererManager renderManager) {
         super(renderManager);
         this.model = new ModelRenderer(64, 32, 0, 0);
-        this.model.setRotationPoint(0.0F, 22.5F, 0.0F);
+        this.model.setPos(0.0F, 22.5F, 0.0F);
         this.model.addBox(-1.5F, -1.5F, -1.5F, 3, 3, 3, 0.0F);
     }
 
     @Override
     public void render(MimangoEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0, 1.5, 0);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        model.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entityIn))), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(false)));
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        model.render(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entityIn))), packedLightIn, OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(false)));
+        matrixStackIn.popPose();
     }
 
     @Override
-    public ResourceLocation getEntityTexture(MimangoEggEntity entity) {
+    public ResourceLocation getTextureLocation(MimangoEggEntity entity) {
         return TEXTURE;
     }
 }

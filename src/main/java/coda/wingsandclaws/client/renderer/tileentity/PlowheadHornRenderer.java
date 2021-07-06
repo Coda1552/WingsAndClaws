@@ -18,10 +18,10 @@ public class PlowheadHornRenderer extends ItemStackTileEntityRenderer {
     private final PlowheadHornModel model = new PlowheadHornModel();
 
     @Override
-    public void func_239207_a_(ItemStack itemStackIn, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        matrixStackIn.push();
-        model.render(matrixStackIn, ItemRenderer.getBuffer(bufferIn, model.getRenderType(TEXTURE), false, itemStackIn.hasEffect()), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
-        matrixStackIn.pop();
+    public void renderByItem(ItemStack itemStackIn, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        matrixStackIn.pushPose();
+        model.renderToBuffer(matrixStackIn, ItemRenderer.getFoilBuffer(bufferIn, model.renderType(TEXTURE), false, itemStackIn.hasFoil()), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+        matrixStackIn.popPose();
     }
 
 

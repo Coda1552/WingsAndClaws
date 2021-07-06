@@ -20,13 +20,13 @@ public class DEDBandanaLayer extends LayerRenderer<DumpyEggDrakeEntity, DumpyEgg
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, DumpyEggDrakeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entitylivingbaseIn.isTamed() && !entitylivingbaseIn.isInvisible()) {
+        if (entitylivingbaseIn.isTame() && !entitylivingbaseIn.isInvisible()) {
             DyeColor color = entitylivingbaseIn.getBandanaColor();
-            int texture = (color.getId() << 1) | (entitylivingbaseIn.isChild() ? 1 : 0);
+            int texture = (color.getId() << 1) | (entitylivingbaseIn.isBaby() ? 1 : 0);
             ResourceLocation resource = TEXTURES[texture];
             if (resource == null)
-                TEXTURES[texture] = resource = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake/bandana/" + (entitylivingbaseIn.isChild() ? "baby_" : "") + "bandana_" + color + ".png");
-            this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(this.getEntityModel().getRenderType(resource)), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0)), 1, 1, 1, 1);
+                TEXTURES[texture] = resource = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/dumpy_egg_drake/bandana/" + (entitylivingbaseIn.isBaby() ? "baby_" : "") + "bandana_" + color + ".png");
+            this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.getParentModel().renderType(resource)), packedLightIn, OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0)), 1, 1, 1, 1);
         }
     }
 }

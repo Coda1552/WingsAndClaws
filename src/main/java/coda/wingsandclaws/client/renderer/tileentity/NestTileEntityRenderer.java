@@ -17,13 +17,13 @@ public abstract class NestTileEntityRenderer<T extends NestTileEntity> extends T
 
     @Override
     public void render(T tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.5, 1.5, 0.5);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
         //TODO use something not deprecated
         RenderSystem.enableRescaleNormal();
-        getModel().render(matrixStackIn, bufferIn.getBuffer(getModel().getRenderType(getTexture())), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
-        matrixStackIn.pop();
+        getModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(getModel().renderType(getTexture())), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+        matrixStackIn.popPose();
     }
 
     protected abstract Model getModel();

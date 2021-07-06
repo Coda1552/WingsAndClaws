@@ -24,9 +24,9 @@ import coda.wingsandclaws.init.WingsTileEntities;
 public class ClientEventHandler {
     @OnlyIn(Dist.CLIENT)
     public static void init() {
-        RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.getTranslucent());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.MANGO_BUNCH.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(WingsBlocks.ROASTED_HAROLDS_GREENDRAKE.get(), RenderType.translucent());
 
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.DED_NEST.get(), DEDNestTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(WingsTileEntities.HB_NEST.get(), HBNestTileEntityRenderer::new);
@@ -54,9 +54,9 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void renderPlayer(RenderPlayerEvent.Pre event) {
-        if (event.getPlayer().getRidingEntity() instanceof HatchetBeakEntity) {
-            final HatchetBeakEntity hb = (HatchetBeakEntity) event.getPlayer().getRidingEntity();
-            event.getMatrixStack().rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), hb.prevTilt, hb.tilt)));
+        if (event.getPlayer().getVehicle() instanceof HatchetBeakEntity) {
+            final HatchetBeakEntity hb = (HatchetBeakEntity) event.getPlayer().getVehicle();
+            event.getMatrixStack().mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(event.getPartialRenderTick(), hb.prevTilt, hb.tilt)));
         }
     }
 }

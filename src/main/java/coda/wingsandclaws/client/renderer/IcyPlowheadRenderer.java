@@ -18,26 +18,26 @@ public class IcyPlowheadRenderer extends MobRenderer<IcyPlowheadEntity, IcyPlowh
 
     public IcyPlowheadRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new IcyPlowheadModel.Adult(), 0.75f);
-        adult = entityModel;
+        adult = model;
         child = new IcyPlowheadModel.Child();
     }
 
     @Override
     public void render(IcyPlowheadEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        entityModel = entityIn.isChild() ? child : adult;
+        model = entityIn.isBaby() ? child : adult;
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    protected void applyRotations(IcyPlowheadEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(entityLiving.rotationPitch));
+    protected void setupRotations(IcyPlowheadEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        super.setupRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(entityLiving.xRot));
     }
 
     @Override
-    public ResourceLocation getEntityTexture(IcyPlowheadEntity entity) {
+    public ResourceLocation getTextureLocation(IcyPlowheadEntity entity) {
         byte texture = 0;
-        if (entity.isChild()) texture |= 1;
+        if (entity.isBaby()) texture |= 1;
         if (entity.getGender() == TameableDragonEntity.Gender.MALE) texture |= 2;
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {

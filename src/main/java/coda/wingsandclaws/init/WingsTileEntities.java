@@ -20,7 +20,7 @@ public class WingsTileEntities {
 
     private static <T extends NestTileEntity> RegistryObject<TileEntityType<T>> create(String name, Supplier<T> factory, Supplier<NestBlock<T>> block) {
         return REGISTRY.register(name, () -> {
-            TileEntityType<T> type = TileEntityType.Builder.create(factory, block.get()).build(null);
+            TileEntityType<T> type = TileEntityType.Builder.of(factory, block.get()).build(null);
             block.get().setItem(type);
             return type;
         });

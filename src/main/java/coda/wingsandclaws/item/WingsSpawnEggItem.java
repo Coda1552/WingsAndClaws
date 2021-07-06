@@ -7,6 +7,8 @@ import net.minecraft.nbt.CompoundNBT;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+import net.minecraft.item.Item.Properties;
+
 public class WingsSpawnEggItem extends SpawnEggItem {
     private final Supplier<EntityType<?>> type;
 
@@ -22,7 +24,7 @@ public class WingsSpawnEggItem extends SpawnEggItem {
         if (nbt != null && nbt.contains("EntityTag", 10)) {
             CompoundNBT compoundnbt = nbt.getCompound("EntityTag");
             if (compoundnbt.contains("id", 8)) {
-                return EntityType.byKey(compoundnbt.getString("id")).orElseGet(type);
+                return EntityType.byString(compoundnbt.getString("id")).orElseGet(type);
             }
         }
 

@@ -43,9 +43,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import net.minecraft.entity.ai.controller.MovementController.Action;
+
 public class IcyPlowheadEntity extends TameableDragonEntity {
 	//private static final Ingredient TEMPTATIONS = Ingredient.fromItems(WingsItems.GLISTENING_GLACIAL_SHRIMP);
-	private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
+	private static final EntitySize SLEEPING_SIZE = EntitySize.scalable(1.2f, 0.5f);
 	private final Map<ToolType, ItemStack> tools = new HashMap<>();
 	private ItemStack horn = ItemStack.EMPTY;
 	private BlockPos iceBlock;
@@ -59,8 +61,8 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	public IcyPlowheadEntity(EntityType<? extends IcyPlowheadEntity> type, World worldIn) {
 		super(type, worldIn);
-		this.moveController = new MoveHelperController(this);
-		this.setPathPriority(PathNodeType.WATER, 0.0F);
+		this.moveControl = new MoveHelperController(this);
+		this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
 	}
 
 	@Override
@@ -73,21 +75,21 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 
 	@Override
 	public void tick() {
-		this.setAir(300);
+		this.setAirSupply(300);
 		super.tick();
 	}
 
-	protected PathNavigator createNavigator(World worldIn) {
+	protected PathNavigator createNavigation(World worldIn) {
 		return new SwimmerPathNavigator(this, worldIn);
 	}
 
     public static AttributeModifierMap.MutableAttribute registerPlowheadAttributes() {
-        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2).createMutableAttribute(Attributes.MAX_HEALTH, 30).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 3);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.2).add(Attributes.MAX_HEALTH, 30).add(Attributes.ATTACK_DAMAGE, 3).add(Attributes.ATTACK_KNOCKBACK, 3);
     }
 
 	@Override
-	public EntitySize getSize(Pose poseIn) {
-		return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
+	public EntitySize getDimensions(Pose poseIn) {
+		return isSleeping() ? SLEEPING_SIZE : super.getDimensions(poseIn);
 	}
 
 	@Nullable
@@ -114,119 +116,119 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	}
 
 	@Override
-	public void setTamed(boolean tamed) {
-		super.setTamed(tamed);
-		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(isTamed() ? 44 : 30);
+	public void setTame(boolean tamed) {
+		super.setTame(tamed);
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(isTame() ? 44 : 30);
 		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (!isChild() && source.getTrueSource() instanceof LivingEntity) {
-            LivingEntity entity = (LivingEntity) source.getTrueSource();
-            if (EntityPredicates.CAN_AI_TARGET.test(entity) && !isOwner(entity) && (!(entity instanceof TameableEntity) || getOwnerId() == null || !getOwnerId().equals(((TameableEntity) entity).getOwnerId()))) {
-                setAttackTarget((LivingEntity) source.getTrueSource());
+	public boolean hurt(DamageSource source, float amount) {
+        if (!isBaby() && source.getEntity() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) source.getEntity();
+            if (EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(entity) && !isOwnedBy(entity) && (!(entity instanceof TameableEntity) || getOwnerUUID() == null || !getOwnerUUID().equals(((TameableEntity) entity).getOwnerUUID()))) {
+                setTarget((LivingEntity) source.getEntity());
             }
         }
 
 		if (isSleeping()) {
-			oldPos = getPositionVec();
+			oldPos = position();
 			alarmedTimer = 200;
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override
-	public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if (!world.isRemote && !this.isTamed() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_SHRIMP.get()) {
-			if (!player.abilities.isCreativeMode) stack.shrink(1);
-			if (this.rand.nextInt(3) == 0) {
-				this.setTamedBy(player);
-				this.setAttackTarget(null);
-				this.world.setEntityState(this, (byte) 7);
+	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		if (!level.isClientSide && !this.isTame() && stack.getItem() == WingsItems.GLISTENING_GLACIAL_SHRIMP.get()) {
+			if (!player.abilities.instabuild) stack.shrink(1);
+			if (this.random.nextInt(3) == 0) {
+				this.tame(player);
+				this.setTarget(null);
+				this.level.broadcastEntityEvent(this, (byte) 7);
 			} else {
-				this.world.setEntityState(this, (byte) 6);
+				this.level.broadcastEntityEvent(this, (byte) 6);
 			}
 		}
-		return super.func_230254_b_(player, hand);
+		return super.mobInteract(player, hand);
 	}
 
 	@Override
-	public boolean isBreedingItem(ItemStack stack) {
+	public boolean isFood(ItemStack stack) {
 		return stack.getItem() == WingsItems.GLACIAL_SHRIMP.get();
 	}
 
 	@Override
-	public void livingTick() {
+	public void aiStep() {
 		if (oldPos != null) {
-			setPosition(oldPos.x, oldPos.y, oldPos.z);
+			setPos(oldPos.x, oldPos.y, oldPos.z);
 			oldPos = null;
 		}
 		if (!isSleeping()) {
-			if (this.inWater) {
-				this.rotationPitch = MathHelper.wrapDegrees((float) this.getMotion().getY() * 345);
+			if (this.wasTouchingWater) {
+				this.xRot = MathHelper.wrapDegrees((float) this.getDeltaMovement().y() * 345);
 			} else {
-				this.rotationPitch = 0;
+				this.xRot = 0;
 			}
 
-			if (!world.isRemote) {
-				if (isTamed()) {
-					if (!isSitting()) {
+			if (!level.isClientSide) {
+				if (isTame()) {
+					if (!isOrderedToSit()) {
 						LivingEntity owner = getOwner();
 						if (owner != null) {
-							getNavigator().tryMoveToEntityLiving(owner, 0.2);
+							getNavigation().moveTo(owner, 0.2);
 							if (onGround) {
-								double x = owner.getPosX() - getPosX();
-								double z = owner.getPosZ() - getPosZ();
-								setMotion(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
+								double x = owner.getX() - getX();
+								double z = owner.getZ() - getZ();
+								setDeltaMovement(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
 
-								rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
-								renderYawOffset = rotationYaw;
+								yRot = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+								yBodyRot = yRot;
 							}
 						}
 					}
 				} else {
-					LivingEntity attackTarget = getAttackTarget();
+					LivingEntity attackTarget = getTarget();
 
 					if (attackTarget == null) {
-						PlayerEntity player = world.getClosestPlayer(this, 16);
-						if (player != null && EntityPredicates.CAN_AI_TARGET.test(player)) {
-							setAttackTarget(player);
+						PlayerEntity player = level.getNearestPlayer(this, 16);
+						if (player != null && EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(player)) {
+							setTarget(player);
 							attacking = true;
 						}
 					}
 
 					if (attackTarget != null && attackTarget.isAlive()) {
-						getNavigator().tryMoveToEntityLiving(attackTarget, 0.4);
-						if (getDistanceSq(attackTarget) <= 4) {
-							attackEntityAsMob(attackTarget);
+						getNavigation().moveTo(attackTarget, 0.4);
+						if (distanceToSqr(attackTarget) <= 4) {
+							doHurtTarget(attackTarget);
 						}
 					} else if (attacking) {
-						getNavigator().clearPath();
+						getNavigation().stop();
 						attacking = false;
-						setAttackTarget(null);
+						setTarget(null);
 					}
 				}
 
 				if (target != null) {
 					if (startedCharging == 0) {
-						playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getSoundPitch());
+						playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getVoicePitch());
 						startedCharging = 120;
 					}
-					getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), 0.4);
+					getNavigation().moveTo(target.getX(), target.getY(), target.getZ(), 0.4);
 
-					double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+					double speed = getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().y * getDeltaMovement().y + getDeltaMovement().z + getDeltaMovement().z;
 					if (speed > 0.05) {
-						for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-							entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+						for (Entity entity : level.getEntities(this, getBoundingBox().inflate(1), entity -> entity instanceof LivingEntity)) {
+							entity.hurt(DamageSource.mobAttack(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue());
 						}
 					}
 
-					if (collidedHorizontally) {
-						breakBlock(new BlockPos(getPositionVec().add(getMotion())), false);
+					if (horizontalCollision) {
+						breakBlock(new BlockPos(position().add(getDeltaMovement())), false);
 						target = null;
-					} else if (getDistanceSq(target.getX(), target.getY(), target.getZ()) <= 4) {
+					} else if (distanceToSqr(target.getX(), target.getY(), target.getZ()) <= 4) {
 						breakBlock(target, true);
 						startedCharging = 0;
 						target = null;
@@ -234,46 +236,46 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				} else {
 					if (iceBlock != null) {
 						if (startedCharging == 0) {
-							playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getSoundPitch());
+							playSound(WingsSounds.PLOWHEAD_ANGRY.get(), getSoundVolume(), getVoicePitch());
 							startedCharging = 120;
 						} else if (startedCharging == 1) {
 							iceBlock = null;
 							return;
 						} else --startedCharging;
-						getNavigator().tryMoveToXYZ(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.4);
+						getNavigation().moveTo(iceBlock.getX(), iceBlock.getY(), iceBlock.getZ(), 0.4);
 
-						double speed = getMotion().x * getMotion().x + getMotion().y * getMotion().y + getMotion().z + getMotion().z;
+						double speed = getDeltaMovement().x * getDeltaMovement().x + getDeltaMovement().y * getDeltaMovement().y + getDeltaMovement().z + getDeltaMovement().z;
 						if (speed > 0.05) {
-							for (Entity entity : world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(1), entity -> entity instanceof LivingEntity)) {
-								entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+							for (Entity entity : level.getEntities(this, getBoundingBox().inflate(1), entity -> entity instanceof LivingEntity)) {
+								entity.hurt(DamageSource.mobAttack(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue());
 							}
 						}
-						if (iceBlock.distanceSq(getPosX(), getPosY(), getPosZ(), true) <= 4) {
+						if (iceBlock.distSqr(getX(), getY(), getZ(), true) <= 4) {
 							breakBlock(iceBlock, false);
 							iceBlock = null;
-							ramTime = rand.nextInt(1200) + 1200;
+							ramTime = random.nextInt(1200) + 1200;
 							startedCharging = 0;
 						}
 					}
 				}
 
 				if (alarmedTimer-- <= 0) alarmedTimer = 0;
-				if ((ramTime <= 0 || --ramTime == 0) && iceBlock == null && ticksExisted % 20 == 0) {
+				if ((ramTime <= 0 || --ramTime == 0) && iceBlock == null && tickCount % 20 == 0) {
 					List<BlockPos> possible = new ArrayList<>();
-					BlockPos start = getPosition();
-					Vector3d vec3d = getPositionVec();
-					BlockPos.Mutable mutable = start.toMutable();
-					BlockPos.getAllInBox(start.add(-16, -16, -16), start.add(16, 16, 16)).forEach(pos -> {
-						Material material = world.getBlockState(pos).getMaterial();
-						if (material == Material.ICE || material == Material.PACKED_ICE) {
-							BlockRayTraceResult rayTrace = this.world.rayTraceBlocks(new RayTraceContext(vec3d, Vector3d.copyCentered(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-							if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getPos().equals(pos)) {
-								BlockPos.Mutable p = mutable.setPos(pos);
-								boolean flag = world.getFluidState(p.move(Direction.DOWN)).getFluid() == Fluids.WATER;
+					BlockPos start = blockPosition();
+					Vector3d vec3d = position();
+					BlockPos.Mutable mutable = start.mutable();
+					BlockPos.betweenClosedStream(start.offset(-16, -16, -16), start.offset(16, 16, 16)).forEach(pos -> {
+						Material material = level.getBlockState(pos).getMaterial();
+						if (material == Material.ICE || material == Material.ICE_SOLID) {
+							BlockRayTraceResult rayTrace = this.level.clip(new RayTraceContext(vec3d, Vector3d.atCenterOf(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+							if (rayTrace.getType() != RayTraceResult.Type.MISS && rayTrace.getBlockPos().equals(pos)) {
+								BlockPos.Mutable p = mutable.set(pos);
+								boolean flag = level.getFluidState(p.move(Direction.DOWN)).getType() == Fluids.WATER;
 								for (int i = 2; i < Direction.values().length; ++i) {
-									flag |= world.getFluidState(p.move(Direction.values()[i])).getFluid() == Fluids.WATER;
+									flag |= level.getFluidState(p.move(Direction.values()[i])).getType() == Fluids.WATER;
 									if (flag) {
-										possible.add(pos.toImmutable());
+										possible.add(pos.immutable());
 										break;
 									}
 								}
@@ -281,44 +283,44 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 						}
 					});
 					if (possible.size() > 0)
-						iceBlock = possible.get(rand.nextInt(possible.size()));
+						iceBlock = possible.get(random.nextInt(possible.size()));
 				}
 			}
-			super.livingTick();
-		} else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
+			super.aiStep();
+		} else this.travel(new Vector3d(this.xxa, this.yya, this.zza));
 	}
 
 	@Override
 	public boolean isSleeping() {
-		if (world.getDayTime() > 13000 && world.getDayTime() < 23000) {
-			if (world.getBlockState(new BlockPos(getPosX(), getPosY() - 1, getPosZ())).getBlock() == Blocks.WATER) {
+		if (level.getDayTime() > 13000 && level.getDayTime() < 23000) {
+			if (level.getBlockState(new BlockPos(getX(), getY() - 1, getZ())).getBlock() == Blocks.WATER) {
 				if (sleepTarget == null) {
-					BlockPos p = getPosition().add(rand.nextInt(64) - 32, -1, rand.nextInt(64) - 32);
-					while (world.getBlockState(p).getBlock() == Blocks.WATER) {
-						p = p.down();
+					BlockPos p = blockPosition().offset(random.nextInt(64) - 32, -1, random.nextInt(64) - 32);
+					while (level.getBlockState(p).getBlock() == Blocks.WATER) {
+						p = p.below();
 					}
 					sleepTarget = p;
 				}
-				getNavigator().tryMoveToXYZ(sleepTarget.getX(), sleepTarget.getY(), sleepTarget.getZ(), 0.2);
+				getNavigation().moveTo(sleepTarget.getX(), sleepTarget.getY(), sleepTarget.getZ(), 0.2);
 				return false;
 			}
 			return alarmedTimer == 0;
 		} else if (sleepTarget != null) {
 			sleepTarget = null;
-			setMotion(getMotion().add(0, 0.2, 0));
+			setDeltaMovement(getDeltaMovement().add(0, 0.2, 0));
 		}
 		return false;
 	}
 
 	private void breakBlock(BlockPos pos, boolean selected) {
-		if (eyesInWater) {
-			BlockState state = world.getBlockState(pos);
-			world.playEvent(2001, pos, Block.getStateId(state));
+		if (wasEyeInWater) {
+			BlockState state = level.getBlockState(pos);
+			level.levelEvent(2001, pos, Block.getId(state));
 			Material material = state.getMaterial();
-			if (material == Material.ICE || material == Material.PACKED_ICE) {
-				if (!selected || rand.nextBoolean())
-					entityDropItem(new ItemStack(WingsItems.GLACIAL_SHRIMP.get()), (float) (pos.getY() - getPosY()));
-			} else if (state.isSolid()) {
+			if (material == Material.ICE || material == Material.ICE_SOLID) {
+				if (!selected || random.nextBoolean())
+					spawnAtLocation(new ItemStack(WingsItems.GLACIAL_SHRIMP.get()), (float) (pos.getY() - getY()));
+			} else if (state.canOcclude()) {
 				ToolType type = state.getHarvestTool();
 				if (type == null) type = ToolType.PICKAXE;
 				ItemStack stack = tools.computeIfAbsent(type, k -> {
@@ -330,13 +332,13 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 				setupTool(stack);
 				if (selected) {
 					for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(stack).entrySet()) {
-						if (entry.getKey() == Enchantments.EFFICIENCY) {
-							List<BlockPos> positions = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1)).map(BlockPos::toImmutable).collect(Collectors.toList());
+						if (entry.getKey() == Enchantments.BLOCK_EFFICIENCY) {
+							List<BlockPos> positions = BlockPos.betweenClosedStream(pos.offset(-1, -1, -1), pos.offset(1, 1, 1)).map(BlockPos::immutable).collect(Collectors.toList());
 							int k = 0;
 							for (int i = 0; i < entry.getValue(); i++) {
 								for (int i1 = k; i1 < positions.size(); i1++) {
 									BlockPos p = positions.get(i1);
-									if (world.getBlockState(p).isSolid()) {
+									if (level.getBlockState(p).canOcclude()) {
 										breakBlock(p, false);
 										k = i1;
 										break;
@@ -348,25 +350,25 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 					}
 				}
 
-				for (ItemStack drop : state.getDrops(new LootContext.Builder((ServerWorld) world).withRandom(rand).withParameter(LootParameters.field_237457_g_, Vector3d.copyCentered(pos)).withParameter(LootParameters.TOOL, stack))) {
-					entityDropItem(drop, (float) (pos.getY() - getPosY()));
+				for (ItemStack drop : state.getDrops(new LootContext.Builder((ServerWorld) level).withRandom(random).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(pos)).withParameter(LootParameters.TOOL, stack))) {
+					spawnAtLocation(drop, (float) (pos.getY() - getY()));
 				}
 			}
-			world.removeBlock(pos, false);
+			level.removeBlock(pos, false);
 		}
 	}
 
 	private void setupTool(ItemStack stack) {
 		if (!horn.isEmpty()) {
 			for (Map.Entry<Enchantment, Integer> entry : EnchantmentHelper.getEnchantments(horn).entrySet())
-				stack.addEnchantment(entry.getKey(), entry.getValue());
+				stack.enchant(entry.getKey(), entry.getValue());
 			horn = ItemStack.EMPTY;
 		}
 	}
 
 	@Override
 	public void createEgg() {
-		world.addEntity(new PlowheadEggEntity(world, getPosX(), getPosY(), getPosZ()));
+		level.addFreshEntity(new PlowheadEggEntity(level, getX(), getY(), getZ()));
 	}
 
 	@Override
@@ -377,21 +379,21 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 	public void setTarget(RayTraceResult target) {
 		if (target.getType() == RayTraceResult.Type.ENTITY) {
 			Entity entity = ((EntityRayTraceResult) target).getEntity();
-			if (entity instanceof LivingEntity) setAttackTarget((LivingEntity) entity);
-		} else if (target.getType() == RayTraceResult.Type.BLOCK) this.target = ((BlockRayTraceResult) target).getPos();
+			if (entity instanceof LivingEntity) setTarget((LivingEntity) entity);
+		} else if (target.getType() == RayTraceResult.Type.BLOCK) this.target = ((BlockRayTraceResult) target).getBlockPos();
 	}
 
 	@Override
 	public void travel(Vector3d p_213352_1_) {
-		if (this.isServerWorld() && this.isInWater()) {
+		if (this.isEffectiveAi() && this.isInWater()) {
 			this.moveRelative(0.1F, p_213352_1_);
-			this.move(MoverType.SELF, this.getMotion());
-			this.setMotion(this.getMotion().scale(0.9D));
-			if (this.collidedHorizontally) {
-				this.setMotion(this.getMotion().x, 0.1F, this.getMotion().z);
+			this.move(MoverType.SELF, this.getDeltaMovement());
+			this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+			if (this.horizontalCollision) {
+				this.setDeltaMovement(this.getDeltaMovement().x, 0.1F, this.getDeltaMovement().z);
 			}
-			if (this.getAttackTarget() == null) {
-				this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
+			if (this.getTarget() == null) {
+				this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
 			}
 		} else {
 			super.travel(p_213352_1_);
@@ -411,21 +413,21 @@ public class IcyPlowheadEntity extends TameableDragonEntity {
 		}
 
 		public void tick() {
-			this.plowhead.setMotion(this.plowhead.getMotion().add(0.0D, 0.005D, 0.0D));
-			if (this.action == Action.MOVE_TO && !this.plowhead.getNavigator().noPath()) {
-				double d0 = this.posX - this.plowhead.getPosX();
-				double d1 = this.posY - this.plowhead.getPosY();
-				double d2 = this.posZ - this.plowhead.getPosZ();
+			this.plowhead.setDeltaMovement(this.plowhead.getDeltaMovement().add(0.0D, 0.005D, 0.0D));
+			if (this.operation == Action.MOVE_TO && !this.plowhead.getNavigation().isDone()) {
+				double d0 = this.wantedX - this.plowhead.getX();
+				double d1 = this.wantedY - this.plowhead.getY();
+				double d2 = this.wantedZ - this.plowhead.getZ();
 				double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 				d1 = d1 / d3;
 				float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-				this.plowhead.rotationYaw = this.limitAngle(this.plowhead.rotationYaw, f, 90.0F);
-				this.plowhead.renderYawOffset = this.plowhead.rotationYaw;
-				float f1 = (float) (this.speed * this.plowhead.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-				this.plowhead.setAIMoveSpeed(MathHelper.lerp(0.125F, this.plowhead.getAIMoveSpeed(), f1));
-				this.plowhead.setMotion(this.plowhead.getMotion().add(MathHelper.clamp(d0, speed / -10, speed / 10), (double) this.plowhead.getAIMoveSpeed() * d1 * 0.5, MathHelper.clamp(d2, speed / -10, speed / 10)));
+				this.plowhead.yRot = this.rotlerp(this.plowhead.yRot, f, 90.0F);
+				this.plowhead.yBodyRot = this.plowhead.yRot;
+				float f1 = (float) (this.speedModifier * this.plowhead.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+				this.plowhead.setSpeed(MathHelper.lerp(0.125F, this.plowhead.getSpeed(), f1));
+				this.plowhead.setDeltaMovement(this.plowhead.getDeltaMovement().add(MathHelper.clamp(d0, speedModifier / -10, speedModifier / 10), (double) this.plowhead.getSpeed() * d1 * 0.5, MathHelper.clamp(d2, speedModifier / -10, speedModifier / 10)));
 			} else {
-				this.plowhead.setAIMoveSpeed(0.0F);
+				this.plowhead.setSpeed(0.0F);
 			}
 		}
 	}

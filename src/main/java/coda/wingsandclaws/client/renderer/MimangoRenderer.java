@@ -16,19 +16,19 @@ public class MimangoRenderer extends MobRenderer<MimangoEntity, MimangoModel> {
 
     public MimangoRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new MimangoModel.Adult(), 0.1f);
-        adult = entityModel;
+        adult = model;
         child = new MimangoModel.Baby();
     }
 
     @Override
     public void render(MimangoEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        entityModel = entityIn.isChild() ? child : adult;
+        model = entityIn.isBaby() ? child : adult;
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(MimangoEntity entity) {
-        int variant = entity.isChild() ? 1 : entity.getVariant() + 2;
+    public ResourceLocation getTextureLocation(MimangoEntity entity) {
+        int variant = entity.isBaby() ? 1 : entity.getVariant() + 2;
         ResourceLocation texture = TEXTURES[variant - 1];
         if (texture == null) {
             TEXTURES[variant - 1] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/mimango/mimango_" + variant + ".png");

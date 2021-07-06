@@ -40,7 +40,7 @@ public class WingsEntities {
     //public static final EntityType<SaddledThunderTailEggEntity> SADDLED_THUNDER_TAIL_EGG = create("saddled_thunder_tail_egg", SaddledThunderTailEggEntity::new, EntityClassification.MISC, 0.5f, 0.75f);
 
     private static <T extends CreatureEntity> RegistryObject<EntityType<T>> create(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height, int pri, int sec) {
-        final Item.Properties properties = new Item.Properties().group(WingsItems.GROUP);
+        final Item.Properties properties = new Item.Properties().tab(WingsItems.GROUP);
         EntityType<T> type = createType(name, factory, classification, width, height);
         WingsItems.REGISTRY.register(name + "_spawn_egg", () -> new SpawnEggItem(type, pri, sec, properties));
         return REGISTRY.register(name, () -> type);
@@ -51,6 +51,6 @@ public class WingsEntities {
     }
 
     private static <T extends Entity> EntityType<T> createType(String name, EntityType.IFactory<T> factory, EntityClassification classification, float width, float height) {
-        return EntityType.Builder.create(factory, classification).size(width, height).setTrackingRange(128).build(name);
+        return EntityType.Builder.of(factory, classification).sized(width, height).setTrackingRange(128).build(name);
     }
 }

@@ -16,7 +16,7 @@ public class HaroldsGreendrakeRenderer extends MobRenderer<HaroldsGreendrakeEnti
         addLayer(new HaroldsGreendrakeItemLayer(this));
     }
 
-    public ResourceLocation getEntityTexture(HaroldsGreendrakeEntity entity) {
+    public ResourceLocation getTextureLocation(HaroldsGreendrakeEntity entity) {
         return TEXTURE;
     }
 }

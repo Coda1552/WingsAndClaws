@@ -20,7 +20,7 @@ public interface IDragonEntity {
 
     default void createEgg() {
         if (canDragonBreed() && this instanceof AnimalEntity) {
-            ((AnimalEntity) this).entityDropItem(getEgg());
+            ((AnimalEntity) this).spawnAtLocation(getEgg());
         }
     }
 

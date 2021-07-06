@@ -9,15 +9,15 @@ import net.minecraft.util.math.vector.Vector3d;
 public class CallHatchetBeaksPacket implements INetworkPacket {
     @Override
     public void handle(PlayerEntity player) {
-        final Vector3d playerPosition = player.getPositionVec();
-        player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), WingsSounds.PLAYER_WHISTLE.get(), SoundCategory.PLAYERS, 0.5f, 0.4f / (player.getRNG().nextFloat() * 0.4f + 0.8f));
-        player.world.getEntitiesWithinAABB(
+        final Vector3d playerPosition = player.position();
+        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), WingsSounds.PLAYER_WHISTLE.get(), SoundCategory.PLAYERS, 0.5f, 0.4f / (player.getRandom().nextFloat() * 0.4f + 0.8f));
+        player.level.getEntities(
                 WingsEntities.HATCHET_BEAK.get(),
-                player.getBoundingBox().grow(256).offset(0, 128, 0),
-                entity -> entity.isOwner(player)
+                player.getBoundingBox().inflate(256).move(0, 128, 0),
+                entity -> entity.isOwnedBy(player)
         )
                 .stream()
-                .reduce((a, b) -> a.getDistanceSq(player) < b.getDistanceSq(player) ? a : b)
+                .reduce((a, b) -> a.distanceToSqr(player) < b.distanceToSqr(player) ? a : b)
                 .ifPresent(entity -> entity.callerPosition = playerPosition);
     }
 }

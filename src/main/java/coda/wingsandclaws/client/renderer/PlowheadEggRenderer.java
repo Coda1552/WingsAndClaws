@@ -24,20 +24,20 @@ public class PlowheadEggRenderer extends EntityRenderer<PlowheadEggEntity> imple
     @Override
     public void render(PlowheadEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0, 1.5, 0);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entityIn))), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(false)), 1, 1, 1, 1);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        getModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entityIn))), packedLightIn, OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(false)), 1, 1, 1, 1);
+        matrixStackIn.popPose();
     }
 
     @Override
-    public ResourceLocation getEntityTexture(PlowheadEggEntity entity) {
+    public ResourceLocation getTextureLocation(PlowheadEggEntity entity) {
         return TEXTURE;
     }
 
     @Override
-    public PlowheadEggModel getEntityModel() {
+    public PlowheadEggModel getModel() {
         return model;
     }
 }

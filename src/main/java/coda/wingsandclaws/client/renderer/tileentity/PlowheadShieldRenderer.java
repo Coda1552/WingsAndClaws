@@ -17,10 +17,10 @@ public class PlowheadShieldRenderer extends ItemStackTileEntityRenderer {
     private final PlowheadShieldModel model = new PlowheadShieldModel();
 
     @Override
-    public void func_239207_a_(ItemStack itemStackIn, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        matrixStackIn.push();
-        model.render(matrixStackIn, bufferIn.getBuffer(this.model.getRenderType(TEXTURE)), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+    public void renderByItem(ItemStack itemStackIn, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        matrixStackIn.pushPose();
+        model.renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.model.renderType(TEXTURE)), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
         matrixStackIn.scale(1, -1, -1);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 }

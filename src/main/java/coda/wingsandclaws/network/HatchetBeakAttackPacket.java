@@ -7,11 +7,11 @@ import net.minecraft.entity.player.PlayerEntity;
 public class HatchetBeakAttackPacket implements INetworkPacket {
     @Override
     public void handle(PlayerEntity player) {
-        Entity ridingEntity = player.getRidingEntity();
+        Entity ridingEntity = player.getVehicle();
         if (ridingEntity instanceof HatchetBeakEntity) {
-            player.world.getEntitiesWithinAABBExcludingEntity(ridingEntity, ridingEntity.getBoundingBox().offset(ridingEntity.getLookVec()))
+            player.level.getEntities(ridingEntity, ridingEntity.getBoundingBox().move(ridingEntity.getLookAngle()))
                     .stream()
-                    .reduce((e1, e2) -> e1.getDistanceSq(ridingEntity) > e2.getDistanceSq(ridingEntity) ? e2 : e1)
+                    .reduce((e1, e2) -> e1.distanceToSqr(ridingEntity) > e2.distanceToSqr(ridingEntity) ? e2 : e1)
                     .ifPresent(((HatchetBeakEntity) ridingEntity)::performAttack);
         }
     }

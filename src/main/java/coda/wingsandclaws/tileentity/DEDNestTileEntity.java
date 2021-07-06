@@ -32,15 +32,15 @@ public class DEDNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putIntArray("Eggs", eggs.stream().map(AtomicInteger::get).collect(Collectors.toList()));
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+    public void load(BlockState state, CompoundNBT compound) {
+        super.load(state, compound);
         List<AtomicInteger> list = new ArrayList<>();
         for (int i : compound.getIntArray("Eggs")) list.add(new AtomicInteger(i));
         this.eggs = list;
@@ -72,7 +72,7 @@ public class DEDNestTileEntity extends NestTileEntity {
 
     private void update(World world) {
         IPacket<IClientPlayNetHandler> packet = Objects.requireNonNull(getUpdatePacket());
-        Objects.requireNonNull(Objects.requireNonNull(world).getServer()).getPlayerList().getPlayers().forEach(player -> player.connection.sendPacket(packet));
+        Objects.requireNonNull(Objects.requireNonNull(world).getServer()).getPlayerList().getPlayers().forEach(player -> player.connection.send(packet));
     }
 
     public int getEggCount() {
@@ -82,45 +82,45 @@ public class DEDNestTileEntity extends NestTileEntity {
     @Override
     public void tick() {
         if (current == null && getEggCount() > 0) current = eggs.get(0);
-        World world = getWorld();
-        if (world != null && !world.isRemote && current != null) {
+        World world = getLevel();
+        if (world != null && !world.isClientSide && current != null) {
             if (current.decrementAndGet() <= 0) {
-                BlockPos pos = getPos();
+                BlockPos pos = getBlockPos();
                 DumpyEggDrakeEntity drake = WingsEntities.DUMPY_EGG_DRAKE.get().create(world);
                 if (drake != null) {
-                    drake.setGrowingAge(-24000);
-                    drake.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                    drake.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, drake.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> drake.getDistanceSq(p1) < drake.getDistanceSq(p2) ? p1 : p2).ifPresent(drake::setTamedBy);
-                    world.addEntity(drake);
+                    drake.setAge(-24000);
+                    drake.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
+                    drake.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(pos), SpawnReason.NATURAL, null, null);
+                    world.getEntitiesOfClass(PlayerEntity.class, drake.getBoundingBox().inflate(15)).stream().reduce((p1, p2) -> drake.distanceToSqr(p1) < drake.distanceToSqr(p2) ? p1 : p2).ifPresent(drake::tame);
+                    world.addFreshEntity(drake);
                 }
                 eggs.remove(0);
                 current = null;
-                world.notifyBlockUpdate(pos, WingsBlocks.DED_NEST.get().getDefaultState(), WingsBlocks.DED_NEST.get().getDefaultState(), 3);
-                markDirty();
+                world.sendBlockUpdated(pos, WingsBlocks.DED_NEST.get().defaultBlockState(), WingsBlocks.DED_NEST.get().defaultBlockState(), 3);
+                setChanged();
             }
         }
     }
 
     @Override
     public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        read(state, tag);
+        load(state, tag);
     }
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return write(new CompoundNBT());
+        return save(new CompoundNBT());
     }
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(getPos(), 1, getUpdateTag());
+        return new SUpdateTileEntityPacket(getBlockPos(), 1, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        CompoundNBT tag = pkt.getNbtCompound();
-        read(WingsBlocks.DED_NEST.get().getDefaultState(), tag);
+        CompoundNBT tag = pkt.getTag();
+        load(WingsBlocks.DED_NEST.get().defaultBlockState(), tag);
     }
 }

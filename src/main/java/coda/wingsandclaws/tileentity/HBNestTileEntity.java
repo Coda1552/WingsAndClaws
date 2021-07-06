@@ -19,15 +19,15 @@ public class HBNestTileEntity extends NestTileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public CompoundNBT save(CompoundNBT compound) {
         compound.putInt("EggTime", eggTimer);
-        return super.write(compound);
+        return super.save(compound);
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
+    public void load(BlockState state, CompoundNBT compound) {
         this.eggTimer = compound.getInt("EggTime");
-        super.read(state, compound);
+        super.load(state, compound);
     }
 
     @Override
@@ -55,16 +55,16 @@ public class HBNestTileEntity extends NestTileEntity {
 
     @Override
     public void tick() {
-        World world = getWorld();
-        if (world != null && !world.isRemote && eggTimer != -1 && --eggTimer <= 0) {
-            BlockPos pos = getPos();
+        World world = getLevel();
+        if (world != null && !world.isClientSide && eggTimer != -1 && --eggTimer <= 0) {
+            BlockPos pos = getBlockPos();
             HatchetBeakEntity hatchetBeak = WingsEntities.HATCHET_BEAK.get().create(world);
             if (hatchetBeak != null) {
-                hatchetBeak.setGrowingAge(-24000);
-                hatchetBeak.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
-                hatchetBeak.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-                world.getEntitiesWithinAABB(PlayerEntity.class, hatchetBeak.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> hatchetBeak.getDistanceSq(p1) < hatchetBeak.getDistanceSq(p2) ? p1 : p2).ifPresent(hatchetBeak::setTamedBy);
-                world.addEntity(hatchetBeak);
+                hatchetBeak.setAge(-24000);
+                hatchetBeak.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
+                hatchetBeak.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(pos), SpawnReason.NATURAL, null, null);
+                world.getEntitiesOfClass(PlayerEntity.class, hatchetBeak.getBoundingBox().inflate(15)).stream().reduce((p1, p2) -> hatchetBeak.distanceToSqr(p1) < hatchetBeak.distanceToSqr(p2) ? p1 : p2).ifPresent(hatchetBeak::tame);
+                world.addFreshEntity(hatchetBeak);
             }
             eggTimer = -1;
         }

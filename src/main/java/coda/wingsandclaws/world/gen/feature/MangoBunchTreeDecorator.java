@@ -18,16 +18,16 @@ import java.util.Set;
 
 public class MangoBunchTreeDecorator extends TreeDecorator {
     @Override
-    public void func_225576_a_(ISeedReader world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, MutableBoundingBox boundingBox) {
+    public void place(ISeedReader world, Random random, List<BlockPos> logPositions, List<BlockPos> leavesPositions, Set<BlockPos> set, MutableBoundingBox boundingBox) {
         if (random.nextFloat() <= 0.2f) {
             for (BlockPos pos : logPositions) {
                 for (Direction direction : Direction.Plane.HORIZONTAL) {
                     if (random.nextFloat() <= 0.25F) {
                         Direction direction1 = direction.getOpposite();
-                        BlockPos blockpos = pos.add(direction1.getXOffset(), 0, direction1.getZOffset());
-                        if (TreeFeature.isAirAt(world, blockpos)) {
-                            BlockState blockstate = WingsBlocks.MANGO_BUNCH.get().getDefaultState().with(MangoBlock.STAGE, random.nextInt(4) + 1);
-                            this.func_227423_a_(world, blockpos, blockstate, set, boundingBox);
+                        BlockPos blockpos = pos.offset(direction1.getStepX(), 0, direction1.getStepZ());
+                        if (TreeFeature.isAir(world, blockpos)) {
+                            BlockState blockstate = WingsBlocks.MANGO_BUNCH.get().defaultBlockState().setValue(MangoBlock.STAGE, random.nextInt(4) + 1);
+                            this.setBlock(world, blockpos, blockstate, set, boundingBox);
                         }
                     }
                 }
@@ -36,7 +36,7 @@ public class MangoBunchTreeDecorator extends TreeDecorator {
     }
 
     @Override
-    protected TreeDecoratorType<?> func_230380_a_() {
+    protected TreeDecoratorType<?> type() {
         return WingsFeatures.MANGO_BUNCH.get();
     }
 }

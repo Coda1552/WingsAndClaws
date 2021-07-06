@@ -24,8 +24,11 @@ import net.minecraftforge.event.ForgeEventFactory;
 import javax.annotation.Nullable;
 
 //TODO use the right navigator and rely on goals for following the player
+import coda.wingsandclaws.entity.util.TameableDragonEntity.Gender;
+import net.minecraft.entity.AgeableEntity.AgeableData;
+
 public class SaddledThunderTailEntity extends TameableDragonEntity {
-    private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
+    private static final EntitySize SLEEPING_SIZE = EntitySize.scalable(1.2f, 0.5f);
     private int alarmedTimer;
     private Vector3d oldPos;
 
@@ -34,36 +37,36 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     @Override
-    public EntitySize getSize(Pose poseIn) {
-        return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
+    public EntitySize getDimensions(Pose poseIn) {
+        return isSleeping() ? SLEEPING_SIZE : super.getDimensions(poseIn);
     }
 
     public static AttributeModifierMap.MutableAttribute registerSTTAttributes() {
-        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23).createMutableAttribute(Attributes.MAX_HEALTH, 150).createMutableAttribute(Attributes.ATTACK_DAMAGE, 3);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23).add(Attributes.MAX_HEALTH, 150).add(Attributes.ATTACK_DAMAGE, 3);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         boolean bullSpawn;
         if (spawnDataIn instanceof STTData) {
             bullSpawn = ((STTData) spawnDataIn).canMaleSpawn();
         } else {
-            bullSpawn = rand.nextBoolean();
+            bullSpawn = random.nextBoolean();
             spawnDataIn = new STTData();
         }
 
         AgeableData ageableData = (AgeableData) spawnDataIn;
 
-        if (ageableData.getIndexInGroup() > 2) {
-            this.setGrowingAge(-24000);
+        if (ageableData.getGroupSize() > 2) {
+            this.setAge(-24000);
         }
 
         if (bullSpawn) {
             ((STTData) spawnDataIn).setCanMaleSpawn(false);
         }
 
-        return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     @Override
-    public int getMaxSpawnedInChunk() {
+    public int getMaxSpawnClusterSize() {
         return 10;
     }
 
@@ -102,8 +105,8 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     @Override
-    public void setTamed(boolean tamed) {
-        super.setTamed(tamed);
+    public void setTame(boolean tamed) {
+        super.setTame(tamed);
         if (tamed) {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(200);
             this.setHealth(150);
@@ -113,83 +116,83 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-            if (!isChild() && getGender() == Gender.MALE && !isOwner((LivingEntity) source.getTrueSource()))
-                setAttackTarget((LivingEntity) source.getTrueSource());
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof LivingEntity && (!(source.getEntity() instanceof PlayerEntity) || (!isOwnedBy((LivingEntity) source.getEntity()) && !((PlayerEntity) source.getEntity()).abilities.instabuild))) {
+            if (!isBaby() && getGender() == Gender.MALE && !isOwnedBy((LivingEntity) source.getEntity()))
+                setTarget((LivingEntity) source.getEntity());
         }
 
         if (isSleeping()) {
-            oldPos = getPositionVec();
+            oldPos = position();
             alarmedTimer = 200;
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (handleSpawnEgg(player, stack)) return ActionResultType.SUCCESS;
 
-        if (isChild() && !isTamed() && isBreedingItem(stack)) {
-            this.consumeItemFromStack(player, stack);
-            if (rand.nextInt(20) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
-                this.setTamedBy(player);
-                this.navigator.clearPath();
-                this.setAttackTarget(null);
+        if (isBaby() && !isTame() && isFood(stack)) {
+            this.usePlayerItem(player, stack);
+            if (random.nextInt(20) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
+                this.tame(player);
+                this.navigation.stop();
+                this.setTarget(null);
                 this.setHealth(150);
-                this.world.setEntityState(this, (byte) 7);
+                this.level.broadcastEntityEvent(this, (byte) 7);
             } else {
-                this.world.setEntityState(this, (byte) 6);
+                this.level.broadcastEntityEvent(this, (byte) 6);
             }
             return ActionResultType.SUCCESS;
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.PUMPKIN_PIE; //todo check if this is the right item
     }
 
     @Override
-    public void livingTick() {
+    public void aiStep() {
         if (oldPos != null) {
-            setPosition(oldPos.x, oldPos.y, oldPos.z);
+            setPos(oldPos.x, oldPos.y, oldPos.z);
             oldPos = null;
         }
         if (!isSleeping()) {
-            if (!world.isRemote) {
-                if (isTamed()) {
-                    if (!isSitting()) {
+            if (!level.isClientSide) {
+                if (isTame()) {
+                    if (!isOrderedToSit()) {
                         LivingEntity owner = getOwner();
                         if (owner != null) {
-                            getNavigator().tryMoveToEntityLiving(owner, 0.2);
+                            getNavigation().moveTo(owner, 0.2);
                             if (onGround) {
-                                double x = owner.getPosX() - getPosX();
-                                double z = owner.getPosZ() - getPosZ();
-                                setMotion(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
+                                double x = owner.getX() - getX();
+                                double z = owner.getZ() - getZ();
+                                setDeltaMovement(MathHelper.clamp(x, -0.2, 0.2), 0, MathHelper.clamp(z, -0.2, 0.2));
 
-                                rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
-                                renderYawOffset = rotationYaw;
+                                yRot = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+                                yBodyRot = yRot;
                             }
                         }
                     }
                 }
                 if (alarmedTimer-- <= 0) alarmedTimer = 0;
             }
-            super.livingTick();
-        } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
+            super.aiStep();
+        } else this.travel(new Vector3d(this.xxa, this.yya, this.zza));
     }
 
     @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
     @Override
     public boolean isSleeping() {
-        return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 1000;
+        return alarmedTimer == 0 && level.getDayTime() > 13000 && level.getDayTime() < 1000;
     }
 
 /*    @Override
@@ -213,7 +216,7 @@ public class SaddledThunderTailEntity extends TameableDragonEntity {
         }
 
         @Override
-        public float getBabySpawnProbability() {
+        public float getBabySpawnChance() {
             return 0.5f;
         }
     }

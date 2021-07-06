@@ -21,19 +21,19 @@ public class WingsNbtStructure extends Feature<NoFeatureConfig> {
     private final ResourceLocation structure;
 
     public WingsNbtStructure(ResourceLocation structure) {
-        super(NoFeatureConfig.field_236558_a_);
+        super(NoFeatureConfig.CODEC);
         this.structure = structure;
     }
 
     @Override
-    public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-        Rotation rotation = Rotation.randomRotation(rand);
-        TemplateManager templatemanager = reader.getWorld().getServer().getTemplateManager();
-        Template template = templatemanager.getTemplateDefaulted(structure);
+    public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+        Rotation rotation = Rotation.getRandom(rand);
+        TemplateManager templatemanager = reader.getLevel().getServer().getStructureManager();
+        Template template = templatemanager.getOrCreate(structure);
         ChunkPos chunkpos = new ChunkPos(pos);
-        MutableBoundingBox mutableboundingbox = new MutableBoundingBox(chunkpos.getXStart(), 0, chunkpos.getZStart(), chunkpos.getXEnd(), 256, chunkpos.getZEnd());
-        PlacementSettings placementsettings = new PlacementSettings().setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreStructureProcessor.AIR_AND_STRUCTURE_BLOCK);
-        BlockPos blockpos = template.transformedSize(rotation);
+        MutableBoundingBox mutableboundingbox = new MutableBoundingBox(chunkpos.getMinBlockX(), 0, chunkpos.getMinBlockZ(), chunkpos.getMaxBlockX(), 256, chunkpos.getMaxBlockZ());
+        PlacementSettings placementsettings = new PlacementSettings().setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_AND_AIR);
+        BlockPos blockpos = template.getSize(rotation);
         int j = rand.nextInt(16 - blockpos.getX());
         int k = rand.nextInt(16 - blockpos.getZ());
         int l = 256;
@@ -44,15 +44,15 @@ public class WingsNbtStructure extends Feature<NoFeatureConfig> {
             }
         }
 
-        BlockPos blockpos1 = template.getZeroPositionWithTransform(pos.add(j, l - pos.getY(), k), Mirror.NONE, rotation);
+        BlockPos blockpos1 = template.getZeroPositionWithTransform(pos.offset(j, l - pos.getY(), k), Mirror.NONE, rotation);
         IntegrityProcessor integrityprocessor = new IntegrityProcessor(0.9F);
         placementsettings.clearProcessors().addProcessor(integrityprocessor);
-        if (template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4)) {
-            for(Template.BlockInfo blockInfo : template.func_215381_a(blockpos1, placementsettings, Blocks.STRUCTURE_BLOCK)) {
+        if (template.placeInWorld(reader, blockpos1, blockpos1, placementsettings, rand, 4)) {
+            for(Template.BlockInfo blockInfo : template.filterBlocks(blockpos1, placementsettings, Blocks.STRUCTURE_BLOCK)) {
                 if (blockInfo.nbt != null) {
                     StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt.getString("mode"));
                     if (structuremode == StructureMode.DATA) {
-                        reader.setBlockState(blockInfo.pos, Blocks.AIR.getDefaultState(), 4);
+                        reader.setBlock(blockInfo.pos, Blocks.AIR.defaultBlockState(), 4);
                         this.handleDataMarker(blockInfo.nbt.getString("metadata"), blockInfo.pos, reader, rand, mutableboundingbox);
                     }
                 }

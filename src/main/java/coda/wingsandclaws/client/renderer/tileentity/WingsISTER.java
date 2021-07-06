@@ -32,8 +32,8 @@ public class WingsISTER extends ItemStackTileEntityRenderer {
     }
 
     @Override
-    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType transforms, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-        CHILDREN.get(stack.getItem()).func_239207_a_(stack, transforms, matrixStack, buffer, combinedLight, combinedOverlay);
+    public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType transforms, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        CHILDREN.get(stack.getItem()).renderByItem(stack, transforms, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     public void addDelegate(Item item, ItemStackTileEntityRenderer child) {

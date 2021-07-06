@@ -24,20 +24,20 @@ public class SaddledThunderTailEggRenderer extends EntityRenderer<SaddledThunder
     @Override
     public void render(SaddledThunderTailEggEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0, 1.5, 0);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        getEntityModel().render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucent(getEntityTexture(entityIn))), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(false)), 1, 1, 1, 1);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        getModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucent(getTextureLocation(entityIn))), packedLightIn, OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(false)), 1, 1, 1, 1);
+        matrixStackIn.popPose();
     }
 
     @Override
-    public ResourceLocation getEntityTexture(SaddledThunderTailEggEntity entity) {
+    public ResourceLocation getTextureLocation(SaddledThunderTailEggEntity entity) {
         return TEXTURE;
     }
 
     @Override
-    public SaddledThunderTailEggModel getEntityModel() {
+    public SaddledThunderTailEggModel getModel() {
         return model;
     }
 }

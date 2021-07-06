@@ -20,7 +20,7 @@ public class HatchetBeakSaddleLayer extends LayerRenderer<HatchetBeakEntity, Hat
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, HatchetBeakEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn.hasSaddle()) {
-            this.getEntityModel().render(matrixStackIn, bufferIn.getBuffer(this.getEntityModel().getRenderType(TEXTURE)), packedLightIn, OverlayTexture.getPackedUV(OverlayTexture.getU(0), OverlayTexture.getV(entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0)), 1, 1, 1, 1);
+            this.getParentModel().renderToBuffer(matrixStackIn, bufferIn.getBuffer(this.getParentModel().renderType(TEXTURE)), packedLightIn, OverlayTexture.pack(OverlayTexture.u(0), OverlayTexture.v(entitylivingbaseIn.hurtTime > 0 || entitylivingbaseIn.deathTime > 0)), 1, 1, 1, 1);
         }
     }
 }

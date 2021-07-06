@@ -41,110 +41,110 @@ public class MimangoEggEntity extends LivingEntity {
     public MimangoEggEntity(World worldIn, BlockPos pos) {
         super(WingsEntities.MIMANGO_EGG.get(), worldIn);
         setSilent(true);
-        setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        startedInLeaves = world.getBlockState(pos).getBlock().isIn(BlockTags.LEAVES);
+        setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+        startedInLeaves = level.getBlockState(pos).getBlock().is(BlockTags.LEAVES);
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
+    public Iterable<ItemStack> getArmorSlots() {
         return Collections.emptyList();
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
     }
 
     @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
     @Override
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Override
-    public HandSide getPrimaryHand() {
+    public HandSide getMainArm() {
         return HandSide.RIGHT;
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
-        this.setAir(300);
+        this.setAirSupply(300);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.hatchTime = compound.getInt("HatchTime");
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("HatchTime", hatchTime);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.MIMANGO_EGG.get())), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
+                this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.MIMANGO_EGG.get())), this.getX(), this.getY(), this.getZ(), ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
     }
 
     @Override
     public void tick() {
-        if (!this.world.isRemote) {
-            if (startedInLeaves && !world.getBlockState(getPosition()).getBlock().isIn(BlockTags.LEAVES)) {
-                entityDropItem(new ItemStack(WingsItems.MIMANGO_EGG.get()));
+        if (!this.level.isClientSide) {
+            if (startedInLeaves && !level.getBlockState(blockPosition()).getBlock().is(BlockTags.LEAVES)) {
+                spawnAtLocation(new ItemStack(WingsItems.MIMANGO_EGG.get()));
                 remove();
                 return;
             }
             if (hatchTime++ >= 1200) {
-                MimangoEntity mimangoEntity = WingsEntities.MIMANGO.get().create(this.world);
+                MimangoEntity mimangoEntity = WingsEntities.MIMANGO.get().create(this.level);
                 if (mimangoEntity != null) {
-                    mimangoEntity.setGrowingAge(-24000);
-                    mimangoEntity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                    mimangoEntity.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(mimangoEntity.getPosition()), SpawnReason.NATURAL, null, null);
-                    world.getEntitiesWithinAABB(PlayerEntity.class, mimangoEntity.getBoundingBox().grow(15)).stream().reduce((p1, p2) -> mimangoEntity.getDistanceSq(p1) < mimangoEntity.getDistanceSq(p2) ? p1 : p2).ifPresent(mimangoEntity::setTamedBy);
-                    this.world.addEntity(mimangoEntity);
+                    mimangoEntity.setAge(-24000);
+                    mimangoEntity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
+                    mimangoEntity.finalizeSpawn((IServerWorld) level, level.getCurrentDifficultyAt(mimangoEntity.blockPosition()), SpawnReason.NATURAL, null, null);
+                    level.getEntitiesOfClass(PlayerEntity.class, mimangoEntity.getBoundingBox().inflate(15)).stream().reduce((p1, p2) -> mimangoEntity.distanceToSqr(p1) < mimangoEntity.distanceToSqr(p2) ? p1 : p2).ifPresent(mimangoEntity::tame);
+                    this.level.addFreshEntity(mimangoEntity);
                 }
 
-                this.world.setEntityState(this, (byte) 3);
+                this.level.broadcastEntityEvent(this, (byte) 3);
                 this.remove();
             }
         }
     }
 
     @Override
-    public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType interact(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (stack.isEmpty()) {
             ItemStack egg = new ItemStack(WingsItems.MIMANGO_EGG.get());
-            if (!player.addItemStackToInventory(egg)) {
-                player.dropItem(egg, false);
+            if (!player.addItem(egg)) {
+                player.drop(egg, false);
             }
             remove();
             return ActionResultType.SUCCESS;
         }
-        return super.processInitialInteract(player, hand);
+        return super.interact(player, hand);
     }
 
     public static MimangoEggEntity getEgg(World world, BlockPos pos) {
-        List<MimangoEggEntity> list = world.getEntitiesWithinAABB(MimangoEggEntity.class, new AxisAlignedBB(pos));
+        List<MimangoEggEntity> list = world.getEntitiesOfClass(MimangoEggEntity.class, new AxisAlignedBB(pos));
         return list.isEmpty() ? null : list.get(0);
     }
 }

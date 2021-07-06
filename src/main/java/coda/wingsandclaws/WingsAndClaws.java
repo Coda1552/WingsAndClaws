@@ -84,11 +84,11 @@ public class WingsAndClaws {
         switch (event.getCategory()) {
             case DESERT:
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.DUMPY_EGG_DRAKE.get(), 1, 1, 1));
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.DED_NEST.get().configured(IFeatureConfig.NONE).decorated(Placement.HEIGHTMAP.configured(NoPlacementConfig.INSTANCE)).decorated(Placement.CHANCE.configured(new ChanceConfig(300))));
                 break;
             case JUNGLE:
                 event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).removeIf(configuredFeature -> configuredFeature.get().feature == Feature.DECORATED && ((DecoratedFeatureConfig) configuredFeature.get().config).feature.get().feature == Feature.RANDOM_SELECTOR);
-                event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() -> Feature.RANDOM_SELECTOR.withConfiguration(new MultipleRandomFeatureConfig(ImmutableList.of(Features.FANCY_OAK.withChance(0.1F), Features.JUNGLE_BUSH.withChance(0.5F), Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.getDefaultState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.getDefaultState()), new JungleFoliagePlacer(FeatureSpread.func_242252_a(2), FeatureSpread.func_242252_a(0), 2), new MegaJungleTrunkPlacer(10, 2, 19), new TwoLayerFeature(1, 1, 2)).setDecorators(ImmutableList.of(TrunkVineTreeDecorator.field_236879_b_, LeaveVineTreeDecorator.field_236871_b_, new MangoBunchTreeDecorator())).build()).withChance(0.33333334F)), Feature.TREE.withConfiguration(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.getDefaultState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.getDefaultState()), new BlobFoliagePlacer(FeatureSpread.func_242252_a(2), FeatureSpread.func_242252_a(0), 3), new StraightTrunkPlacer(4, 8, 0), new TwoLayerFeature(1, 0, 1)).setDecorators(ImmutableList.of(new CocoaTreeDecorator(0.2F), TrunkVineTreeDecorator.field_236879_b_, LeaveVineTreeDecorator.field_236871_b_, new MangoBunchTreeDecorator())).setIgnoreVines().build()).withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(50, 0.1F, 1))))));
+                event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION).add(() -> Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.FANCY_OAK.weighted(0.1F), Features.JUNGLE_BUSH.weighted(0.5F), Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.defaultBlockState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.defaultBlockState()), new JungleFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 2), new MegaJungleTrunkPlacer(10, 2, 19), new TwoLayerFeature(1, 1, 2)).decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE, new MangoBunchTreeDecorator())).build()).weighted(0.33333334F)), Feature.TREE.configured(new BaseTreeFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.JUNGLE_LOG.defaultBlockState()), new SimpleBlockStateProvider(Blocks.JUNGLE_LEAVES.defaultBlockState()), new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3), new StraightTrunkPlacer(4, 8, 0), new TwoLayerFeature(1, 0, 1)).decorators(ImmutableList.of(new CocoaTreeDecorator(0.2F), TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE, new MangoBunchTreeDecorator())).ignoreVines().build()).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(50, 0.1F, 1))))));
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.MIMANGO.get(), 30, 3, 5));
                 break;
             case OCEAN:
@@ -106,7 +106,7 @@ public class WingsAndClaws {
                 break;
             case SAVANNA:
                 if (event.getDepth() >= 0.36f && event.getScale() >= 1.22f) {
-                    event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.HB_NEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.HEIGHTMAP.configure(NoPlacementConfig.INSTANCE)).withPlacement(Placement.CHANCE.configure(new ChanceConfig(300))));
+                    event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> WingsFeatures.HB_NEST.get().configured(IFeatureConfig.NONE).decorated(Placement.HEIGHTMAP.configured(NoPlacementConfig.INSTANCE)).decorated(Placement.CHANCE.configured(new ChanceConfig(300))));
                     event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WingsEntities.HATCHET_BEAK.get(), 1, 1, 1));
                 }
                 break;
@@ -128,18 +128,18 @@ public class WingsAndClaws {
         registerEntityAttributes();
 
         EntitySpawnPlacementRegistry.register(WingsEntities.HAROLDS_GREENDRAKE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HaroldsGreendrakeEntity::canHaroldsSpawn);
-        EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::func_223363_b);
+        EntitySpawnPlacementRegistry.register(WingsEntities.SUGARSCALE.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
     }
     
     private void registerEntityAttributes() {
-        GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO.get(), MimangoEntity.registerMimangoAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.HATCHET_BEAK.get(), HatchetBeakEntity.registerHBAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.DUMPY_EGG_DRAKE.get(), DumpyEggDrakeEntity.registerDEDAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.ICY_PLOWHEAD.get(), IcyPlowheadEntity.registerPlowheadAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE.get(), HaroldsGreendrakeEntity.registerGreendrakeAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.ICY_PLOWHEAD_EGG.get(), LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG.get(), LivingEntity.registerAttributes().create());
-        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE.get(), SugarscaleEntity.func_234176_m_().create());
+        GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO.get(), MimangoEntity.registerMimangoAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.HATCHET_BEAK.get(), HatchetBeakEntity.registerHBAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.DUMPY_EGG_DRAKE.get(), DumpyEggDrakeEntity.registerDEDAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.ICY_PLOWHEAD.get(), IcyPlowheadEntity.registerPlowheadAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.HAROLDS_GREENDRAKE.get(), HaroldsGreendrakeEntity.registerGreendrakeAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.ICY_PLOWHEAD_EGG.get(), LivingEntity.createLivingAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.MIMANGO_EGG.get(), LivingEntity.createLivingAttributes().build());
+        GlobalEntityTypeAttributes.put(WingsEntities.SUGARSCALE.get(), SugarscaleEntity.createAttributes().build());
         /*GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL_EGG, LivingEntity.registerAttributes().create());
         GlobalEntityTypeAttributes.put(WingsEntities.SADDLED_THUNDER_TAIL, SaddledThunderTailEntity.registerSTTAttributes().create());*/
     }

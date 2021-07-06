@@ -36,9 +36,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
+import coda.wingsandclaws.entity.util.TameableDragonEntity.Gender;
+
 public class DumpyEggDrakeEntity extends TameableDragonEntity {
-    private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.createKey(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
-    private static final EntitySize SLEEPING_SIZE = EntitySize.flexible(1.2f, 0.5f);
+    private static final DataParameter<Byte> BANDANA_COLOR = EntityDataManager.defineId(DumpyEggDrakeEntity.class, DataSerializers.BYTE);
+    private static final EntitySize SLEEPING_SIZE = EntitySize.scalable(1.2f, 0.5f);
     private final AtomicReference<ItemEntity> target = new AtomicReference<>();
     private int alarmedTimer;
     private int attackCooldown;
@@ -58,39 +60,39 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.1, false));
         this.goalSelector.addGoal(6, new PanicGoal(this, 1.0D) {
             @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && getAttackTarget() == null;
+            public boolean canUse() {
+                return super.canUse() && getTarget() == null;
             }
         });
         this.goalSelector.addGoal(7, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(9, new TemptGoal(this, 0.8, false, Ingredient.fromItems(Items.EGG, Items.DRAGON_EGG)) {
+        this.goalSelector.addGoal(9, new TemptGoal(this, 0.8, false, Ingredient.of(Items.EGG, Items.DRAGON_EGG)) {
             @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && !isSitting() && target.get() == null;
+            public boolean canUse() {
+                return super.canUse() && !isOrderedToSit() && target.get() == null;
             }
         });
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 15, 1) {{
-            setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
             @Override
-            public boolean shouldExecute() {
-                boolean execute = isChild() && !isSitting() && super.shouldExecute();
-                if (execute && getDistanceSq(closestEntity) >= 9) {
-                    getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
+            public boolean canUse() {
+                boolean execute = isBaby() && !isOrderedToSit() && super.canUse();
+                if (execute && distanceToSqr(lookAt) >= 9) {
+                    getNavigation().moveTo(lookAt, 0.6);
                 }
                 return execute;
             }
 
             @Override
             public void tick() {
-                closestPlayer = (PlayerEntity) closestEntity;
-                if (getDistanceSq(closestEntity) < 9) {
-                    getNavigator().clearPath();
-                    getLookController().setLookPositionWithEntity(this.closestEntity, (float) (20 - getHorizontalFaceSpeed()), (float) getVerticalFaceSpeed());
-                } else if (getNavigator().noPath()) {
-                    getNavigator().tryMoveToEntityLiving(closestEntity, 0.6);
+                closestPlayer = (PlayerEntity) lookAt;
+                if (distanceToSqr(lookAt) < 9) {
+                    getNavigation().stop();
+                    getLookControl().setLookAt(this.lookAt, (float) (20 - getMaxHeadYRot()), (float) getMaxHeadXRot());
+                } else if (getNavigation().isDone()) {
+                    getNavigation().moveTo(lookAt, 0.6);
                 }
             }
         });
@@ -99,29 +101,29 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
         this.goalSelector.addGoal(12, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(13, new LookRandomlyGoal(this));
 
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getAttackTarget()));
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, entity -> entity == getTarget()));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<DumpyEggDrakeEntity>(this, DumpyEggDrakeEntity.class, 10, true, false, entity -> ((DumpyEggDrakeEntity) entity).getGender() == Gender.MALE)
         {
             @Override
-            public boolean shouldExecute() {
-                return getGender() == Gender.MALE && super.shouldExecute();
+            public boolean canUse() {
+                return getGender() == Gender.MALE && super.canUse();
             }
         });
     }
 
     public static AttributeModifierMap.MutableAttribute registerDEDAttributes() {
-        return MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3).createMutableAttribute(Attributes.MAX_HEALTH, 20).createMutableAttribute(Attributes.ATTACK_DAMAGE, 2).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1).createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.3).add(Attributes.MAX_HEALTH, 20).add(Attributes.ATTACK_DAMAGE, 2).add(Attributes.ATTACK_KNOCKBACK, 1).add(Attributes.ATTACK_KNOCKBACK, 1);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(BANDANA_COLOR, (byte) DyeColor.WHITE.getId());
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(BANDANA_COLOR, (byte) DyeColor.WHITE.getId());
     }
 
     @Override
-    public EntitySize getSize(Pose poseIn) {
-        return isSleeping() ? SLEEPING_SIZE : super.getSize(poseIn);
+    public EntitySize getDimensions(Pose poseIn) {
+        return isSleeping() ? SLEEPING_SIZE : super.getDimensions(poseIn);
     }
 
     @Nullable
@@ -148,76 +150,76 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     @Override
-    public void setTamed(boolean tamed) {
-        super.setTamed(tamed);
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(isTamed() ? 40 : 20);
+    public void setTame(boolean tamed) {
+        super.setTame(tamed);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(isTame() ? 40 : 20);
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source.getTrueSource() instanceof LivingEntity && (!(source.getTrueSource() instanceof PlayerEntity) || (!isOwner((LivingEntity) source.getTrueSource()) && !((PlayerEntity) source.getTrueSource()).abilities.isCreativeMode))) {
-            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isChild() && entity.getGender() == Gender.MALE && !entity.isOwner((LivingEntity) source.getTrueSource());
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof LivingEntity && (!(source.getEntity() instanceof PlayerEntity) || (!isOwnedBy((LivingEntity) source.getEntity()) && !((PlayerEntity) source.getEntity()).abilities.instabuild))) {
+            Predicate<DumpyEggDrakeEntity> canAttack = entity -> !entity.isBaby() && entity.getGender() == Gender.MALE && !entity.isOwnedBy((LivingEntity) source.getEntity());
             if (canAttack.test(this)) {
-                setAttackTarget((LivingEntity) source.getTrueSource());
+                setTarget((LivingEntity) source.getEntity());
             }
-            world.getEntitiesWithinAABB(getClass(), getBoundingBox().grow(31)).stream().filter(canAttack).forEach(e -> e.setAttackTarget((LivingEntity) source.getTrueSource()));
+            level.getEntitiesOfClass(getClass(), getBoundingBox().inflate(31)).stream().filter(canAttack).forEach(e -> e.setTarget((LivingEntity) source.getEntity()));
         }
 
-        if (isSleeping()) oldPos = getPositionVec();
+        if (isSleeping()) oldPos = position();
         alarmedTimer = 200;
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote && isTamed() && stack.getItem() instanceof DyeItem) {
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!level.isClientSide && isTame() && stack.getItem() instanceof DyeItem) {
             setBandanaColor(((DyeItem) stack.getItem()).getDyeColor());
-            if (!player.abilities.isCreativeMode) stack.shrink(1);
+            if (!player.abilities.instabuild) stack.shrink(1);
             return ActionResultType.SUCCESS;
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.EGG;
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         if (oldPos != null) {
-            setPositionAndRotation(oldPos.x, oldPos.y, oldPos.z, 0, 0);
+            absMoveTo(oldPos.x, oldPos.y, oldPos.z, 0, 0);
             oldPos = null;
         }
         if (!isSleeping()) {
-            if (isChild() && closestPlayer != null) {
-                double x = closestPlayer.getPosX() - getPosX();
-                double z = closestPlayer.getPosZ() - getPosZ();
+            if (isBaby() && closestPlayer != null) {
+                double x = closestPlayer.getX() - getX();
+                double z = closestPlayer.getZ() - getZ();
 
-                rotationYaw = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
-                renderYawOffset = rotationYaw;
+                yRot = (float) Math.toDegrees(Math.atan2(z, x) - Math.PI / 2);
+                yBodyRot = yRot;
             }
-            LivingEntity attackTarget = getAttackTarget();
-            if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.isCreativeMode) {
-                getNavigator().tryMoveToEntityLiving(attackTarget, 1.2);
-                if (attackCooldown == 0 && getDistanceSq(attackTarget) < 4) {
-                    attackEntityAsMob(attackTarget);
+            LivingEntity attackTarget = getTarget();
+            if (attackTarget != null && attackTarget.isAlive() && attackTarget instanceof PlayerEntity && !((PlayerEntity) attackTarget).abilities.instabuild) {
+                getNavigation().moveTo(attackTarget, 1.2);
+                if (attackCooldown == 0 && distanceToSqr(attackTarget) < 4) {
+                    doHurtTarget(attackTarget);
                     attackCooldown = 20;
                 }
             } else if (attackCooldown > 0) {
-                getNavigator().clearPath();
+                getNavigation().stop();
                 attackCooldown = 0;
-                setAttackTarget(null);
+                setTarget(null);
             }
             if (attackCooldown-- <= 0) attackCooldown = 0;
             ItemEntity i = target.get();
             if (i == null) {
-                world.getEntitiesWithinAABB(ItemEntity.class, getBoundingBox().grow(15)).stream().filter(e -> isBreedingItem(e.getItem())).findAny().ifPresent(item -> {
-                    getNavigator().tryMoveToEntityLiving(item, 1);
+                level.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(15)).stream().filter(e -> isFood(e.getItem())).findAny().ifPresent(item -> {
+                    getNavigation().moveTo(item, 1);
                     target.set(item);
                 });
             } else {
@@ -225,68 +227,68 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
                     target.set(null);
                     return;
                 }
-                if (getDistanceSq(i) < 4) {
+                if (distanceToSqr(i) < 4) {
                     heal(i.getItem().getCount() * 4);
                     i.remove();
                     target.set(null);
-                    getNavigator().clearPath();
-                    if (this.isTamed()) {
-                        if (this.getGrowingAge() == 0 && this.canBreed()) this.setInLove((PlayerEntity) getOwner());
-                        else if (this.isChild()) this.ageUp((int) ((float) (-this.getGrowingAge() / 20) * 0.1F), true);
-                    } else if (isChild()) {
-                        if (!this.world.isRemote) {
-                            UUID id = i.getThrowerId();
+                    getNavigation().stop();
+                    if (this.isTame()) {
+                        if (this.getAge() == 0 && this.canBreed()) this.setInLove((PlayerEntity) getOwner());
+                        else if (this.isBaby()) this.ageUp((int) ((float) (-this.getAge() / 20) * 0.1F), true);
+                    } else if (isBaby()) {
+                        if (!this.level.isClientSide) {
+                            UUID id = i.getThrower();
                             if (id != null) {
-                                PlayerEntity player = world.getPlayerByUuid(id);
+                                PlayerEntity player = level.getPlayerByUUID(id);
                                 if (player != null) {
-                                    if (this.rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
-                                        this.setTamedBy(player);
-                                        this.navigator.clearPath();
-                                        this.setAttackTarget(null);
+                                    if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                                        this.tame(player);
+                                        this.navigation.stop();
+                                        this.setTarget(null);
                                         this.setHealth(40);
-                                        this.world.setEntityState(this, (byte) 7);
+                                        this.level.broadcastEntityEvent(this, (byte) 7);
                                     } else {
-                                        this.world.setEntityState(this, (byte) 6);
+                                        this.level.broadcastEntityEvent(this, (byte) 6);
                                     }
                                 }
                             }
                         }
                     }
                 } else {
-                    getNavigator().tryMoveToEntityLiving(target.get(), 1.2);
+                    getNavigation().moveTo(target.get(), 1.2);
                 }
             }
             if (alarmedTimer-- <= 0) alarmedTimer = 0;
-        } else this.travel(new Vector3d(this.moveStrafing, this.moveVertical, this.moveForward));
+        } else this.travel(new Vector3d(this.xxa, this.yya, this.zza));
         sleepTimer.add(isSleeping()? 0.085f : -0.085f);
     }
 
     @Override
     public boolean isSleeping() {
-        return alarmedTimer == 0 && world.getDayTime() > 13000 && world.getDayTime() < 23000;
+        return alarmedTimer == 0 && level.getDayTime() > 13000 && level.getDayTime() < 23000;
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundNBT compound) {
         compound.putByte("Color", (byte) this.getBandanaColor().getId());
-        super.writeAdditional(compound);
+        super.addAdditionalSaveData(compound);
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
         this.setBandanaColor(DyeColor.byId(compound.getByte("Color")));
-        super.readAdditional(compound);
+        super.readAdditionalSaveData(compound);
     }
 
     @Override
     protected void onLeashDistance(float distance) {
         super.onLeashDistance(distance);
-        if (!world.isRemote && distance >= 5) {
+        if (!level.isClientSide && distance >= 5) {
             if (isSleeping()) {
-                oldPos = getPositionVec();
+                oldPos = position();
                 alarmedTimer = 200;
             }
-            clearLeashed(true, true);
+            dropLeash(true, true);
         }
     }
 
@@ -296,10 +298,10 @@ public class DumpyEggDrakeEntity extends TameableDragonEntity {
     }
 
     public DyeColor getBandanaColor() {
-        return DyeColor.byId(this.dataManager.get(BANDANA_COLOR));
+        return DyeColor.byId(this.entityData.get(BANDANA_COLOR));
     }
 
     private void setBandanaColor(DyeColor color) {
-        this.dataManager.set(BANDANA_COLOR, (byte) color.getId());
+        this.entityData.set(BANDANA_COLOR, (byte) color.getId());
     }
 }

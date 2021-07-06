@@ -17,31 +17,31 @@ public class WingsItems {
 
     public static final ItemGroup GROUP = new ItemGroup(WingsAndClaws.MOD_ID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(DUMPY_EGG_DRAKE_EGG.get());
         }
     };
 
-    public static final RegistryObject<Item> GLISTENING_GLACIAL_SHRIMP = REGISTRY.register("glistening_glacial_shrimp", () -> new HasEffectItem(new Item.Properties().group(GROUP)));
+    public static final RegistryObject<Item> GLISTENING_GLACIAL_SHRIMP = REGISTRY.register("glistening_glacial_shrimp", () -> new HasEffectItem(new Item.Properties().tab(GROUP)));
     //Items
-    public static final RegistryObject<Item> DRAGON_MEAT = REGISTRY.register("dragon_meat", () -> new Item(new Item.Properties().food(WingsFoods.DRAGON_MEAT).group(GROUP)));
-    public static final RegistryObject<Item> COOKED_DRAGON_MEAT = REGISTRY.register("cooked_dragon_meat", () -> new Item(new Item.Properties().food(WingsFoods.COOKED_DRAGON_MEAT).group(GROUP)));
-    public static final RegistryObject<Item> GLACIAL_SHRIMP = REGISTRY.register("glacial_shrimp", () -> new Item(new Item.Properties().group(GROUP)));
+    public static final RegistryObject<Item> DRAGON_MEAT = REGISTRY.register("dragon_meat", () -> new Item(new Item.Properties().food(WingsFoods.DRAGON_MEAT).tab(GROUP)));
+    public static final RegistryObject<Item> COOKED_DRAGON_MEAT = REGISTRY.register("cooked_dragon_meat", () -> new Item(new Item.Properties().food(WingsFoods.COOKED_DRAGON_MEAT).tab(GROUP)));
+    public static final RegistryObject<Item> GLACIAL_SHRIMP = REGISTRY.register("glacial_shrimp", () -> new Item(new Item.Properties().tab(GROUP)));
     public static final RegistryObject<Item> ICY_PLOWHEAD_EGG = REGISTRY.register("icy_plowhead_egg", PlowheadEggItem::new);
     public static final RegistryObject<Item> DUMPY_EGG_DRAKE_EGG = REGISTRY.register("dumpy_egg_drake_egg", () -> new NestEggItem(WingsBlocks.DED_NEST.get()));
     public static final RegistryObject<Item> MIMANGO_EGG = REGISTRY.register("mimango_egg", MimangoEggItem::new);
     public static final RegistryObject<Item> HATCHET_BEAK_EGG = REGISTRY.register("hatchet_beak_egg", () -> new NestEggItem(WingsBlocks.HB_NEST.get()));
-    public static final RegistryObject<Item> HATCHET_BEAK_CREST = REGISTRY.register("hatchet_beak_crest", () -> new Item(new Item.Properties().group(GROUP)));
-    public static final RegistryObject<Item> CREST_HATCHET = REGISTRY.register("crest_hatchet", () -> new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().group(GROUP)));
-    public static final RegistryObject<Item> ICY_PLOWHEAD_SHIELD = REGISTRY.register("icy_plowhead_shield", () -> new ShieldItem(new Item.Properties().group(GROUP).maxDamage(678).setISTER(() -> WingsISTER::get)));
+    public static final RegistryObject<Item> HATCHET_BEAK_CREST = REGISTRY.register("hatchet_beak_crest", () -> new Item(new Item.Properties().tab(GROUP)));
+    public static final RegistryObject<Item> CREST_HATCHET = REGISTRY.register("crest_hatchet", () -> new AxeItem(ItemTier.DIAMOND, 5.0F, -3.0F, new Item.Properties().tab(GROUP)));
+    public static final RegistryObject<Item> ICY_PLOWHEAD_SHIELD = REGISTRY.register("icy_plowhead_shield", () -> new ShieldItem(new Item.Properties().tab(GROUP).durability(678).setISTER(() -> WingsISTER::get)));
     public static final RegistryObject<Item> HORN_HORN = REGISTRY.register("horn_horn", HornHornItem::new);
-    public static final RegistryObject<Item> PLOWHEAD_HORN = REGISTRY.register("plowhead_horn", () -> new Item(new Item.Properties().group(GROUP)));
-    public static final RegistryObject<Item> SUGARSCALE_BUCKET = REGISTRY.register("sugarscale_bucket", () -> new FishBucketItem(WingsEntities.SUGARSCALE::get, () -> Fluids.WATER, new Item.Properties().group(GROUP).maxStackSize(1)));
-    public static final RegistryObject<Item> SUGARSCALE = REGISTRY.register("sugarscale", () -> new Item(new Item.Properties().group(GROUP)));
-    public static final RegistryObject<Item> GOLDEN_MANGO = REGISTRY.register("golden_mango", () -> new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).group(GROUP)));
-    public static final RegistryObject<Item> MIMANGO = REGISTRY.register("mimango", () -> new Item(new Item.Properties().food(WingsFoods.MIMANGO).group(GROUP)));
-    public static final RegistryObject<Item> FRIED_MIMANGO = REGISTRY.register("fried_mimango", () -> new Item(new Item.Properties().food(WingsFoods.FRIED_MIMANGO).group(GROUP)));
-    public static final RegistryObject<Item> BREADED_MIMANGO = REGISTRY.register("breaded_mimango", () -> new Item(new Item.Properties().food(WingsFoods.BREADED_MIMANGO).group(GROUP)));
+    public static final RegistryObject<Item> PLOWHEAD_HORN = REGISTRY.register("plowhead_horn", () -> new Item(new Item.Properties().tab(GROUP)));
+    public static final RegistryObject<Item> SUGARSCALE_BUCKET = REGISTRY.register("sugarscale_bucket", () -> new FishBucketItem(WingsEntities.SUGARSCALE::get, () -> Fluids.WATER, new Item.Properties().tab(GROUP).stacksTo(1)));
+    public static final RegistryObject<Item> SUGARSCALE = REGISTRY.register("sugarscale", () -> new Item(new Item.Properties().tab(GROUP)));
+    public static final RegistryObject<Item> GOLDEN_MANGO = REGISTRY.register("golden_mango", () -> new Item(new Item.Properties().food(WingsFoods.GOLDEN_MANGO).tab(GROUP)));
+    public static final RegistryObject<Item> MIMANGO = REGISTRY.register("mimango", () -> new Item(new Item.Properties().food(WingsFoods.MIMANGO).tab(GROUP)));
+    public static final RegistryObject<Item> FRIED_MIMANGO = REGISTRY.register("fried_mimango", () -> new Item(new Item.Properties().food(WingsFoods.FRIED_MIMANGO).tab(GROUP)));
+    public static final RegistryObject<Item> BREADED_MIMANGO = REGISTRY.register("breaded_mimango", () -> new Item(new Item.Properties().food(WingsFoods.BREADED_MIMANGO).tab(GROUP)));
     public static final RegistryObject<Item> MUSIC_DISC_BLISSFUL_DUNES = registerMusicDisc("music_disc_blissful_dunes",  WingsSounds.MUSIC_BLISSFUL_DUNES);
     public static final RegistryObject<Item> MUSIC_DISC_ASHEN_LANDS = registerMusicDisc("music_disc_ashen_lands",  WingsSounds.MUSIC_ASHEN_LANDS);
     public static final RegistryObject<Item> MUSIC_DISC_ISLAND_HOPPERS = registerMusicDisc("music_disc_island_hoppers",  WingsSounds.MUSIC_ISLAND_HOPPERS);
@@ -58,12 +58,12 @@ public class WingsItems {
 
     //Custom block items
     static {
-        REGISTRY.register("ded_nest", () -> new BlockItem(WingsBlocks.DED_NEST.get(), new Item.Properties().group(GROUP).setISTER(() -> WingsISTER::get)));
-        REGISTRY.register("hb_nest", () -> new BlockItem(WingsBlocks.HB_NEST.get(), new Item.Properties().group(GROUP).setISTER(() -> WingsISTER::get)));
+        REGISTRY.register("ded_nest", () -> new BlockItem(WingsBlocks.DED_NEST.get(), new Item.Properties().tab(GROUP).setISTER(() -> WingsISTER::get)));
+        REGISTRY.register("hb_nest", () -> new BlockItem(WingsBlocks.HB_NEST.get(), new Item.Properties().tab(GROUP).setISTER(() -> WingsISTER::get)));
         //REGISTRY.register("golden_mimango_statue", new BlockItem(WingsBlocks.GOLDEN_MIMANGO_STATUE, new Item.Properties().group(GROUP)));
     }
 
     private static RegistryObject<Item> registerMusicDisc(String name, Supplier<SoundEvent> soundEventSupplier) {
-        return REGISTRY.register(name, () -> new MusicDiscItem(1, soundEventSupplier, new Item.Properties().group(GROUP).maxStackSize(1).rarity(Rarity.RARE)));
+        return REGISTRY.register(name, () -> new MusicDiscItem(1, soundEventSupplier, new Item.Properties().tab(GROUP).stacksTo(1).rarity(Rarity.RARE)));
     }
 }

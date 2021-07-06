@@ -12,12 +12,12 @@ import net.minecraft.world.World;
 
 public class PlowheadEggItem extends DragonEggItem {
     public PlowheadEggItem() {
-        super(new Item.Properties().group(WingsItems.GROUP));
+        super(new Item.Properties().tab(WingsItems.GROUP));
     }
 
     @Override
     protected Entity createEgg(ItemStack stack, BlockPos pos, Direction direction, World world, PlayerEntity player) {
-        pos = pos.offset(direction);
+        pos = pos.relative(direction);
         return new PlowheadEggEntity(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
     }
 }

@@ -37,27 +37,27 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class SongvernEntity extends TameableDragonEntity implements IFlyingAnimal {
-    private static final DataParameter<Integer> VARIANT = EntityDataManager.createKey(SongvernEntity.class, DataSerializers.VARINT);
-    private static final EntityPredicate CAN_BREED = new EntityPredicate().setDistance(64.0D).allowInvulnerable().allowFriendlyFire().setLineOfSiteRequired();
+    private static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(SongvernEntity.class, DataSerializers.INT);
+    private static final EntityPredicate CAN_BREED = new EntityPredicate().range(64.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
     private SongvernEntity groupLeader;
     private int groupSize = 1;
 
     public SongvernEntity(EntityType<? extends SongvernEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new FlyingMovementController(this, 10, true);
-        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
+        this.moveControl = new FlyingMovementController(this, 10, true);
+        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
     }
 
     public static AttributeModifierMap.MutableAttribute registerSongvernAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.FLYING_SPEED, 0.8).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5).createMutableAttribute(Attributes.MAX_HEALTH, 10);
+        return MobEntity.createMobAttributes().add(Attributes.FLYING_SPEED, 0.8).add(Attributes.MOVEMENT_SPEED, 0.5).add(Attributes.MAX_HEALTH, 10);
     }
 
     @Override
-    protected PathNavigator createNavigator(World worldIn) {
+    protected PathNavigator createNavigation(World worldIn) {
         FlyingPathNavigator flyingpathnavigator = new FlyingPathNavigator(this, worldIn);
         flyingpathnavigator.setCanOpenDoors(false);
-        flyingpathnavigator.setCanSwim(true);
-        flyingpathnavigator.setCanEnterDoors(true);
+        flyingpathnavigator.setCanFloat(true);
+        flyingpathnavigator.setCanPassDoors(true);
         return flyingpathnavigator;
     }
 
@@ -68,20 +68,20 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new BreedGoal(this, 1) {
             @Override
-            public boolean shouldExecute() {
-                return this.animal.isInLove() && (this.targetMate = this.getNearbyMate()) != null;
+            public boolean canUse() {
+                return this.animal.isInLove() && (this.partner = this.getNearbyMate()) != null;
             }
 
             @Nullable
             private AnimalEntity getNearbyMate() {
-                List<AnimalEntity> list = this.world.getTargettableEntitiesWithinAABB(SongvernEntity.class, CAN_BREED, this.animal, this.animal.getBoundingBox().grow(64.0D));
+                List<AnimalEntity> list = this.level.getNearbyEntities(SongvernEntity.class, CAN_BREED, this.animal, this.animal.getBoundingBox().inflate(64.0D));
                 double d0 = Double.MAX_VALUE;
                 AnimalEntity animalentity = null;
 
                 for (AnimalEntity animalentity1 : list) {
-                    if (this.animal.canMateWith(animalentity1) && this.animal.getDistanceSq(animalentity1) < d0) {
+                    if (this.animal.canMate(animalentity1) && this.animal.distanceToSqr(animalentity1) < d0) {
                         animalentity = animalentity1;
-                        d0 = this.animal.getDistanceSq(animalentity1);
+                        d0 = this.animal.distanceToSqr(animalentity1);
                     }
                 }
 
@@ -95,29 +95,29 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(VARIANT, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(VARIANT, 0);
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT);
+        return this.entityData.get(VARIANT);
     }
 
     private void setVariant(int variant) {
-        this.dataManager.set(VARIANT, variant);
+        this.entityData.set(VARIANT, variant);
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.WHEAT_SEEDS;
     }
 
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         if (spawnDataIn == null) {
-            spawnDataIn = new GroupData(this, rand.nextInt(15));
+            spawnDataIn = new GroupData(this, random.nextInt(15));
         } else {
             this.setGroupLeaader(((GroupData)spawnDataIn).groupLeader);
         }
@@ -128,23 +128,23 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source == DamageSource.IN_WALL && !world.getBlockState(getPosition()).isSolid()) {
-            setMotion(getMotion().add(0, -0.05, 0));
+    public boolean hurt(DamageSource source, float amount) {
+        if (source == DamageSource.IN_WALL && !level.getBlockState(blockPosition()).canOcclude()) {
+            setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
             return false;
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("Variant", getVariant());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         setVariant(compound.getInt("Variant"));
     }
 
@@ -168,10 +168,10 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
 
     public void tick() {
         super.tick();
-        if (isSitting()) setMotion(getMotion().add(0, -0.05, 0));
+        if (isOrderedToSit()) setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
         else {
-            if (this.isGroupLeader() && this.world.rand.nextInt(200) == 1) {
-                List<SongvernEntity> list = this.world.getEntitiesWithinAABB(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
+            if (this.isGroupLeader() && this.level.random.nextInt(200) == 1) {
+                List<SongvernEntity> list = this.level.getEntitiesOfClass(this.getClass(), this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
                 if (list.size() <= 1) {
                     this.groupSize = 1;
                 }
@@ -180,50 +180,50 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     public boolean isFlying() {
-        return !this.onGround && !world.getBlockState(new BlockPos(getPosX() + 0.5, getPosY() - 0.5, getPosZ() + 0.5)).isSolid();
+        return !this.onGround && !level.getBlockState(new BlockPos(getX() + 0.5, getY() - 0.5, getZ() + 0.5)).canOcclude();
     }
 
-    public boolean onLivingFall(float distance, float damageMultiplier) {
+    public boolean causeFallDamage(float distance, float damageMultiplier) {
         return false;
     }
 
-    public boolean canBePushed() {
+    public boolean isPushable() {
         return true;
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote) {
-            if (isTamed()) {
-                if (player.isSneaking()) {
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!level.isClientSide) {
+            if (isTame()) {
+                if (player.isShiftKeyDown()) {
                     CompoundNBT compoundnbt = new CompoundNBT();
-                    compoundnbt.putString("id", this.getEntityString());
-                    this.writeWithoutTypeId(compoundnbt);
-                    if (player.getLeftShoulderEntity().isEmpty() && player.addShoulderEntity(compoundnbt)) {
+                    compoundnbt.putString("id", this.getEncodeId());
+                    this.saveWithoutId(compoundnbt);
+                    if (player.getShoulderEntityLeft().isEmpty() && player.setEntityOnShoulder(compoundnbt)) {
                         this.remove();
                     }
                 } else {
-                    this.navigator.clearPath();
-                    this.setSleeping(true);
+                    this.navigation.stop();
+                    this.setInSittingPose(true);
                 }
                 return ActionResultType.SUCCESS;
             } else if (stack.getItem() == Items.HONEYCOMB) {
-                if (!player.abilities.isCreativeMode) stack.shrink(1);
-                this.setTamedBy(player);
-                this.setAttackTarget(null);
-                this.world.setEntityState(this, (byte) 7);
+                if (!player.abilities.instabuild) stack.shrink(1);
+                this.tame(player);
+                this.setTarget(null);
+                this.level.broadcastEntityEvent(this, (byte) 7);
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     public void setGroup(Stream<SongvernEntity> stream) {
-        stream.limit(this.getMaxSpawnedInChunk() - this.groupSize).filter(entity -> entity != this).forEach(entity -> entity.setGroupLeaader(this));
+        stream.limit(this.getMaxSpawnClusterSize() - this.groupSize).filter(entity -> entity != this).forEach(entity -> entity.setGroupLeaader(this));
     }
 
     public SongvernEntity setGroupLeaader(SongvernEntity groupLeaderIn) {
@@ -250,7 +250,7 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     public boolean canGroupGrow() {
-        return this.isGroupLeader() && this.groupSize < this.getMaxSpawnedInChunk();
+        return this.isGroupLeader() && this.groupSize < this.getMaxSpawnClusterSize();
     }
 
     public boolean isGroupLeader() {
@@ -258,12 +258,12 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
     }
 
     public boolean inRangeOfGroupLeader() {
-        return this.getDistanceSq(this.groupLeader) <= 121.0D;
+        return this.distanceToSqr(this.groupLeader) <= 121.0D;
     }
 
     public void moveToGroupLeader() {
         if (this.hasGroupLeader()) {
-            this.getNavigator().tryMoveToEntityLiving(this.groupLeader, 1.0D);
+            this.getNavigation().moveTo(this.groupLeader, 1.0D);
         }
     }
 
@@ -288,10 +288,10 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
         }
 
         protected int getCooldown(SongvernEntity taskOwnerIn) {
-            return 200 + taskOwnerIn.getRNG().nextInt(200) % 20;
+            return 200 + taskOwnerIn.getRandom().nextInt(200) % 20;
         }
 
-        public boolean shouldExecute() {
+        public boolean canUse() {
             if (this.taskOwner.isGroupLeader()) {
                 return false;
             } else if (this.taskOwner.hasGroupLeader()) {
@@ -302,22 +302,22 @@ public class SongvernEntity extends TameableDragonEntity implements IFlyingAnima
             } else {
                 this.cooldown = this.getCooldown(this.taskOwner);
                 Predicate<SongvernEntity> predicate = (entity) -> entity.canGroupGrow() || !entity.hasGroupLeader();
-                List<SongvernEntity> list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), this.taskOwner.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
+                List<SongvernEntity> list = this.taskOwner.level.getEntitiesOfClass(this.taskOwner.getClass(), this.taskOwner.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), predicate);
                 SongvernEntity songvernEntity = list.stream().filter(SongvernEntity::canGroupGrow).findAny().orElse(this.taskOwner);
                 songvernEntity.setGroup(list.stream().filter(entity -> !entity.hasGroupLeader()));
                 return this.taskOwner.hasGroupLeader();
             }
         }
 
-        public boolean shouldContinueExecuting() {
+        public boolean canContinueToUse() {
             return this.taskOwner.hasGroupLeader() && this.taskOwner.inRangeOfGroupLeader();
         }
 
-        public void startExecuting() {
+        public void start() {
             this.navigateTimer = 0;
         }
 
-        public void resetTask() {
+        public void stop() {
             this.taskOwner.leaveGroup();
         }
 

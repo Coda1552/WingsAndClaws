@@ -44,9 +44,9 @@ public class TamePointsManager extends JsonReloadListener {
                     String name = reader.nextName();
                     int value = reader.nextInt();
                     if (name.startsWith("#")) {
-                        ITag<Item> items = ItemTags.getCollection().get(new ResourceLocation(name.replace("#", "")));
+                        ITag<Item> items = ItemTags.getAllTags().getTag(new ResourceLocation(name.replace("#", "")));
                         if (items != null) {
-                            for (Item element : items.getAllElements()) {
+                            for (Item element : items.getValues()) {
                                 pointsFromItem.put(element, value);
                             }
                         }

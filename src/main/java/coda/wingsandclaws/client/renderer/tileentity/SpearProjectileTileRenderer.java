@@ -18,9 +18,9 @@ public class SpearProjectileTileRenderer extends ItemStackTileEntityRenderer {
     private final SpearProjectileTileModel model = new SpearProjectileTileModel();
 
     @Override
-    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-        matrixStack.push();
-        model.render(matrixStack, ItemRenderer.getBuffer(buffer, model.getRenderType(TEXTURE), false, stack.hasEffect()), combinedLight, combinedOverlay, 1, 1, 1, 1);
-        matrixStack.pop();
+    public void renderByItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        matrixStack.pushPose();
+        model.renderToBuffer(matrixStack, ItemRenderer.getFoilBuffer(buffer, model.renderType(TEXTURE), false, stack.hasFoil()), combinedLight, combinedOverlay, 1, 1, 1, 1);
+        matrixStack.popPose();
     }
 }

@@ -31,40 +31,40 @@ import coda.wingsandclaws.WingsAndClaws;
 
 public class STSpearItem extends TridentItem {
     public STSpearItem() {
-        super(new Item.Properties().group(WingsItems.GROUP).maxDamage(100).setISTER(() -> SpearProjectileTileRenderer::new));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemModelsProperties.registerProperty(this, new ResourceLocation(WingsAndClaws.MOD_ID, "throwing"), (stack, world, entity) -> entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack ? 1.0F : 0.0F));
+        super(new Item.Properties().tab(WingsItems.GROUP).durability(100).setISTER(() -> SpearProjectileTileRenderer::new));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ItemModelsProperties.register(this, new ResourceLocation(WingsAndClaws.MOD_ID, "throwing"), (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F));
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity playerEntity = (PlayerEntity) entityLiving;
             int i = this.getUseDuration(stack) - timeLeft;
             if (i >= 10) {
-                int j = EnchantmentHelper.getRiptideModifier(stack);
-                if (j <= 0 || playerEntity.isWet()) {
-                    if (!worldIn.isRemote) {
-                        stack.damageItem(1, playerEntity, playerEntity1 -> playerEntity1.sendBreakAnimation(entityLiving.getActiveHand()));
+                int j = EnchantmentHelper.getRiptide(stack);
+                if (j <= 0 || playerEntity.isInWaterOrRain()) {
+                    if (!worldIn.isClientSide) {
+                        stack.hurtAndBreak(1, playerEntity, playerEntity1 -> playerEntity1.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                         if (j == 0) {
                             SpearProjectileEntity spearProjectileEntity = new SpearProjectileEntity(worldIn, playerEntity, stack);
-                            spearProjectileEntity.func_234612_a_(playerEntity, playerEntity.rotationPitch, playerEntity.rotationYaw, 0.0F, 2.5F + (float) j * 0.5F, 1.0F);
-                            if (playerEntity.abilities.isCreativeMode) {
-                                spearProjectileEntity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                            spearProjectileEntity.shootFromRotation(playerEntity, playerEntity.xRot, playerEntity.yRot, 0.0F, 2.5F + (float) j * 0.5F, 1.0F);
+                            if (playerEntity.abilities.instabuild) {
+                                spearProjectileEntity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                             }
 
-                            worldIn.addEntity(spearProjectileEntity);
-                            worldIn.playMovingSound(null, spearProjectileEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                            if (!playerEntity.abilities.isCreativeMode) {
-                                playerEntity.inventory.deleteStack(stack);
+                            worldIn.addFreshEntity(spearProjectileEntity);
+                            worldIn.playSound(null, spearProjectileEntity, SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            if (!playerEntity.abilities.instabuild) {
+                                playerEntity.inventory.removeItem(stack);
                             }
                         }
                     }
                 }
 
-                playerEntity.addStat(Stats.ITEM_USED.get(this));
+                playerEntity.awardStat(Stats.ITEM_USED.get(this));
                 if (j > 0) {
-                    float f7 = playerEntity.rotationYaw;
-                    float f = playerEntity.rotationPitch;
+                    float f7 = playerEntity.yRot;
+                    float f = playerEntity.xRot;
                     double f1 = -Math.sin(Math.toRadians(f7)) * Math.cos(Math.toRadians(f));
                     double f2 = -Math.sin(Math.toRadians(f));
                     double f3 = Math.cos(Math.toRadians(f7)) * Math.cos(Math.toRadians(f));
@@ -73,32 +73,32 @@ public class STSpearItem extends TridentItem {
                     f1 = f1 * (f5 / f4);
                     f2 = f2 * (f5 / f4);
                     f3 = f3 * (f5 / f4);
-                    playerEntity.addVelocity(f1, f2, f3);
-                    playerEntity.startSpinAttack(20);
+                    playerEntity.push(f1, f2, f3);
+                    playerEntity.startAutoSpinAttack(20);
                     if (playerEntity.isOnGround()) {
                         playerEntity.move(MoverType.SELF, new Vector3d(0.0D, 1.1999999, 0.0D));
                     }
                 }
 
-                SoundEvent soundEvent = SoundEvents.ITEM_TRIDENT_RIPTIDE_2;
-                playerEntity.addStat(Stats.ITEM_USED.get(this));
-                worldIn.playMovingSound(null, playerEntity, soundEvent, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                SoundEvent soundEvent = SoundEvents.TRIDENT_RIPTIDE_2;
+                playerEntity.awardStat(Stats.ITEM_USED.get(this));
+                worldIn.playSound(null, playerEntity, soundEvent, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }
         }
     }
 
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
-            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
+            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 6.0D, AttributeModifier.Operation.MULTIPLY_BASE));
         }
 
         return builder.build();
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 }

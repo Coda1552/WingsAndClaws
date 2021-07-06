@@ -21,20 +21,20 @@ public class FlyGoal<T extends TameableDragonEntity> extends Goal {
     public FlyGoal(T creatureIn, Predicate<T> canFly) {
         this.creature = creatureIn;
         this.canFly = canFly;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
-    public boolean shouldExecute() {
-        if (this.creature.isBeingRidden() || canFly != null && !canFly.test(creature)) {
+    public boolean canUse() {
+        if (this.creature.isVehicle() || canFly != null && !canFly.test(creature)) {
             return false;
         } else {
             if (mustUpdate) {
-                if (this.creature.isSitting()) {
+                if (this.creature.isOrderedToSit()) {
                     goToGround();
                     return true;
                 }
 
-                Vector3d vec3d = RandomPositionGenerator.findAirTarget(this.creature, 48, 15, this.creature.getLook(0.0F), ((float) Math.PI / 2F), 12, 6);
+                Vector3d vec3d = RandomPositionGenerator.getAboveLandPos(this.creature, 48, 15, this.creature.getViewVector(0.0F), ((float) Math.PI / 2F), 12, 6);
                 if (vec3d == null) {
                     goToGround();
                 } else {
@@ -51,23 +51,23 @@ public class FlyGoal<T extends TameableDragonEntity> extends Goal {
     }
 
     private void goToGround() {
-        BlockPos height = this.creature.world.getHeight(Heightmap.Type.MOTION_BLOCKING, creature.getPosition());
+        BlockPos height = this.creature.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, creature.blockPosition());
         this.x = height.getX();
         this.y = height.getY();
         this.z = height.getZ();
     }
 
-    public boolean shouldContinueExecuting() {
-        return this.creature.getDistanceSq(x, y, z) > 4 && !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden();
+    public boolean canContinueToUse() {
+        return this.creature.distanceToSqr(x, y, z) > 4 && !this.creature.getNavigation().isDone() && !this.creature.isVehicle();
     }
 
-    public void startExecuting() {
-        this.creature.getNavigator().tryMoveToXYZ(this.x, this.y, this.z, 0.8);
+    public void start() {
+        this.creature.getNavigation().moveTo(this.x, this.y, this.z, 0.8);
     }
 
-    public void resetTask() {
-        super.resetTask();
-        this.creature.getNavigator().clearPath();
+    public void stop() {
+        super.stop();
+        this.creature.getNavigation().stop();
         this.mustUpdate = true;
     }
 }

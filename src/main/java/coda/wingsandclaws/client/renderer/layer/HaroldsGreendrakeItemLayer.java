@@ -19,12 +19,12 @@ public class HaroldsGreendrakeItemLayer extends LayerRenderer<HaroldsGreendrakeE
 
     @Override
     public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, HaroldsGreendrakeEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        final ItemStack item = entitylivingbaseIn.getHeldItemMainhand();
+        final ItemStack item = entitylivingbaseIn.getMainHandItem();
         if (!item.isEmpty()) {
             matrixStack.translate(0, 1.2, -0.6);
-            matrixStack.rotate(Vector3f.XN.rotationDegrees(30));
-            getEntityModel().head.translateRotate(matrixStack);
-            Minecraft.getInstance().getItemRenderer().renderItem(entitylivingbaseIn, item, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, matrixStack, bufferIn, entitylivingbaseIn.world, packedLightIn, OverlayTexture.NO_OVERLAY);
+            matrixStack.mulPose(Vector3f.XN.rotationDegrees(30));
+            getParentModel().head.translateAndRotate(matrixStack);
+            Minecraft.getInstance().getItemRenderer().renderStatic(entitylivingbaseIn, item, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, matrixStack, bufferIn, entitylivingbaseIn.level, packedLightIn, OverlayTexture.NO_OVERLAY);
         }
     }
 }

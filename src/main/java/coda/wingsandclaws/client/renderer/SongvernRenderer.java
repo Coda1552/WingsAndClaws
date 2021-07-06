@@ -16,19 +16,19 @@ public class SongvernRenderer extends MobRenderer<SongvernEntity, SongvernModel>
 
     public SongvernRenderer(EntityRendererManager manager) {
         super(manager, new SongvernModel.Adult(), 0.15f);
-        adult = entityModel;
+        adult = model;
         child = new SongvernModel.Child();
     }
 
     @Override
     public void render(SongvernEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        entityModel = entityIn.isChild() ? child : adult;
+        model = entityIn.isBaby() ? child : adult;
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(SongvernEntity entity) {
-        int variant = entity.isChild() ? 1 : entity.getVariant() + 2;
+    public ResourceLocation getTextureLocation(SongvernEntity entity) {
+        int variant = entity.isBaby() ? 1 : entity.getVariant() + 2;
         ResourceLocation texture = TEXTURES[variant - 1];
         if (texture == null) {
             TEXTURES[variant - 1] = texture = new ResourceLocation(WingsAndClaws.MOD_ID, "textures/entity/songvern/songvern_" + variant + ".png");

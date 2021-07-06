@@ -17,9 +17,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import coda.wingsandclaws.WingsAndClaws;
 
+import net.minecraft.item.Item.Properties;
+
 public class DragonEggItem extends Item {
     public DragonEggItem() {
-        this(new Item.Properties().group(WingsItems.GROUP));
+        this(new Item.Properties().tab(WingsItems.GROUP));
     }
 
     public DragonEggItem(Properties properties) {
@@ -27,27 +29,27 @@ public class DragonEggItem extends Item {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
 
         if (player != null) {
-            ItemStack itemstack = player.getHeldItem(context.getHand());
+            ItemStack itemstack = player.getItemInHand(context.getHand());
 
-            World world = context.getWorld();
-            if (!world.isRemote) {
-                Entity entity = createEgg(itemstack, context.getPos(), context.getFace(), world, player);
-                if (entity == null) return super.onItemUse(context);
-                if (!player.abilities.isCreativeMode) {
+            World world = context.getLevel();
+            if (!world.isClientSide) {
+                Entity entity = createEgg(itemstack, context.getClickedPos(), context.getClickedFace(), world, player);
+                if (entity == null) return super.useOn(context);
+                if (!player.abilities.instabuild) {
                     itemstack.shrink(1);
                 }
-                world.addEntity(entity);
+                world.addFreshEntity(entity);
             }
 
-            player.addStat(Stats.ITEM_USED.get(this));
+            player.awardStat(Stats.ITEM_USED.get(this));
             return ActionResultType.SUCCESS;
         }
 
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     protected Entity createEgg(ItemStack stack, BlockPos pos, Direction direction, World world, PlayerEntity player) {
@@ -57,7 +59,7 @@ public class DragonEggItem extends Item {
             EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(WingsAndClaws.MOD_ID, nbt.getString("type")));
             if (type != null) {
                 /*ProjectileItemEntity entity = new DragonEggEntity(type, world, player);
-                entity.func_213884_b(stack);
+                entity.setItem(stack);
                 entity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
                 world.playSound(null, player.getPosition(), SoundEvents.ENTITY_EGG_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
                 return entity;*/

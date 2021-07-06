@@ -32,7 +32,7 @@ import net.minecraftforge.eventbus.api.Event;
 import java.util.Random;
 
 public class HaroldsGreendrakeEntity extends AnimalEntity {
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(HaroldsGreendrakeEntity.class, DataSerializers.ITEMSTACK);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(HaroldsGreendrakeEntity.class, DataSerializers.ITEM_STACK);
 
     public HaroldsGreendrakeEntity(EntityType<? extends HaroldsGreendrakeEntity> type, World worldIn) {
         super(type, worldIn);
@@ -42,7 +42,7 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 2.0D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.fromItems(Items.POTATO), false));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25D, Ingredient.of(Items.POTATO), false));
         this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.25D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
@@ -50,20 +50,20 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        dataManager.register(ITEM, ItemStack.EMPTY);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(ITEM, ItemStack.EMPTY);
     }
 
     public static boolean canHaroldsSpawn(EntityType<? extends HaroldsGreendrakeEntity> animal, IWorld worldIn, SpawnReason reason, BlockPos pos, Random random) {
-        return worldIn.getBlockState(pos.down()).getBlock() == Blocks.GRASS_BLOCK && worldIn.getLightSubtracted(pos, 0) > 4;
+        return worldIn.getBlockState(pos.below()).getBlock() == Blocks.GRASS_BLOCK && worldIn.getRawBrightness(pos, 0) > 4;
     }
 
     public static AttributeModifierMap.MutableAttribute registerGreendrakeAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1883).createMutableAttribute(Attributes.MAX_HEALTH, 12);
+        return MobEntity.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.1883).add(Attributes.MAX_HEALTH, 12);
     }
 
-    public boolean isBreedingItem(ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return stack.getItem() == Items.POTATO;
     }
 
@@ -80,39 +80,39 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
     }
 
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.ENTITY_COW_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.COW_STEP, 0.15F, 1.0F);
     }
 
     protected float getSoundVolume() {
         return 0.4F;
     }
 
-    public boolean isPotionApplicable(EffectInstance effect) {
-        if (effect.getPotion() == Effects.POISON) {
+    public boolean canBeAffected(EffectInstance effect) {
+        if (effect.getEffect() == Effects.POISON) {
             PotionEvent.PotionApplicableEvent event = new PotionEvent.PotionApplicableEvent(this, effect);
             MinecraftForge.EVENT_BUS.post(event);
             return event.getResult() == Event.Result.ALLOW;
         }
-        return super.isPotionApplicable(effect);
+        return super.canBeAffected(effect);
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slot, ItemStack stack) {
+    public void setItemSlot(EquipmentSlotType slot, ItemStack stack) {
         if (slot == EquipmentSlotType.MAINHAND) {
-            dataManager.set(ITEM, stack);
+            entityData.set(ITEM, stack);
         } else {
-            super.setItemStackToSlot(slot, stack);
+            super.setItemSlot(slot, stack);
         }
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slot) {
-        return slot == EquipmentSlotType.MAINHAND ? dataManager.get(ITEM) : super.getItemStackFromSlot(slot);
+    public ItemStack getItemBySlot(EquipmentSlotType slot) {
+        return slot == EquipmentSlotType.MAINHAND ? entityData.get(ITEM) : super.getItemBySlot(slot);
     }
 
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         float maxHealth = this.getMaxHealth();
         float health = this.getHealth();
         if (stack.getItem() == Items.POISONOUS_POTATO) {
@@ -121,10 +121,10 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
                     stack.shrink(1);
                 }
                 heal(4);
-                double x = this.rand.nextGaussian() * 0.02D;
-                double y = this.rand.nextGaussian() * 0.02D;
-                double z = this.rand.nextGaussian() * 0.02D;
-                this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), x, y, z);
+                double x = this.random.nextGaussian() * 0.02D;
+                double y = this.random.nextGaussian() * 0.02D;
+                double z = this.random.nextGaussian() * 0.02D;
+                this.level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), x, y, z);
                 return ActionResultType.SUCCESS;
             }
         } else if (stack.getItem() == Items.APPLE) {
@@ -133,16 +133,16 @@ public class HaroldsGreendrakeEntity extends AnimalEntity {
             }
             final ItemStack apple = stack.copy();
             apple.setCount(1);
-            setHeldItem(Hand.MAIN_HAND, apple);
+            setItemInHand(Hand.MAIN_HAND, apple);
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
-    public HaroldsGreendrakeEntity func_241840_a(ServerWorld serverWorld, AgeableEntity ageable) {
+    public HaroldsGreendrakeEntity getBreedOffspring(ServerWorld serverWorld, AgeableEntity ageable) {
         return WingsEntities.HAROLDS_GREENDRAKE.get().create(serverWorld);
     }
 
     protected float getStandingEyeHeight(Pose pose, EntitySize size) {
-        return this.isChild() ? size.height * 0.95F : 0.7F;
+        return this.isBaby() ? size.height * 0.95F : 0.7F;
     }
 }

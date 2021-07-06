@@ -29,34 +29,34 @@ public abstract class SongvernModel extends SegmentedModel<SongvernEntity> {
 
 		@Override
 		protected void setAngles() {
-			this.textureWidth = 32;
-			this.textureHeight = 32;
+			this.texWidth = 32;
+			this.texHeight = 32;
 			this.rightWing = new ModelRenderer(this, 0, 12);
-			this.rightWing.setRotationPoint(-2.0F, -1.5F, 1.0F);
+			this.rightWing.setPos(-2.0F, -1.5F, 1.0F);
 			this.rightWing.addBox(-5.0F, 0.0F, -3.0F, 5.0F, 0.0F, 5.0F, 0.0F, 0.0F, 0.0F);
 			this.leftWing = new ModelRenderer(this, 0, 12);
 			this.leftWing.mirror = true;
-			this.leftWing.setRotationPoint(2.0F, -1.5F, 1.0F);
+			this.leftWing.setPos(2.0F, -1.5F, 1.0F);
 			this.leftWing.addBox(0.0F, 0.0F, -3.0F, 5.0F, 0.0F, 5.0F, 0.0F, 0.0F, 0.0F);
 			this.rightLeg = new ModelRenderer(this, 0, 0);
-			this.rightLeg.setRotationPoint(-2.0F, -0.5F, 2.5F);
+			this.rightLeg.setPos(-2.0F, -0.5F, 2.5F);
 			this.rightLeg.addBox(-1.0F, 0.0F, -1.5F, 1.0F, 3.0F, 2.0F, 0.0F, 0.0F, 0.0F);
 			this.leftLeg = new ModelRenderer(this, 0, 0);
 			this.leftLeg.mirror = true;
-			this.leftLeg.setRotationPoint(2.0F, -0.5F, 2.5F);
+			this.leftLeg.setPos(2.0F, -0.5F, 2.5F);
 			this.leftLeg.addBox(0.0F, 0.0F, -1.5F, 1.0F, 3.0F, 2.0F, 0.0F, 0.0F, 0.0F);
 			this.body = new ModelRenderer(this, 0, 0);
-			this.body.setRotationPoint(0.0F, 21.5F, 0.0F);
+			this.body.setPos(0.0F, 21.5F, 0.0F);
 			this.body.addBox(-2.0F, -1.5F, -5.0F, 4.0F, 3.0F, 9.0F, 0.0F, 0.0F, 0.0F);
 			this.tail = new ModelRenderer(this, 9, 17);
-			this.tail.setRotationPoint(0.0F, -1.0F, 4.0F);
+			this.tail.setPos(0.0F, -1.0F, 4.0F);
 			this.tail.addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 6.0F, 0.0F, 0.0F, 0.0F);
 			this.outerRightWing = new ModelRenderer(this, 10, 12);
-			this.outerRightWing.setRotationPoint(-5.0F, 0.0F, -1.0F);
+			this.outerRightWing.setPos(-5.0F, 0.0F, -1.0F);
 			this.outerRightWing.addBox(-5.0F, 0.0F, -2.0F, 5.0F, 0.0F, 5.0F, 0.0F, 0.0F, 0.0F);
 			this.outerLeftWing = new ModelRenderer(this, 10, 12);
 			this.outerLeftWing.mirror = true;
-			this.outerLeftWing.setRotationPoint(5.0F, 0.0F, -1.0F);
+			this.outerLeftWing.setPos(5.0F, 0.0F, -1.0F);
 			this.outerLeftWing.addBox(0.0F, 0.0F, -2.0F, 5.0F, 0.0F, 5.0F, 0.0F, 0.0F, 0.0F);
 			this.body.addChild(this.rightWing);
 			this.body.addChild(this.leftWing);
@@ -71,72 +71,72 @@ public abstract class SongvernModel extends SegmentedModel<SongvernEntity> {
 	public static class Child extends SongvernModel {
 		@Override
 		protected void setAngles() {
-			textureWidth = 32;
-			textureHeight = 16;
+			texWidth = 32;
+			texHeight = 16;
 
 			body = new ModelRenderer(this);
-			body.setRotationPoint(0.0F, 22.0F, -1.0F);
-			body.setTextureOffset(0, 0).addBox(-1.5F, -1.5F, -3.0F, 3.0F, 3.0F, 6.0F, 0.0F, false);
+			body.setPos(0.0F, 22.0F, -1.0F);
+			body.texOffs(0, 0).addBox(-1.5F, -1.5F, -3.0F, 3.0F, 3.0F, 6.0F, 0.0F, false);
 
 			leftWing = new ModelRenderer(this);
-			leftWing.setRotationPoint(-1.5F, 0.0F, -0.5F);
+			leftWing.setPos(-1.5F, 0.0F, -0.5F);
 			body.addChild(leftWing);
-			leftWing.setTextureOffset(4, 9).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 0.0F, 2.0F, 0.0F, true);
+			leftWing.texOffs(4, 9).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 0.0F, 2.0F, 0.0F, true);
 
 			rightWing = new ModelRenderer(this);
-			rightWing.setRotationPoint(1.5F, 0.0F, -0.5F);
+			rightWing.setPos(1.5F, 0.0F, -0.5F);
 			body.addChild(rightWing);
-			rightWing.setTextureOffset(4, 9).addBox(0.0F, 0.0F, 0.0F, 4.0F, 0.0F, 2.0F, 0.0F, false);
+			rightWing.texOffs(4, 9).addBox(0.0F, 0.0F, 0.0F, 4.0F, 0.0F, 2.0F, 0.0F, false);
 
 			tail = new ModelRenderer(this);
-			tail.setRotationPoint(0.0F, -1.0F, 3.0F);
+			tail.setPos(0.0F, -1.0F, 3.0F);
 			body.addChild(tail);
-			tail.setTextureOffset(0, 9).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 4.0F, 0.0F, false);
+			tail.texOffs(0, 9).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 1.0F, 4.0F, 0.0F, false);
 
 			leftLeg = new ModelRenderer(this);
-			leftLeg.setRotationPoint(-1.5F, 0.0F, 1.5F);
+			leftLeg.setPos(-1.5F, 0.0F, 1.5F);
 			body.addChild(leftLeg);
-			leftLeg.setTextureOffset(0, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
+			leftLeg.texOffs(0, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
 
 			rightLeg = new ModelRenderer(this);
-			rightLeg.setRotationPoint(1.5F, 0.0F, 1.5F);
+			rightLeg.setPos(1.5F, 0.0F, 1.5F);
 			body.addChild(rightLeg);
-			rightLeg.setTextureOffset(0, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
+			rightLeg.texOffs(0, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
 		}
 	}
 
 	@Override
-	public void setRotationAngles(SongvernEntity entity, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(SongvernEntity entity, float f, float f1, float ageInTicks, float netHeadYaw, float headPitch){
 		float speed = 1.0f;
 		float degree = 1.0f;
 		if (entity.isFlying()) {
-			this.body.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.2F * f1 + 0.1F;
-			this.leftWing.rotateAngleZ = MathHelper.cos(f * speed * 0.4F) * degree * 1.2F * f1;
+			this.body.xRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.2F * f1 + 0.1F;
+			this.leftWing.zRot = MathHelper.cos(f * speed * 0.4F) * degree * 1.2F * f1;
 			//this.outerLeftWing.rotateAngleZ = MathHelper.cos(f * speed * 0.4F) * degree * 1.5F * f1;
-			this.rightWing.rotateAngleZ = MathHelper.cos(f * speed * 0.4F) * degree * -1.2F * f1;
+			this.rightWing.zRot = MathHelper.cos(f * speed * 0.4F) * degree * -1.2F * f1;
 			//this.outerRightWing.rotateAngleZ = MathHelper.cos(f * speed * 0.4F) * degree * -1.5F * f1;
-			this.tail.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.7F * f1 - 0.1F;
-			this.leftLeg.rotateAngleX = MathHelper.cos(f1 + 0.3F);
-			this.rightLeg.rotateAngleX = MathHelper.cos(f1 + 0.3F);
+			this.tail.xRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.7F * f1 - 0.1F;
+			this.leftLeg.xRot = MathHelper.cos(f1 + 0.3F);
+			this.rightLeg.xRot = MathHelper.cos(f1 + 0.3F);
 		} else {
-			this.body.rotateAngleX = 0;
-			this.leftWing.rotateAngleZ = 0;
-			this.rightWing.rotateAngleZ = 0;
-			this.tail.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.4F * f1;
-			this.tail.rotateAngleX = MathHelper.cos(f1 - 0.3F);
-			this.leftLeg.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * 0.6F * f1;
-			this.rightLeg.rotateAngleX = MathHelper.cos(f * speed * 0.4F) * degree * -0.6F * f1;
-			this.leftWing.rotateAngleZ = MathHelper.cos(f1 + 0.92F);
+			this.body.xRot = 0;
+			this.leftWing.zRot = 0;
+			this.rightWing.zRot = 0;
+			this.tail.yRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.4F * f1;
+			this.tail.xRot = MathHelper.cos(f1 - 0.3F);
+			this.leftLeg.xRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.6F * f1;
+			this.rightLeg.xRot = MathHelper.cos(f * speed * 0.4F) * degree * -0.6F * f1;
+			this.leftWing.zRot = MathHelper.cos(f1 + 0.92F);
 //			this.outterLeftWing.rotateAngleZ = MathHelper.cos() *  * f1 - 2.0F;
-			this.leftWing.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
-			this.rightWing.rotateAngleY = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
-			this.rightWing.rotateAngleZ = MathHelper.cos(f1 - 0.92F);
+			this.leftWing.yRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
+			this.rightWing.yRot = MathHelper.cos(f * speed * 0.4F) * degree * 0.8F * f1;
+			this.rightWing.zRot = MathHelper.cos(f1 - 0.92F);
 //			this.outterRightWing.rotateAngleZ = MathHelper.cos() *  * f1 + 2.0F;
 		}
 	}
 
 	@Override
-	public Iterable<ModelRenderer> getParts() {
+	public Iterable<ModelRenderer> parts() {
 		return parts;
 	}
 }

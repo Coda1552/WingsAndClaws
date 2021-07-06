@@ -18,27 +18,27 @@ public class DumpyEggDrakeRenderer extends MobRenderer<DumpyEggDrakeEntity, Dump
 
     public DumpyEggDrakeRenderer(EntityRendererManager p_i50961_1_) {
         super(p_i50961_1_, new DumpyEggDrakeModel.Adult(), 0.5f);
-        adult = entityModel;
+        adult = model;
         child = new DumpyEggDrakeModel.Child();
         addLayer(new DEDBandanaLayer(this));
     }
 
     @Override
     public void render(DumpyEggDrakeEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        entityModel = entityIn.isChild() ? child : adult;
+        model = entityIn.isBaby() ? child : adult;
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    protected void preRenderCallback(DumpyEggDrakeEntity entity, MatrixStack matrixStackIn, float partialTickTime) {
-        super.preRenderCallback(entity, matrixStackIn, partialTickTime);
-        matrixStackIn.translate(0, (entity.isChild() ? 0.325 : 0.65) * entity.sleepTimer.get(partialTickTime), 0);
+    protected void scale(DumpyEggDrakeEntity entity, MatrixStack matrixStackIn, float partialTickTime) {
+        super.scale(entity, matrixStackIn, partialTickTime);
+        matrixStackIn.translate(0, (entity.isBaby() ? 0.325 : 0.65) * entity.sleepTimer.get(partialTickTime), 0);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(DumpyEggDrakeEntity entity) {
+    public ResourceLocation getTextureLocation(DumpyEggDrakeEntity entity) {
         byte texture = 0;
-        if (entity.isChild()) texture |= 1;
+        if (entity.isBaby()) texture |= 1;
         if (entity.getGender() == TameableDragonEntity.Gender.MALE) texture |= 2;
         if (entity.isSleeping()) texture |= 4;
         if (TEXTURES[texture] == null) {

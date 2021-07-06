@@ -9,18 +9,18 @@ public class SaddledThunderTailEggModel extends SegmentedModel<SaddledThunderTai
     public ModelRenderer egg;
 
     public SaddledThunderTailEggModel() {
-        this.textureWidth = 64;
-        this.textureHeight = 32;
+        this.texWidth = 64;
+        this.texHeight = 32;
         this.egg = new ModelRenderer(this, 0, 0);
-        this.egg.setRotationPoint(0.0F, 24.0F, 0.0F);
+        this.egg.setPos(0.0F, 24.0F, 0.0F);
         this.egg.addBox(-4.0F, -12.0F, -4.0F, 8.0F, 12.0F, 8.0F, 0.0F, 0.0F, 0.0F);
     }
 
     @Override
-    public void setRotationAngles(SaddledThunderTailEggEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) { }
+    public void setupAnim(SaddledThunderTailEggEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) { }
 
     @Override
-    public Iterable<ModelRenderer> getParts() {
+    public Iterable<ModelRenderer> parts() {
         return ImmutableList.of(egg);
     }
 }

@@ -33,54 +33,54 @@ public class PlowheadEggEntity extends LivingEntity {
 
 	public PlowheadEggEntity(World worldIn, double x, double y, double z) {
 		this(WingsEntities.ICY_PLOWHEAD_EGG.get(), worldIn);
-		setPosition(x, y, z);
+		setPos(x, y, z);
 	}
 
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList() {
+	public Iterable<ItemStack> getArmorSlots() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+	public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {}
+	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {}
 
 	@Override
-	public boolean onLivingFall(float distance, float damageMultiplier) {
+	public boolean causeFallDamage(float distance, float damageMultiplier) {
 		return false;
 	}
 
 	@Override
-	public HandSide getPrimaryHand() {
+	public HandSide getMainArm() {
 		return HandSide.RIGHT;
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		return false;
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compound) {
-		super.readAdditional(compound);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
 		this.hatchTime = compound.getInt("HatchTime");
 	}
 
 	@Override
-	public void writeAdditional(CompoundNBT compound) {
-		super.writeAdditional(compound);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
 		compound.putInt("HatchTime", hatchTime);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void handleStatusUpdate(byte id) {
+	public void handleEntityEvent(byte id) {
 		if (id == 3) {
 			for (int i = 0; i < 8; ++i) {
-				this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.ICY_PLOWHEAD_EGG.get())), this.getPosX(), this.getPosY(), this.getPosZ(), ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D, ((double) this.rand.nextFloat() - 0.5D) * 0.08D);
+				this.level.addParticle(new ItemParticleData(ParticleTypes.ITEM, new ItemStack(WingsItems.ICY_PLOWHEAD_EGG.get())), this.getX(), this.getY(), this.getZ(), ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D);
 			}
 		}
 	}
@@ -88,35 +88,35 @@ public class PlowheadEggEntity extends LivingEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		this.setAir(300);
-		if (!this.world.isRemote) {
-			if (isInWaterOrBubbleColumn() && hatchTime++ >= 4800) {
-				IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.get().create(this.world);
+		this.setAirSupply(300);
+		if (!this.level.isClientSide) {
+			if (isInWaterOrBubble() && hatchTime++ >= 4800) {
+				IcyPlowheadEntity plowhead = WingsEntities.ICY_PLOWHEAD.get().create(this.level);
 				if (plowhead != null) {
-					plowhead.setGrowingAge(-24000);
-					plowhead.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-					plowhead.onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(plowhead.getPosition()), SpawnReason.BREEDING, null, null);
-					this.world.addEntity(plowhead);
+					plowhead.setAge(-24000);
+					plowhead.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
+					plowhead.finalizeSpawn((IServerWorld) level, level.getCurrentDifficultyAt(plowhead.blockPosition()), SpawnReason.BREEDING, null, null);
+					this.level.addFreshEntity(plowhead);
 				}
 
-				this.world.setEntityState(this, (byte) 3);
+				this.level.broadcastEntityEvent(this, (byte) 3);
 				this.remove();
 			}
 		}
 	}
 
 	@Override
-	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-		ItemStack stack = player.getHeldItem(hand);
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		ItemStack stack = player.getItemInHand(hand);
 		if (stack.isEmpty()) {
             ItemStack egg = new ItemStack(WingsItems.ICY_PLOWHEAD_EGG.get());
-            if (!player.addItemStackToInventory(egg)) {
-                player.dropItem(egg, false);
+            if (!player.addItem(egg)) {
+                player.drop(egg, false);
             }
             remove();
 			return ActionResultType.SUCCESS;
 		}
 
-		return super.processInitialInteract(player, hand);
+		return super.interact(player, hand);
 	}
 }

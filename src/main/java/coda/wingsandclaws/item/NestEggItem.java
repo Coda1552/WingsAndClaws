@@ -10,7 +10,7 @@ import net.minecraft.world.IWorldReader;
 
 public class NestEggItem extends Item {
     public NestEggItem(NestBlock<?> block) {
-        super(new Item.Properties().group(WingsItems.GROUP));
+        super(new Item.Properties().tab(WingsItems.GROUP));
         block.setItem(this);
     }
 
